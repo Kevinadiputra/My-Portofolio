@@ -77,6 +77,8 @@ const Projects = () => {
         { key: "deep-learning", label: "Deep learning" },
         { key: "nlp", label: "NLP" },
         { key: "data-science", label: "Data science" },
+        { key: "data-engineering", label: "Data engineering" },
+        { key: "mlops", label: "MLOps" },
     ];
 
     const getProjectCount = (category) => {
@@ -97,6 +99,7 @@ const Projects = () => {
             "nlp": "NATURAL LANGUAGE PROCESSING",
             "data-science": "DATA SCIENCE",
             "data-engineering": "DATA ENGINEERING",
+            "mlops": "MLOPS",
         };
         return mapping[cat] || cat.toUpperCase();
     };
@@ -247,7 +250,7 @@ const Projects = () => {
                                 <motion.div
                                     key={project.id}
                                     variants={rowVariants}
-                                    className="group relative border-b border-white/10"
+                                    className="group relative border-b border-white/10 overflow-hidden"
                                     onMouseEnter={() => setHoveredSlug(project.slug)}
                                     onMouseLeave={() => setHoveredSlug(null)}
                                     animate={{
@@ -255,6 +258,11 @@ const Projects = () => {
                                     }}
                                     transition={{ duration: 0.4, ease: "easeInOut" }}
                                 >
+                                    {/* Subtle Glow Hover Background */}
+                                    <div className="absolute inset-0 bg-gradient-to-r from-accent/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none -z-10" />
+                                    {/* Left Accent Bar */}
+                                    <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none -z-10" />
+                                    
                                     <Link
                                         href={`/projects/${project.slug}`}
                                         scroll={true}
@@ -268,17 +276,24 @@ const Projects = () => {
 
                                         {/* 2. Project Title */}
                                         <div className="flex flex-col gap-2">
-                                            <h3
-                                                className="font-display text-lg sm:text-xl md:text-2xl lg:text-[28px] font-bold uppercase tracking-tight leading-none transition-all duration-300 ease-out"
-                                                style={{
-                                                    WebkitTextStroke: isHovered 
-                                                        ? '1px transparent' 
-                                                        : '1px rgba(255, 255, 255, 0.25)',
-                                                    color: isHovered ? 'var(--color-accent)' : 'transparent',
-                                                }}
-                                            >
-                                                {project.title}
-                                            </h3>
+                                            <div className="flex flex-wrap items-center gap-3">
+                                                <h3
+                                                    className="font-display text-lg sm:text-xl md:text-2xl lg:text-[28px] font-bold uppercase tracking-tight leading-none transition-all duration-300 ease-out"
+                                                    style={{
+                                                        WebkitTextStroke: isHovered 
+                                                            ? '1px transparent' 
+                                                            : '1px rgba(255, 255, 255, 0.25)',
+                                                        color: isHovered ? 'var(--color-accent)' : 'transparent',
+                                                    }}
+                                                >
+                                                    {project.title}
+                                                </h3>
+                                                {project.year === "2026" && (
+                                                    <span className="px-2 py-0.5 text-[9px] font-mono font-bold tracking-widest text-primary bg-accent uppercase select-none rounded-none shadow-[0_0_12px_rgba(104,212,204,0.4)]">
+                                                        2026
+                                                    </span>
+                                                )}
+                                            </div>
                                             
                                             {/* Mobile Image (Inline) */}
                                             <div className="block md:hidden overflow-hidden rounded-none bg-tertiary border border-white/10 aspect-video w-full mt-2">

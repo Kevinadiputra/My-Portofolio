@@ -59,6 +59,7 @@ export default function ProjectPage({ params }) {
             "nlp": "NATURAL LANGUAGE PROCESSING",
             "data-science": "DATA SCIENCE",
             "data-engineering": "DATA ENGINEERING",
+            "mlops": "MLOPS",
         };
         return mapping[cat] || cat.toUpperCase();
     };
@@ -129,7 +130,7 @@ export default function ProjectPage({ params }) {
                                 <span className="block text-[9px] uppercase tracking-widest text-white/40 mb-1">Primary Role</span>
                                 <div className="flex items-center gap-2 text-sm text-white/85">
                                     <Cpu size={14} className="text-accent" />
-                                    <span>{project.category === "data-engineering" ? "Data Engineer" : "ML Engineer"}</span>
+                                    <span>{project.category === "data-engineering" ? "Data Engineer" : project.category === "mlops" ? "MLOps Engineer" : "ML Engineer"}</span>
                                 </div>
                             </div>
                             <div className="border-t border-white/5 pt-6 pl-4">

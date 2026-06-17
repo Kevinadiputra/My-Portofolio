@@ -16,6 +16,28 @@ const fadeUpVariants = {
     }
 };
 
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.08,
+        },
+    },
+};
+
+const cardVariants = {
+    hidden: { y: 25, opacity: 0 },
+    visible: {
+        y: 0,
+        opacity: 1,
+        transition: {
+            duration: 0.6,
+            ease: [0.16, 1, 0.3, 1],
+        },
+    },
+};
+
 const Certificates = () => {
     const { certificates, loading } = useCertificates();
 
@@ -54,11 +76,18 @@ const Certificates = () => {
                     </p>
                 </div>
 
-                <div className="grid gap-px bg-white/10 border border-white/10 rounded-none overflow-hidden md:grid-cols-2 lg:grid-cols-3">
+                <motion.div 
+                    variants={containerVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-100px" }}
+                    className="grid gap-px bg-white/10 border border-white/10 rounded-none md:grid-cols-2 lg:grid-cols-3"
+                >
                     {certificates.map((certificate) => (
-                        <article 
+                        <motion.article 
                             key={certificate.id} 
-                            className="group flex flex-col p-8 bg-[#0b0b12] hover:bg-[#12151d] transition-colors duration-500 relative"
+                            variants={cardVariants}
+                            className="group flex flex-col p-8 bg-[#0b0b12] hover:bg-[#12151d] transition-all duration-300 relative border border-transparent hover:border-accent/20 hover:shadow-[0_0_30px_rgba(104,212,204,0.08)] hover:z-10 cursor-default"
                         >
                             {/* Holographic Scan Effect */}
                             <div className="absolute inset-0 z-10 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700">
@@ -69,9 +98,14 @@ const Certificates = () => {
                                 <div className="flex h-12 w-12 items-center justify-center rounded-none border border-white/10 group-hover:border-accent/30 text-white/50 group-hover:text-accent transition-colors duration-500 bg-white/[0.02]">
                                     <Award size={20} />
                                 </div>
-                                <div className="text-right">
+                                <div className="text-right flex flex-col items-end gap-1">
                                     <span className="block text-[8px] font-mono text-white/30 tracking-widest uppercase">ID</span>
                                     <span className="block text-[10px] font-mono text-accent/80 font-medium tracking-wider">{certificate.credentialId}</span>
+                                    {certificate.date === "2026" && (
+                                        <span className="mt-1 px-1.5 py-0.5 text-[8px] font-mono font-bold tracking-wider text-primary bg-accent uppercase select-none rounded-none shadow-[0_0_8px_rgba(104,212,204,0.4)]">
+                                            2026
+                                        </span>
+                                    )}
                                 </div>
                             </div>
                             
@@ -94,9 +128,9 @@ const Certificates = () => {
                                 </div>
                                 <span className="uppercase tracking-wider text-white/50">{certificate.level}</span>
                             </div>
-                        </article>
+                        </motion.article>
                     ))}
-                </div>
+                </motion.div>
             </div>
         </section>
     );

@@ -14,6 +14,38 @@ export const useCertificates = () => {
 
 const certificatesData = [
     {
+        id: 16,
+        title: "Membangun Sistem Machine Learning",
+        issuer: "Dicoding Indonesia",
+        platform: "Dicoding",
+        date: "2026",
+        image: "/api/placeholder/400/300",
+        credentialId: "98XW07580XM3",
+        skills: ["Machine Learning", "Machine Learning Pipeline", "Model Deployment", "MLflow", "MLOps"],
+        description: "Sertifikasi yang memvalidasi kemampuan dalam membangun sistem machine learning end-to-end mulai dari preprocessing data, training model, evaluasi, deployment, hingga monitoring performa model pada lingkungan produksi.",
+        verifyUrl: "https://www.dicoding.com/certificates/verify",
+        featured: true,
+        category: "Machine Learning",
+        level: "Advanced",
+        duration: "1 month"
+    },
+    {
+        id: 15,
+        title: "Belajar Fundamental Pemrosesan Data",
+        issuer: "Dicoding Indonesia",
+        platform: "Dicoding",
+        date: "2026",
+        image: "/api/placeholder/400/300",
+        credentialId: "N9ZON17OYXG5",
+        skills: ["Extract Transform Load (ETL)", "Data Engineering", "Data Processing", "Data Cleaning"],
+        description: "Sertifikasi yang memvalidasi kemampuan dalam membangun pipeline pemrosesan data menggunakan pendekatan ETL, melakukan transformasi data, data cleaning, validasi data, dan otomatisasi proses pengolahan data.",
+        verifyUrl: "https://www.dicoding.com/certificates/verify",
+        featured: true,
+        category: "Data Engineering",
+        level: "Beginner",
+        duration: "1 month"
+    },
+    {
         id: 12,
         title: "Belajar Pengembangan Machine Learning",
         issuer: "Dicoding Indonesia",
