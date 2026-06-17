@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { Award, Calendar, BarChart3, Tag } from "lucide-react";
 import { useCertificates } from "@/context/CertificatesContext";
 import { motion } from "framer-motion";
@@ -41,6 +41,17 @@ const cardVariants = {
 
 const Certificates = () => {
     const { certificates, loading } = useCertificates();
+
+    // Check for missing or invalid credential URLs and show console warning
+    useEffect(() => {
+        if (certificates && certificates.length > 0) {
+            certificates.forEach((c) => {
+                if (!c.credentialUrl) {
+                    console.warn(`Missing credential URL for certificate: ${c.title}`);
+                }
+            });
+        }
+    }, [certificates]);
 
     // Live Statistics Calculations
     const stats = useMemo(() => {
@@ -92,6 +103,7 @@ const Certificates = () => {
     }, [certificates]);
 
     const handleKeyDown = (e, url) => {
+        if (!url) return;
         if (e.key === " " || e.key === "Spacebar") {
             e.preventDefault();
             window.open(url, "_blank", "noopener,noreferrer");
@@ -221,38 +233,43 @@ const Certificates = () => {
                 >
                     {sortedCertificates.map((certificate) => {
                         const isFeatured = certificate.featured;
+                        const disableCard = !certificate.credentialUrl;
                         
                         return (
                             <motion.a 
-                                href={certificate.verifyUrl || "#"}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                                href={disableCard ? undefined : certificate.credentialUrl}
+                                target={disableCard ? undefined : "_blank"}
+                                rel={disableCard ? undefined : "noopener noreferrer"}
                                 key={certificate.id} 
                                 variants={cardVariants}
-                                whileHover={{ 
+                                whileHover={disableCard ? {} : { 
                                     y: -8, 
                                     boxShadow: "0 0 20px rgba(104, 212, 204, 0.15)",
                                 }}
-                                whileTap={{ 
+                                whileTap={disableCard ? {} : { 
                                     y: -3, 
                                     scale: 0.98 
                                 }}
-                                onKeyDown={(e) => handleKeyDown(e, certificate.verifyUrl)}
+                                onKeyDown={(e) => handleKeyDown(e, disableCard ? null : certificate.credentialUrl)}
                                 transition={{ type: "tween", duration: 0.35, ease: "easeOut" }}
                                 className={`group flex flex-col p-8 bg-[#12151d]/40 backdrop-blur-md relative border ${
                                     isFeatured ? "border-accent/30 shadow-[0_0_20px_rgba(104,212,204,0.04)]" : "border-white/10"
-                                } hover:border-accent/40 focus-visible:border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent cursor-pointer rounded-none transition-colors duration-300`}
-                                aria-label={`Open certification for ${certificate.title} by ${certificate.issuer}`}
+                                } ${disableCard ? "cursor-default opacity-75" : "hover:border-accent/40 focus-visible:border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent cursor-pointer"} rounded-none transition-colors duration-300`}
+                                aria-label={disableCard ? `Certification: ${certificate.title} by ${certificate.issuer} (No URL available)` : `Open certification for ${certificate.title} by ${certificate.issuer}`}
                             >
                                 {/* Holographic Scan Effect */}
-                                <div className="absolute inset-0 z-10 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-                                    <div className="absolute top-0 left-0 w-full h-[1px] bg-accent/80 shadow-[0_0_8px_rgba(104,212,204,0.8)] animate-scan-line" />
-                                </div>
+                                {!disableCard && (
+                                    <div className="absolute inset-0 z-10 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                                        <div className="absolute top-0 left-0 w-full h-[1px] bg-accent/80 shadow-[0_0_8px_rgba(104,212,204,0.8)] animate-scan-line" />
+                                    </div>
+                                )}
                                 
                                 {/* External Link Indicator - Pojok Kanan Atas */}
-                                <div className="absolute top-6 right-6 text-white/30 group-hover:text-accent transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300 font-mono text-lg leading-none z-20">
-                                    ↗
-                                </div>
+                                {!disableCard && (
+                                    <div className="absolute top-6 right-6 text-white/30 group-hover:text-accent transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300 font-mono text-lg leading-none z-20">
+                                        ↗
+                                    </div>
+                                )}
 
                                 {/* Card Header */}
                                 <div className="mb-6 flex items-start justify-between z-20 pr-6">
