@@ -55,13 +55,13 @@ const Hero = () => {
 
     const highlights = ["Data Science", "Machine Learning", "MLOps Pipelines", "Data Analytics"];
     const heroStats = [
-        { value: "2+", label: "Years Experience" },
-        { value: "15+", label: "Projects Completed" },
-        { value: "5+", label: "Model Deployments" },
+        { value: "2+", label: "Years" },
+        { value: "15+", label: "Projects" },
+        { value: "5+", label: "Orchestrations" },
     ];
 
     return (
-        <section id="home" className="relative min-h-[85vh] lg:min-h-[88vh] flex items-center overflow-hidden py-12 md:py-16 lg:py-20 pt-20 sm:pt-24 lg:pt-28">
+        <section id="home" className="relative h-auto lg:h-[88vh] min-h-[660px] lg:max-h-[820px] flex items-center overflow-hidden py-10 lg:py-0 pt-20 lg:pt-16">
             <div className="absolute inset-0 hero-surface" />
             <div className="absolute inset-0 hero-grid" />
             <div className="absolute inset-0 noise-overlay" />
@@ -74,8 +74,9 @@ const Hero = () => {
             <div className="relative z-10 section-shell w-full my-auto">
                 <div className="grid lg:grid-cols-[55fr_45fr] gap-12 lg:gap-16 items-center">
                     
-                    {/* Hero Left: Text Column */}
-                    <div className="space-y-4 md:space-y-5">
+                    {/* Hero Left: Text Column with strict spacing hierarchy */}
+                    <div className="flex flex-col justify-center">
+                        {/* Available Badge */}
                         <div className="flex items-center gap-3 text-xs text-white/50">
                             <span className="inline-flex items-center gap-2 rounded-none border border-accent/30 bg-accent/10 px-2.5 py-0.5 text-accent font-semibold tracking-wide text-[10px]">
                                 <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
@@ -84,70 +85,72 @@ const Hero = () => {
                             <span className="text-white/30 tracking-wider text-[10px]">Portfolio 2026</span>
                         </div>
 
-                        <div className="space-y-3">
-                            <motion.h1
-                                initial="hidden"
-                                animate="visible"
-                                variants={fadeUpVariants}
-                                className="font-display text-3xl sm:text-4xl md:text-[50px] lg:text-[58px] xl:text-[66px] font-extrabold tracking-tight text-white leading-[1.1] xl:leading-[1.05]"
-                            >
-                                Building Machine Learning Systems and Transforming Data into Actionable Insights.
-                            </motion.h1>
-                            
-                            <p className="text-base md:text-lg font-display font-semibold text-white/80">
-                                Hi, I'm <span className="text-accent">{profile?.name || "Kevin Adiputra"}</span>.
-                            </p>
+                        {/* Headline - Spacing: 24px */}
+                        <motion.h1
+                            initial="hidden"
+                            animate="visible"
+                            variants={fadeUpVariants}
+                            className="font-display text-4xl sm:text-5xl md:text-[50px] lg:text-[56px] xl:text-[62px] font-extrabold tracking-tight text-white leading-[1.1] xl:leading-[1.05] max-w-[600px] mt-[24px]"
+                        >
+                            Building Machine Learning Systems and Transforming Data into Actionable Insights.
+                        </motion.h1>
+                        
+                        {/* Nama - Spacing: 20px */}
+                        <p className="text-base md:text-lg font-display font-semibold text-white/80 mt-[20px]">
+                            Hi, I'm <span className="text-accent">{profile?.name || "Kevin Adiputra"}</span>.
+                        </p>
 
-                            <div className="flex items-center gap-3">
-                                <span className="text-[10px] font-mono px-2 py-0.5 border border-white/10 bg-white/[0.02] text-white/40 tracking-wider uppercase">
-                                    Current focus
+                        {/* Job Title - Spacing: 16px */}
+                        <div className="flex items-center gap-3 mt-[16px]">
+                            <span className="text-[10px] font-mono px-2 py-0.5 border border-white/10 bg-white/[0.02] text-white/40 tracking-wider uppercase">
+                                Current focus
                                 </span>
-                                <h2 className="text-sm md:text-base font-bold font-display text-white/80">
-                                    {displayText}
-                                    <span className="text-accent animate-pulse">|</span>
-                                </h2>
-                            </div>
+                            <h2 className="text-sm md:text-base font-bold font-display text-white/80">
+                                {displayText}
+                                <span className="text-accent animate-pulse">|</span>
+                            </h2>
                         </div>
 
-                        <p className="text-xs md:text-sm text-white/50 max-w-[500px] leading-relaxed">
+                        {/* Short Description - Spacing: 20px */}
+                        <p className="text-xs md:text-sm text-white/50 max-w-[500px] leading-relaxed mt-[20px]">
                             I design practical data products: models that explain their work, dashboards
                             that guide decisions, and pipelines that keep running after the demo.
                         </p>
 
-                        {/* CTA Buttons */}
-                        <div className="flex flex-wrap gap-4">
+                        {/* CTA Buttons - Spacing: 24px */}
+                        <div className="flex flex-wrap gap-4 mt-[24px]">
                             <a 
                                 href="/Kevin-Adiputra-CV.pdf" 
-                                className="inline-flex items-center justify-center h-11 px-5 text-xs font-semibold rounded-none border border-accent bg-accent hover:bg-accent-hover text-primary transition-all duration-300 active:scale-[0.98] gap-2 shadow-[0_8px_30px_rgba(104,212,204,0.1)]"
+                                className="inline-flex items-center justify-center h-[50px] px-7 text-xs sm:text-sm font-semibold rounded-none border border-accent bg-accent hover:bg-accent-hover text-primary transition-all duration-300 active:scale-[0.98] gap-2 shadow-[0_8px_30px_rgba(104,212,204,0.12)]"
                             >
-                                <Download size={14} />
+                                <Download size={15} />
                                 Download CV
                             </a>
                             <button 
                                 onClick={scrollToAbout} 
-                                className="inline-flex items-center justify-center h-11 px-5 text-xs font-semibold rounded-none border border-white/10 bg-tertiary hover:bg-tertiary-hover text-white transition-all duration-300 active:scale-[0.98] shadow-md"
+                                className="inline-flex items-center justify-center h-[50px] px-7 text-xs sm:text-sm font-semibold rounded-none border border-white/10 bg-tertiary hover:bg-tertiary-hover text-white transition-all duration-300 active:scale-[0.98] shadow-md"
                             >
                                 See how I work
                             </button>
                         </div>
 
-                        {/* Hero Stats */}
-                        <div className="grid grid-cols-3 gap-4 pt-3 max-w-[480px]">
+                        {/* Statistics Grid - Spacing: 28px */}
+                        <div className="grid grid-cols-3 gap-4 mt-[28px] max-w-[540px]">
                             {heroStats.map((stat) => (
                                 <div 
                                     key={stat.label} 
-                                    className="surface-card py-2 px-3 flex flex-col justify-center h-20 hover:border-accent/30 hover:shadow-[0_0_15px_rgba(104,212,204,0.03)] transition-all duration-300"
+                                    className="surface-card py-2.5 px-4 flex flex-col justify-center h-[92px] hover:border-accent/30 hover:shadow-[0_0_15px_rgba(104,212,204,0.04)] transition-all duration-300"
                                 >
-                                    <div className="text-xl md:text-2xl lg:text-[28px] font-display font-extrabold text-accent leading-none mb-1">
+                                    <div className="text-2xl md:text-3xl lg:text-[36px] font-display font-extrabold text-accent leading-none mb-1">
                                         {stat.value}
                                     </div>
-                                    <div className="text-[8px] md:text-[9px] font-mono tracking-wider text-white/40 uppercase leading-none truncate">{stat.label}</div>
+                                    <div className="text-[10px] md:text-[12px] lg:text-[16px] font-mono tracking-wider text-white/40 uppercase leading-none truncate">{stat.label}</div>
                                 </div>
                             ))}
                         </div>
 
-                        {/* Social Icons */}
-                        <div className="flex items-center justify-between pt-1.5 max-w-[480px]">
+                        {/* Social Media Links - Spacing: 24px */}
+                        <div className="flex items-center justify-between pt-1 mt-[24px] max-w-[480px]">
                             <div className="flex items-center gap-3">
                                 {[
                                     { icon: Github, label: "GitHub profile", url: "https://github.com/Kevinadiputra" },
@@ -161,10 +164,10 @@ const Hero = () => {
                                             href={item.url}
                                             target={item.url.startsWith("mailto:") ? undefined : "_blank"}
                                             rel={item.url.startsWith("mailto:") ? undefined : "noopener noreferrer"}
-                                            className="w-9 h-9 bg-tertiary/60 hover:bg-accent hover:text-primary rounded-none border border-white/5 hover:border-accent/30 flex items-center justify-center transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_10px_rgba(104,212,204,0.2)]"
+                                            className="w-10 h-10 bg-tertiary/60 hover:bg-accent hover:text-primary rounded-none border border-white/5 hover:border-accent/30 flex items-center justify-center transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_10px_rgba(104,212,204,0.25)]"
                                             aria-label={item.label}
                                         >
-                                            <Icon size={14} />
+                                            <Icon size={16} />
                                         </a>
                                     );
                                 })}
@@ -184,7 +187,7 @@ const Hero = () => {
                                 <span className="text-accent font-mono text-[9px]">ID-ML-1704</span>
                             </div>
 
-                            {/* Photo Container */}
+                            {/* Photo Container (Shrunk by 15-20%) */}
                             <div className="relative group cursor-pointer w-full max-w-[220px] mx-auto">
                                 {/* Technical decorative corners */}
                                 <div className="absolute -inset-1 border border-white/5 bg-transparent z-0 transition-colors duration-500 group-hover:border-accent/15 group-hover:bg-accent/[0.01]" />
@@ -215,10 +218,10 @@ const Hero = () => {
 
                                 {/* Data readout overlay */}
                                 <div className="absolute bottom-2 left-2 z-30 flex flex-col gap-0.5 opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
-                                    <span className="text-[7px] font-mono text-accent bg-primary/90 px-1 py-0.5 border border-accent/20 tracking-wider">
+                                    <span className="text-[7px] font-mono text-accent bg-primary/90 px-1.5 py-0.5 border border-accent/20 tracking-wider">
                                         SRC: {profile?.name || "KEVIN_A"}
                                     </span>
-                                    <span className="text-[7px] font-mono text-accent/80 bg-primary/90 px-1 py-0.5 border border-accent/20 tracking-wider">
+                                    <span className="text-[7px] font-mono text-accent/80 bg-primary/90 px-1.5 py-0.5 border border-accent/20 tracking-wider">
                                         STATUS: ONLINE_
                                     </span>
                                 </div>
@@ -254,7 +257,7 @@ const Hero = () => {
                     whileHover={{ y: 2 }}
                     whileTap={{ scale: 0.95 }}
                 >
-                    <div className="w-5 h-8 border border-white/40 rounded-full flex justify-center pt-1.5">
+                    <div className="w-5 h-8 border border-accent/40 rounded-full flex justify-center pt-1.5">
                         <motion.div
                             animate={{
                                 y: [0, 8, 0],
@@ -268,7 +271,7 @@ const Hero = () => {
                             className="w-1 h-1.5 bg-accent rounded-full"
                         />
                     </div>
-                    <ArrowDown size={10} className="text-white/60 animate-pulse" />
+                    <ArrowDown size={10} className="text-accent animate-pulse" />
                 </motion.button>
             </div>
 
