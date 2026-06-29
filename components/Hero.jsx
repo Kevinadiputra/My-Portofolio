@@ -87,7 +87,7 @@ const Hero = () => {
                                 initial="hidden"
                                 animate="visible"
                                 variants={fadeUpVariants}
-                                className="h1 text-white"
+                                className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-[64px] font-extrabold tracking-tight text-white leading-[1.05]"
                             >
                                 Building Machine Learning Systems and Transforming Data into Actionable Insights.
                             </motion.h1>
@@ -180,7 +180,7 @@ const Hero = () => {
                                 <span className="text-accent">ID-ML-1704</span>
                             </div>
 
-                            <div className="mt-8 relative group cursor-pointer w-full max-w-sm mx-auto">
+                            <div className="mt-8 relative group cursor-pointer w-full max-w-[310px] mx-auto">
                                 {/* Technical decorative corners */}
                                 <div className="absolute -inset-2 border border-white/5 bg-transparent z-0 transition-colors duration-500 group-hover:border-accent/20 group-hover:bg-accent/[0.02]" />
                                 <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-accent/60 -translate-x-2 -translate-y-2 transition-transform duration-500 group-hover:-translate-x-3 group-hover:-translate-y-3 z-20" />
