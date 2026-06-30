@@ -142,44 +142,43 @@ const projectsData = [
     {
         id: 2,
         slug: "user-behavior-predictive-analysis",
-        title: "User Behavior Predictive Analysis",
-        tagline: "Predicting user activity and behavior patterns using machine learning.",
-        description: "Built a predictive model to analyze and forecast user activity levels and behavior patterns using historical usage logs and engagement metrics.",
+        title: "Klasifikasi Perilaku Pengguna Perangkat Seluler (User Behavior Classification)",
+        tagline: "Memprediksi kelas perilaku pengguna perangkat seluler berdasarkan metrik penggunaan aplikasi, daya baterai, dan data internet.",
+        description: "Membangun sistem klasifikasi multi-kelas untuk memprediksi kategori perilaku pengguna (skala 1-5) dengan membandingkan performa 9 model Machine Learning menggunakan K-Fold Cross-Validation dan analisis Feature Importance.",
         image: "/projects/recommendation-system.svg",
-        technologies: ["Python", "Pandas", "NumPy", "Scikit-Learn", "Matplotlib"],
+        technologies: ["Python", "Pandas", "Scikit-Learn", "XGBoost", "MinMaxScaler", "LabelEncoder", "Machine Learning"],
         category: "data-science",
         date: "2024",
         year: "2024",
         status: "Completed",
         liveUrl: "#",
-        githubUrl: "#",
+        githubUrl: "https://github.com/Kevinadiputra/Machine-Learning-Terapan/tree/main/predictive%20analysis",
         featured: true,
         highlight: true,
         metrics: [
-            { label: "Accuracy", value: "91.2%", description: "Classification score on test cohort" },
-            { label: "Precision", value: "89.5%", description: "Positive class positive predictive value" },
-            { label: "Recall", value: "92.1%", description: "Proportion of target behaviors identified" },
-            { label: "Users Analyzed", value: "50,000+", description: "Historical log records processed" }
+            { label: "Models Benchmarked", value: "9 Models", description: "Classifiers evaluated (RF, SVM, XGB, etc.)" },
+            { label: "Best Accuracy", value: "100.0%", description: "Accuracy achieved by Random Forest & SVM" },
+            { label: "Dataset Samples", value: "700 Rows", description: "Mobile Device Usage and User Behavior data" },
+            { label: "Validation Folds", value: "5-Fold CV", description: "K-Fold Cross-Validation for stability check" }
         ],
-        overview: "Understanding user retention and engagement patterns is a core business need. This project focuses on building a machine learning model to classify and predict user activity levels, identifying users at risk of churning based on historical logs and engagement data.",
-        challenge: "Raw user log files are massive, time-series dependent, and highly unstructured. We faced challenges in feature engineering to capture temporal trends (like drop-offs in usage frequency) and handling imbalanced datasets where active users vastly outnumbered inactive ones.",
-        solution: "I developed an end-to-end data science pipeline. First, I performed extensive data preprocessing and cleaning using Pandas and NumPy. Next, I engineered rolling engagement features (e.g., active days per week, session duration ratios). I trained classification models (Logistic Regression, Random Forest) using Scikit-Learn and handled class imbalance using SMOTE. Performance was visualized using Matplotlib.",
+        overview: "Proyek ini bertujuan untuk menganalisis dan mengklasifikasikan kelas perilaku pengguna perangkat seluler (User Behavior Class skala 1-5) menggunakan dataset Mobile Device Usage. Wawasan yang diperoleh dari klasifikasi perilaku ini berguna untuk optimasi efisiensi konsumsi baterai perangkat keras seluler, penyesuaian fungsionalitas UI aplikasi oleh developer, serta penargetan iklan digital berbasis data perilaku secara lebih akurat.",
+        challenge: "Tantangan utama proyek ini adalah mengolah data kategorikal non-ordinal (seperti Device Model) tanpa menyiratkan hierarki numerik palsu. Selain itu, terdapat korelasi multikolinearitas yang sangat tinggi antara model perangkat 'iPhone 12' dengan operating system 'iOS' (korelasi bernilai 1.0) yang berisiko memicu overfitting pada model.",
+        solution: "Menghapus kolom User ID dan fitur 'iPhone 12' untuk menghindari multikolinearitas tinggi. Menerapkan Label Encoding untuk fitur biner (Gender, OS) dan One-Hot Encoding untuk Device Model. Fitur numerik diskalakan menggunakan MinMaxScaler sebelum pembagian data. Kinerja klasifikasi diuji menggunakan 9 model berbeda, dengan validasi silang (5-Fold Cross Validation) untuk memastikan generalisasi dan konsistensi skor akurasi model.",
         process: [
-            { phase: "Data Preprocessing", description: "Addressed missing values, converted timestamp strings, and removed duplicate logs." },
-            { phase: "Exploratory Data Analysis", description: "Analyzed user engagement trends and identified correlations between usage drop-offs and churn." },
-            { phase: "Feature Engineering", description: "Created windowed features mapping usage frequency, session lengths, and login consistency." },
-            { phase: "Model Development", description: "Trained Random Forest and Logistic Regression classifiers, tuning hyperparameters with grid search." },
-            { phase: "Evaluation", description: "Evaluated classifiers using confusion matrices, ROC-AUC curves, and F1 scores." },
-            { phase: "Visualization", description: "Plotted ROC curves and feature importance bar plots to present model findings." }
+            { phase: "Data Profiling", description: "Mengevaluasi statistik deskriptif dataset dan memastikan tidak ada data kosong atau outlier ekstrem." },
+            { phase: "Label & One-Hot Encoding", description: "Mengonversi variabel kategorikal biner ke format numerik 0/1 dan Device Model menggunakan get_dummies." },
+            { phase: "Feature Engineering & Scaling", description: "Memisahkan atribut target, menghapus kolom multikolinearitas, dan menormalisasi fitur dengan MinMaxScaler." },
+            { phase: "Model Training & CV", description: "Melatih 9 model klasifikasi (RF, SVM, KNN, XGB, dsb) dengan 5-fold cross-validation." },
+            { phase: "Feature Importance Evaluation", description: "Mengevaluasi skor kontribusi fitur menggunakan pohon keputusan untuk mengidentifikasi variabel klasifikasi utama." }
         ],
         gallery: [
-            { image: "/api/placeholder/800/600", title: "ROC Curve Analysis", description: "Classifier performance curves comparing Random Forest and baseline models." },
-            { image: "/api/placeholder/800/600", title: "Engagement Distribution", description: "User cohort distribution classified by activity level over time." }
+            { image: "/projects/recommendation-system.svg", title: "Multivariate Correlation Matrix Heatmap", description: "Analisis matriks korelasi menunjukkan keterkaitan kuat antara waktu penggunaan aplikasi, durasi layar menyala, dan pengurasan baterai." },
+            { image: "/projects/analytics-dashboard.svg", title: "Classifier Feature Importance Plot", description: "Visualisasi kontribusi fitur di mana jumlah aplikasi terinstal, pengurasan baterai, dan penggunaan data mendominasi keputusan klasifikasi." }
         ],
         learnings: [
-            "Temporal features, such as rate of change in usage duration, are the strongest predictors of user behavior changes.",
-            "Proper scaling and preprocessing of behavioral data prevents distance-based models from being skewed by outliers.",
-            "Balancing target labels is critical; otherwise, the model fails to identify the minority churn category."
+            "Fitur yang paling berpengaruh di semua model klasifikasi adalah variabel aktivitas perangkat (jumlah aplikasi diinstal, baterai terbuang, data terpakai) dibandingkan faktor demografis pengguna (usia, gender).",
+            "Pembersihan fitur yang memiliki korelasi linear sempurna (multikolinearitas) sangat penting untuk menjaga kestabilan koefisien model linear dan ensemble.",
+            "Model ensemble (Random Forest, Gradient Boosting) dan SVM menghasilkan tingkat akurasi serta mean cross-validation sempurna (1.000) dengan deviasi standar nol, membuktikan generalisasi yang sangat stabil."
         ]
     },
     {
