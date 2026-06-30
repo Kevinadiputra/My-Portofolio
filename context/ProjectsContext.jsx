@@ -59,41 +59,41 @@ const projectsData = [
         id: 7,
         slug: "fundamental-data-processing-etl-pipeline",
         title: "Fundamental Data Processing & ETL Pipeline",
-        tagline: "Membangun pipeline ETL menggunakan Python untuk mengumpulkan, membersihkan, mentransformasi, dan memuat data secara otomatis.",
-        description: "Membangun pipeline ETL (Extract, Transform, Load) menggunakan Python untuk mengumpulkan, membersihkan, mentransformasi, dan memuat data secara otomatis ke dalam format yang siap dianalisis.",
+        tagline: "Membangun pipeline ETL otomatis berbasis Python untuk mengambil, mengolah, dan mengunggah data katalog fashion studio ke Google Sheets.",
+        description: "Membangun pipeline ETL (Extract, Transform, Load) menggunakan Python untuk mengumpulkan data katalog produk dari Fashion Studio Dicoding, membersihkan dan mentransformasikannya dengan Pandas, serta memuat data bersih secara otomatis ke Google Sheets menggunakan API V4.",
         image: "/projects/data-pipeline.svg",
-        technologies: ["Python", "Pandas", "NumPy", "BeautifulSoup", "Requests", "CSV", "Data Processing"],
+        technologies: ["Python", "Pandas", "NumPy", "BeautifulSoup4", "Requests", "Google Sheets API", "Pytest", "Data Engineering"],
         category: "data-engineering",
         date: "2026",
         year: "2026",
         status: "Completed",
-        liveUrl: "#",
-        githubUrl: "#",
+        liveUrl: "https://docs.google.com/spreadsheets/d/1OsVjlGFLeGxOvtRlhR9LFWAhakCQwWB7Xfwz2Jl7jEY/edit?usp=sharing",
+        githubUrl: "https://github.com/Kevinadiputra/ETL-Pipeline",
         featured: true,
         highlight: true,
         metrics: [
-            { label: "Data Extracted", value: "100k+ Row", description: "Daily automatic data scraping" },
-            { label: "Pipeline Runtime", value: "< 45s", description: "Optimized Pandas execution duration" },
-            { label: "Error Rate", value: "0.0%", description: "Robust exception handling and retries" },
-            { label: "Data Cleaned", value: "100%", description: "Automated validation checks passed" }
+            { label: "Data Extracted", value: "50 Pages", description: "Dicoding Fashion Studio catalog pages scraped" },
+            { label: "Code Coverage", value: "100%", description: "Pytest unit test coverage percentage" },
+            { label: "Pipeline Runtime", value: "< 30s", description: "Total execution time from extract to API load" },
+            { label: "Error Rate", value: "0.0%", description: "Robust exception handling and request retries" }
         ],
-        overview: "This project implements a robust, automated end-to-end ETL (Extract, Transform, Load) pipeline using Python. The system targets raw data from external APIs and web sources, parses and cleans the unstructured inputs, executes critical schema validation and data transformations, and loads the structured outcomes into an analytics-ready database format.",
-        challenge: "Raw web-scraped data is highly volatile, prone to formatting shifts, missing fields, and duplicates. Designing a pipeline that gracefully handles scraping failures, logs runtime errors, and maintains consistent data quality without manual supervision was the core challenge.",
-        solution: "Constructed a modular pipeline using Python, Pandas, and NumPy for high-performance cleaning and transformation. Utilized Requests and BeautifulSoup for resilient scraping. Integrated strict validation rules (data type verification, range boundaries, duplicate checks) and structured logs to ensure transparency, exporting the final datasets cleanly.",
+        overview: "Project ini mengimplementasikan data pipeline ETL (Extract, Transform, Load) otomatis menggunakan Python. Pipeline ini dirancang untuk melakukan scraping data produk fashion (Title, Price, Rating, Colors, Size, Gender) dari web Fashion Studio Dicoding, mengolah dan membersihkan data mentah tersebut dengan Pandas dan NumPy, serta mengunggah hasilnya secara langsung ke Google Sheets menggunakan Google Sheets API V4.",
+        challenge: "Tantangan utama dari proyek ini adalah melakukan web scraping secara aman dan konsisten pada 50 halaman katalog, membersihkan data yang volatile (seperti rating yang bertumpuk dengan teks, ukuran acak, data duplikat, dan produk bernilai 'Unknown Product'), serta melakukan eksekusi load API secara efisien tanpa terkena pembatasan kuota Google Sheets API.",
+        solution: "Logika ETL dipisahkan secara modular ke dalam package helper. BeautifulSoup4 dan library Requests menangani proses pengambilan data dengan logic retry. Pandas digunakan untuk memformat harga dari USD ke IDR dengan kurs tetap Rp16.000, membersihkan karakter string, dan membuang anomali. Data bersih kemudian diunggah menggunakan service account JSON Google Sheets API V4. Pengujian modular menggunakan Pytest menjamin ketahanan kode dengan coverage 100%.",
         process: [
-            { phase: "Requirements & Schema", description: "Defined target database schemas and structured rules for the input data." },
-            { phase: "Extraction Engine", description: "Implemented web scraping modules with beautifulsoup4 and resilient HTTP request retry logic." },
-            { phase: "Transformation Logic", description: "Wrote Pandas transformations to clean dates, handle missing values, and calculate aggregations." },
-            { phase: "Validation & Export", description: "Developed data quality checks to assert non-null fields and schema integrity before exporting." }
+            { phase: "Web Scraping (Extract)", description: "Mengambil konten HTML dari 50 halaman katalog produk Fashion Studio Dicoding secara asinkron/sekuensial." },
+            { phase: "Data Cleaning (Transform)", description: "Menghapus duplikasi, membuang data tidak valid, membersihkan label teks rating/ukuran/gender, dan mengonversi harga ke rupiah." },
+            { phase: "API Ingestion (Load)", description: "Mengunggah data frame Pandas yang telah dibersihkan secara langsung ke Google Sheets target via Google Sheets API V4." },
+            { phase: "Unit Testing & QA", description: "Menulis unit test modular menggunakan Pytest untuk memvalidasi fungsi extractor, transformer, dan loader dengan cakupan kode 100%." }
         ],
         gallery: [
-            { image: "/api/placeholder/800/600", title: "ETL Execution Logger", description: "Structured runtime logs detailing extraction progress, batch counts, and validation checks." },
-            { image: "/api/placeholder/800/600", title: "Target Schema Output", description: "Cleaned and structured Pandas dataframe schema ready for analytics database insertion." }
+            { image: "/projects/etl-unit-tests.png", title: "Pytest unit testing verification mapping successful test cases across Extract, Transform, and Load modules.", description: "Unit Test Verification" },
+            { image: "/projects/etl-code-coverage.png", title: "100% code coverage report verifying thorough code verification and script safety.", description: "Code Coverage Report" }
         ],
         learnings: [
-            "Using structured logging instead of print statements is critical for tracking ETL health in automated cron tasks.",
-            "Pandas vectorized operations are significantly faster than iterating over rows, reducing pipeline runtime by over 80% on large files.",
-            "HTTP scraping must respect server rate limits; implementing exponential backoff prevented IP blocks and improved request success rates."
+            "Vectorized operations pada library Pandas memproses data ribuan baris jauh lebih cepat dibandingkan dengan iterasi loop biasa.",
+            "Pemisahan modular Extract, Transform, dan Load mempermudah penulisan unit testing dan mock API requests.",
+            "Implementasi Google Service Account mempermudah autentikasi aman tanpa interaksi manual dari user."
         ]
     },
     {
