@@ -317,43 +317,45 @@ const projectsData = [
     {
         id: 6,
         slug: "rock-paper-scissors-image-classification",
-        title: "Rock Paper Scissors Image Classification",
-        tagline: "Computer vision gesture recognition model using deep learning.",
-        description: "Built an image classification model capable of classifying rock, paper, and scissors hand gestures using deep learning (CNN) architectures.",
-        image: "/projects/object-detection.svg",
-        technologies: ["TensorFlow", "Keras", "Python", "Deep Learning", "CNN"],
+        title: "Klasifikasi Gambar Rock Paper Scissors (Rock Paper Scissors Image Classification)",
+        tagline: "Model deep learning CNN untuk klasifikasi gestur tangan gunting, batu, dan kertas secara real-time.",
+        description: "Membangun model Convolutional Neural Network (CNN) menggunakan TensorFlow dan Keras untuk mengenali serta mengklasifikasikan gambar gestur tangan gunting, batu, dan kertas.",
+        image: "/projects/rps-metrics-accuracy.png",
+        technologies: ["TensorFlow", "Keras", "Python", "Google Colab", "CNN", "Deep Learning", "Computer Vision"],
         category: "deep-learning",
         date: "2024",
         year: "2024",
         status: "Completed",
-        liveUrl: "#",
+        liveUrl: "https://colab.research.google.com/drive/1wTpLBUICVwjygxl5QMOt0qsp5J2YRk1M?usp=sharing",
         githubUrl: "#",
         featured: false,
         highlight: false,
         metrics: [
-            { label: "Accuracy", value: "97.8%", description: "Generalization score on test set" },
-            { label: "Inference Latency", value: "< 12ms", description: "Duration of single-frame evaluation" },
-            { label: "Training Epochs", value: "20", description: "Epochs required for convergence" },
-            { label: "Validation Loss", value: "0.06", description: "Binary crossentropy validation loss" }
+            { label: "Validation Accuracy", value: "97.0%+", description: "Accuracy score achieved on validation split" },
+            { label: "Gesture Categories", value: "3 Classes", description: "Rock, Paper, and Scissors classifications" },
+            { label: "Neural Optimizer", value: "RMSprop", description: "Optimized model convergence solver" },
+            { label: "Image Format", value: "150x150 RGB", description: "Resized color images model input" }
         ],
-        overview: "Real-time hand gesture recognition has applications in human-computer interaction and sign language parsing. This project builds a highly accurate CNN model to classify hand gestures representing Rock, Paper, and Scissors from image inputs.",
-        challenge: "The model needs to generalize across different skin tones, hand shapes, and background conditions, avoiding overfitting on the specific lighting of the training set. It also needs to run with low latency for interactive camera pipelines.",
-        solution: "I designed a CNN model in Keras and TensorFlow. Utilized extensive image augmentation (brightness, zoom, translation) to ensure invariance to lighting and hand positioning. Used MaxPooling and dropout layers to build a compact, lightweight model capable of high accuracy and extremely low latency during inference.",
+        overview: "Proyek computer vision ini bertujuan untuk membuat model klasifikasi gestur tangan (gunting, batu, kertas) dari gambar input menggunakan Convolutional Neural Network (CNN). Model dirancang menggunakan TensorFlow dan Keras di Google Colab, serta dilatih pada dataset gambar gestur tangan dengan pemisahan training dan validation set otomatis.",
+        challenge: "Tantangan dalam klasifikasi gestur tangan adalah variasi warna kulit, latar belakang gambar yang bervariasi, serta posisi tangan yang tidak selalu simetris. Hal ini memerlukan ketahanan spasial model agar tidak sensitif terhadap rotasi atau pencahayaan ruangan.",
+        solution: "Merancang model CNN sekuensial dengan 4 pasang layer konvolusi dan pooling untuk mengekstrak fitur kontur tangan secara bertahap. Menerapkan ImageDataGenerator untuk augmentasi gambar real-time (seperti rotasi, shear, horizontal flip) untuk memperkaya dataset dan mencegah overfitting. Model dikompilasi menggunakan optimizer RMSprop dan diuji pada gambar masukan baru.",
         process: [
-            { phase: "Dataset Preparation", description: "Gathered gesture datasets, normalized image dimensions, and split cohorts." },
-            { phase: "Data Augmentation", description: "Configured brightness adjustments, random rotations, and scales to generalize data." },
-            { phase: "CNN Architecture", description: "Implemented stacking convolutional layers followed by Max Pooling, Dropout, and Dense layers." },
-            { phase: "Training & Evaluation", description: "Trained using RMSprop optimizer, checking validation metrics to prevent early overfitting." },
-            { phase: "Prediction Pipeline", description: "Constructed an inference class capable of receiving live camera images and returning gesture labels." }
+            { phase: "Dataset Preparation", description: "Mendownload dataset zip, mengekstrak direktori, dan membagi data menjadi training set (60%) dan validation set (40%)." },
+            { phase: "Image Augmentation", description: "Menggunakan ImageDataGenerator untuk menerapkan rotasi, pembelokan gambar (shear), dan pembalikan horizontal." },
+            { phase: "CNN Architecture", description: "Membangun model sekuensial dengan stack Conv2D, MaxPooling2D, Flatten, serta Dense layer dengan aktivasi softmax." },
+            { phase: "Training Process", description: "Melatih model dengan optimizer RMSprop dan loss categorical_crossentropy, memvisualisasikan kurva loss dan akurasi." },
+            { phase: "Interactive Inference", description: "Membuat fungsi upload gambar interaktif di Colab untuk memprediksi gestur baru dari file lokal pengguna secara langsung." }
         ],
         gallery: [
-            { image: "/api/placeholder/800/600", title: "Live Prediction Output", description: "Captured frame showing overlay prediction of 'paper' gesture with 99% confidence." },
-            { image: "/api/placeholder/800/600", title: "Validation Metrics", description: "Training and validation accuracy curve overlays showing stable training progression." }
+            { image: "/projects/rps-sample-grid.png", title: "Training Data Sample Grid", description: "Grid visualisasi sampel gambar gestur tangan gunting, batu, dan kertas dalam dataset latih." },
+            { image: "/projects/rps-metrics-accuracy.png", title: "Model Accuracy & Loss Curves", description: "Grafik perbandingan tingkat akurasi dan kerugian (loss) model antara data training dan validation selama 20 epoch." },
+            { image: "/projects/rps-prediction-1.png", title: "Image Inference Test Example 1", description: "Hasil klasifikasi model pada pengujian gambar uji di mana model berhasil mendeteksi gestur kertas (paper) dengan benar." },
+            { image: "/projects/rps-prediction-2.png", title: "Image Inference Test Example 2", description: "Visualisasi uji inferensi model pada gestur tangan gunting (scissors) yang berhasil terklasifikasi secara akurat." }
         ],
         learnings: [
-            "Using dropout (0.4) after dense layers prevents the network from memorizing hand boundaries, yielding 97%+ generalization accuracy.",
-            "Brightness augmentation is critical for computer vision models that will be run under varying real-world lighting conditions.",
-            "A lighter CNN (3 convolutional blocks) keeps latency below 12ms while retaining near-perfect classification scores on gesture datasets."
+            "Augmentasi data yang tepat (seperti rotasi dan horizontal flip) adalah kunci utama agar model memiliki kemampuan generalisasi yang baik terhadap bentuk tangan yang berbeda.",
+            "Optimizer RMSprop menunjukkan konvergensi yang sangat stabil dan cepat untuk kasus klasifikasi multi-kelas citra berwarna skala menengah (150x150).",
+            "Pembagian validation set sebesar 40% dari total dataset 2.188 sampel memberikan estimasi validasi yang sangat kuat dan presisi terhadap performa riil model."
         ]
     }
 ];
