@@ -61,7 +61,7 @@ const Hero = () => {
     ];
 
     return (
-        <section id="home" className="relative min-h-[100dvh] overflow-hidden">
+        <section id="home" className="relative h-auto lg:h-[88vh] min-h-[660px] lg:max-h-[820px] flex items-center overflow-hidden py-10 lg:py-0 pt-20 lg:pt-16">
             <div className="absolute inset-0 hero-surface" />
             <div className="absolute inset-0 hero-grid" />
             <div className="absolute inset-0 noise-overlay" />
@@ -163,16 +163,6 @@ const Hero = () => {
                             </a>
                         </div>
 
-                        <div className="flex items-center gap-3 text-sm text-white/50">
-                            <div className="h-px w-10 bg-white/30" />
-                            <button
-                                onClick={scrollToAbout}
-                                className="flex items-center gap-2 text-white/60 hover:text-accent transition-colors"
-                            >
-                                Scroll
-                                <ArrowDown size={16} />
-                            </button>
-                        </div>
                     </div>
 
                     <div className="relative">
@@ -249,6 +239,33 @@ const Hero = () => {
                         </span>
                     ))}
                 </div>
+            </div>
+
+            {/* Clickable Minimalist Mouse Scroll Indicator */}
+            <div className="absolute bottom-16 md:bottom-20 left-1/2 -translate-x-1/2 z-20 flex justify-center">
+                <motion.button
+                    onClick={scrollToAbout}
+                    aria-label="Scroll to about section"
+                    className="flex flex-col items-center opacity-30 hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                    whileHover={{ y: 2 }}
+                    whileTap={{ scale: 0.95 }}
+                >
+                    <div className="w-[18px] h-[28px] border border-white/30 rounded-full flex justify-center pt-1.5">
+                        <motion.div
+                            animate={{
+                                y: [0, 6, 0],
+                                opacity: [1, 0.4, 1]
+                            }}
+                            transition={{
+                                duration: 1.8,
+                                repeat: Infinity,
+                                ease: "easeInOut"
+                            }}
+                            className="w-1 h-1.5 bg-accent rounded-full"
+                        />
+                    </div>
+                    <ArrowDown size={10} className="text-accent/60 mt-1 animate-pulse" />
+                </motion.button>
             </div>
         </section>
     );
