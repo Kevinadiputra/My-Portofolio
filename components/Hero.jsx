@@ -110,7 +110,12 @@ const Hero = () => {
                         </p>
 
                         <div className="flex flex-wrap gap-4">
-                            <a href="/Kevin-Adiputra-CV.pdf" className="btn btn-lg btn-accent gap-2">
+                            <a 
+                                href="https://drive.google.com/file/d/1D2sj8c3ITvXgHiw9e3lv7llX12fxWCCL/view?usp=sharing" 
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn btn-lg btn-accent gap-2"
+                            >
                                 <Download size={18} />
                                 Download CV
                             </a>
