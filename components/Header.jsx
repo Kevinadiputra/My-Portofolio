@@ -62,7 +62,7 @@ const Header = () => {
                 }`}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center py-4">
+                <div className="flex justify-between items-center py-3">
                     <button
                         onClick={() => router.push("/")}
                         className="text-lg md:text-xl font-display font-semibold hover:text-accent transition-colors"
@@ -72,7 +72,7 @@ const Header = () => {
                     </button>
 
                     {/* Desktop Navigation */}
-                    <nav className="hidden md:flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] p-1">
+                    <nav className="hidden md:flex items-center gap-1 rounded-2xl border border-white/10 bg-white/[0.03] p-1">
                         {navItems.map((item) => {
                             const isActive = (item.type === "route" && pathname === item.href) ||
                                 (item.type === "section" && pathname === "/");
@@ -81,7 +81,7 @@ const Header = () => {
                                 <button
                                     key={item.name}
                                     onClick={(e) => handleNavigation(item, e.ctrlKey || e.metaKey)}
-                                    className={`rounded-xl px-3 py-2 text-sm font-medium transition-all duration-200 ${isActive && item.type === "route"
+                                    className={`rounded-xl px-3.5 py-1.5 text-xs font-semibold transition-all duration-200 ${isActive && item.type === "route"
                                         ? "bg-accent text-primary"
                                         : "text-white/70 hover:bg-white/10 hover:text-white"
                                         }`}
