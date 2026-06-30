@@ -186,43 +186,45 @@ const projectsData = [
     {
         id: 3,
         slug: "ecommerce-data-analysis",
-        title: "E-Commerce Data Analysis",
-        tagline: "Uncovering sales trends and customer behavior in retail transaction data.",
-        description: "Performed end-to-end analysis of e-commerce transaction data to uncover business insights, customer behavior trends, and sales metrics.",
-        image: "/projects/etl-pipeline.svg",
-        technologies: ["Python", "Pandas", "Matplotlib", "Seaborn", "Jupyter Notebook"],
+        title: "Analisis Data E-Commerce & Perilaku Pelanggan (E-Commerce Customer Behavior Analysis)",
+        tagline: "Analisis transaksi e-commerce secara menyeluruh untuk mengungkap pola pembelian, metode pembayaran terpopuler, demografi pelanggan, dan penanganan outlier nilai pembayaran.",
+        description: "Melakukan analisis data transaksional e-commerce untuk memetakan kategori produk terlaris, metode pembayaran dominan, sebaran geografis pelanggan, dan menerapkan teknik transformasi logaritmik & akar kuadrat untuk normalisasi data payment value.",
+        image: "/projects/ecommerce-payment-distribution.png",
+        technologies: ["Python", "Pandas", "Matplotlib", "Seaborn", "Numpy", "Jupyter Notebook", "Google Colab", "Data Analysis"],
         category: "data-science",
         date: "2024",
         year: "2024",
         status: "Completed",
-        liveUrl: "#",
+        liveUrl: "https://colab.research.google.com/drive/1aks5cSXMonidj1QpqA9DM2Wnvpy3wWiQ?usp=sharing",
         githubUrl: "#",
         featured: true,
         highlight: true,
         metrics: [
-            { label: "Transactions", value: "100,000+", description: "Cleaned and processed transaction entries" },
-            { label: "Sales Insights", value: "8 Key", description: "Strategic retail patterns identified" },
-            { label: "Processing Speed", value: "< 2s", description: "Analysis run duration in Jupyter" },
-            { label: "Visual Reports", value: "12 Charts", description: "Custom plots detailing customer behavior" }
+            { label: "Transactions Cleaned", value: "100k+ Orders", description: "Cleaned transaction logs processed" },
+            { label: "Product Categories", value: "Top 10 Mapped", description: "Best-selling categories identified" },
+            { label: "Cities Analyzed", value: "10 Key Cities", description: "Customer demographic density mapped" },
+            { label: "Normalisation Score", value: "Log & Sqrt", description: "Skewness correction transformations applied" }
         ],
-        overview: "Modern retail stores generate huge amounts of transaction logs. This project analyzes transaction datasets to identify purchase trends, customer demographics, peak sales hours, and high-performing product categories to inform inventory and marketing strategies.",
-        challenge: "The raw database entries had significant cleaning issues, including cancelled orders, duplicate transactions, and empty fields. Visualizing multidimensional sales trends clearly without cluttering reports was also a priority.",
-        solution: "I constructed a Jupyter Notebook workflow to clean and analyze the dataset. Removed erroneous and returned transaction records. Conducted customer behavior analysis (RFM - Recency, Frequency, Monetary scoring) and visualized sales trends and category distributions using Matplotlib and Seaborn.",
+        overview: "Proyek ini menganalisis dataset transaksi e-commerce secara end-to-end untuk mengidentifikasi perilaku belanja pelanggan dan performa produk. Analisis berfokus pada visualisasi distribusi data nilai transaksi (payment value), menangani outlier transaksi ekstrem, memetakan 10 kategori produk terlaris, menganalisis kegunaan metode pembayaran, serta sebaran pelanggan di berbagai kota utama.",
+        challenge: "Dataset transaksional e-commerce memiliki skewness positif yang sangat ekstrem pada nilai pembayaran (payment value) karena adanya beberapa transaksi bernilai luar biasa besar (outliers). Membiarkan outliers ini mendominasi dapat mengaburkan tren belanja rata-rata pelanggan sesungguhnya.",
+        solution: "Melakukan pembersihan data pencilan (outliers) menggunakan batas interkuartil (IQR). Untuk menyeimbangkan distribusi payment value yang miring, diterapkan Logarithmic Transformation (np.log1p) dan Square Root Transformation (np.sqrt), yang berhasil menormalisasi grafik sebaran data transaksi agar lebih representatif untuk analisis statistik lanjutan.",
         process: [
-            { phase: "Data Cleaning", description: "Identified and removed missing customer identifiers, cancellations, and duplicate database keys." },
-            { phase: "Exploratory Analysis", description: "Aggregated monthly and hourly transaction volumes to map customer purchasing windows." },
-            { phase: "Customer Analysis", description: "Conducted RFM analysis to segment the customer base into distinct value tiers." },
-            { phase: "Visualization", description: "Generated custom heatmaps, bar charts, and line plots to represent demographic and category distributions." },
-            { phase: "Reporting", description: "Synthesized observations into actionable recommendations for inventory stocking." }
+            { phase: "Data Assessment", description: "Mengidentifikasi data kosong dan pencilan nilai transaksi menggunakan visualisasi Box Plot." },
+            { phase: "Outlier Removal", description: "Membersihkan transaksi pencilan ekstrem berdasarkan rumus interkuartil (IQR) guna mendapatkan basis transaksi normal." },
+            { phase: "Data Transformation", description: "Menerapkan transformasi logaritmik dan akar kuadrat untuk mengatasi kemiringan (skewness) sebaran payment value." },
+            { phase: "Demographics & Sales", description: "Menganalisis 10 kategori produk terlaris, metode pembayaran terpopuler, serta sebaran kota pelanggan terbanyak." },
+            { phase: "Reporting", description: "Menyusun simpulan pola geografis dan produk untuk membantu penargetan promo belanja terarah." }
         ],
         gallery: [
-            { image: "/api/placeholder/800/600", title: "RFM Segment Heatmap", description: "Heatmap displaying user density categorized by Recency and Frequency scores." },
-            { image: "/api/placeholder/800/600", title: "Sales Revenue Trend", description: "Aggregated timeline chart tracking sales peaks across different days of the week." }
+            { image: "/projects/ecommerce-payment-distribution.png", title: "Transaction Value Distribution", description: "Distribusi frekuensi payment value setelah penanganan outlier ekstrem menunjukkan sebaran data yang lebih normal." },
+            { image: "/projects/ecommerce-best-sellers.png", title: "Top 10 Best Selling Categories", description: "Grafik 10 kategori produk dengan volume pembelian tertinggi oleh pelanggan." },
+            { image: "/projects/ecommerce-payment-methods.png", title: "Popular Payment Methods", description: "Perbandingan frekuensi penggunaan kartu kredit, voucher, boleto, dan debit sebagai metode pembayaran." },
+            { image: "/projects/ecommerce-customer-cities.png", title: "Top 10 Customer Cities", description: "Sebaran demografis pelanggan terbanyak di berbagai kota utama." }
         ],
         learnings: [
-            "Cleaning returns and cancellations is crucial; leaving them in skews daily sales peaks by up to 15%.",
-            "Seaborn visualizations, such as correlation heatmaps and boxplots, are highly effective in communicating customer density to non-technical stakeholders.",
-            "Segmenting customer profiles by RFM metrics allows targeted marketing campaigns, increasing repeat purchases."
+            "Pembersihan outlier transaksional bernilai ekstrem sangat krusial untuk mencegah penyimpangan nilai rata-rata belanja bulanan hingga lebih dari 20%.",
+            "Penerapan transformasi logaritmik (log1p) jauh lebih efektif mengurangi skewness nilai transaksi berskala besar dibandingkan transformasi akar kuadrat.",
+            "Visualisasi distribusi kota pelanggan mempermudah perumusan strategi rantai pasok dan penempatan gudang logistik e-commerce yang efisien."
         ]
     },
     {
