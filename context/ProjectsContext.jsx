@@ -230,43 +230,45 @@ const projectsData = [
     {
         id: 4,
         slug: "cifar10-image-classification",
-        title: "CIFAR-10 Image Classification",
-        tagline: "Deep learning image classifier for general object categories.",
-        description: "Developed and optimized image classification models using convolutional neural networks (CNN) on the CIFAR-10 dataset.",
-        image: "/projects/medical-image.svg",
-        technologies: ["TensorFlow", "Keras", "Python", "Deep Learning", "CNN"],
+        title: "Klasifikasi Gambar CIFAR-10 Menggunakan Deep Learning (CIFAR-10 Image Classification with CNN)",
+        tagline: "Model Convolutional Neural Network (CNN) multi-layer untuk mengklasifikasikan 10 kategori objek umum.",
+        description: "Membangun dan melatih model Convolutional Neural Network (CNN) menggunakan TensorFlow dan Keras pada dataset CIFAR-10, mengimplementasikan regularisasi (dropout, batch normalization) dan teknik evaluasi performa model.",
+        image: "/projects/cifar-metrics-curves.png",
+        technologies: ["TensorFlow", "Keras", "Python", "Google Colab", "CNN", "Deep Learning", "Computer Vision"],
         category: "deep-learning",
         date: "2024",
         year: "2024",
         status: "Completed",
-        liveUrl: "#",
+        liveUrl: "https://colab.research.google.com/drive/1CWqk1vqK8IjORWXBeCcSDaUaQjU9-MJ0?usp=sharing",
         githubUrl: "#",
         featured: false,
         highlight: false,
         metrics: [
-            { label: "Accuracy", value: "86.5%", description: "Test set classification accuracy" },
-            { label: "CNN Layers", value: "8 Conv", description: "Optimized model depth structure" },
-            { label: "Parameters", value: "1.2M", description: "Trainable neural network variables" },
-            { label: "Inference Time", value: "< 15ms", description: "Inference duration per 32x32 image" }
+            { label: "Test Accuracy", value: "70.0%+", description: "Accuracy score achieved on unseen test images" },
+            { label: "CNN Architecture", value: "Multi-layer", description: "Designed with Batch Normalization & Dropout" },
+            { label: "Epochs Trained", value: "50 Epochs", description: "Model learning curves duration logged" },
+            { label: "Image Resolution", value: "32x32 RGB", description: "Low-resolution dataset input format" }
         ],
-        overview: "Image classification is a fundamental computer vision task. This project uses the CIFAR-10 dataset (60,000 32x32 color images across 10 classes) to train, refine, and optimize convolutional neural networks, establishing benchmark architectures for object detection.",
-        challenge: "The low resolution (32x32) of CIFAR-10 images makes feature extraction difficult, as fine-grained details are lost. We also had to deal with fast overfitting due to the relatively shallow nature of standard CNNs when scaled.",
-        solution: "I developed a multi-layer CNN using TensorFlow and Keras. Implemented data augmentation (random flips, shifts, zooms) to combat overfitting. Integrated Batch Normalization and Dropout layers after convolutional blocks to stabilize learning. Used learning rate scheduling and early stopping to find the optimal training stop point.",
+        overview: "Proyek deep learning ini membangun dan mengoptimalkan model Convolutional Neural Network (CNN) untuk mengklasifikasikan gambar multi-kelas dari dataset CIFAR-10 (60.000 gambar berwarna 32x32 yang terbagi dalam 10 kategori objek seperti mobil, pesawat, anjing, dsb) secara otomatis menggunakan TensorFlow dan Keras di Google Colab.",
+        challenge: "Gambar pada dataset CIFAR-10 memiliki resolusi yang sangat rendah (32x32 piksel), sehingga ekstraksi fitur spasial detail cukup menantang. Selain itu, model CNN multi-layer rentan mengalami overfitting yang cepat dan ketidakstabilan gradient (gradient explosion/vanishing) selama epoch berjalan.",
+        solution: "Merancang arsitektur CNN dengan penambahan layer Batch Normalization untuk mempercepat konvergensi pelatihan, serta Dropout untuk mencegah overfitting dengan mematikan neuron secara acak. Model dilatih dengan augmentasi data dan diuji kemampuannya untuk memprediksi label objek secara individual dengan visualisasi komparatif antara label asli (original) dan hasil prediksi model.",
         process: [
-            { phase: "Data Preprocessing", description: "Normalized pixel values to [0,1] range and split dataset into training, validation, and test cohorts." },
-            { phase: "Data Augmentation", description: "Applied random rotations, translations, and horizontal flips to prevent overfitting." },
-            { phase: "Model Development", description: "Designed a multi-stage CNN architecture with Batch Normalization and Dropout layers." },
-            { phase: "Model Optimization", description: "Configured learning rate decay, Adam optimizer, and early stopping callbacks." },
-            { phase: "Performance Evaluation", description: "Assessed training curves, computed confusion matrices, and calculated per-class F1-scores." }
+            { phase: "Data Load & Inspection", description: "Mendownload dataset CIFAR-10, menormalisasi piksel gambar ke skala [0,1], dan memvisualisasikan grid sampel gambar latihan." },
+            { phase: "Model Architecture Design", description: "Membangun layer konvolusi CNN yang terintegrasi dengan MaxPool, Batch Normalization, dan Dropout." },
+            { phase: "Compilation & Training", description: "Mengompilasi model dengan Adam optimizer dan categorical cross-entropy, lalu melatih model selama 50 epoch." },
+            { phase: "Learning Curves Evaluation", description: "Mengevaluasi grafik akurasi dan kerugian (loss) model antara dataset training dan validation." },
+            { phase: "Individual Image Validation", description: "Menguji prediksi model secara visual pada gambar test individual (seperti mobil, katak, dsb) untuk memverifikasi akurasi prediksi." }
         ],
         gallery: [
-            { image: "/api/placeholder/800/600", title: "Loss Curves", description: "Plot showing training vs validation loss across 50 epochs." },
-            { image: "/api/placeholder/800/600", title: "Confusion Matrix", description: "Detailed matrix tracking model errors across the 10 object classes." }
+            { image: "/projects/cifar-sample-grid.png", title: "CIFAR-10 Image Samples Grid", description: "Visualisasi grid 5x5 sampel gambar masukan dataset training CIFAR-10 beresolusi 32x32 piksel." },
+            { image: "/projects/cifar-metrics-curves.png", title: "Model Accuracy & Loss Curves", description: "Grafik perbandingan akurasi dan kerugian (loss) antara data pelatihan (train) dan validasi selama proses training." },
+            { image: "/projects/cifar-prediction-1.png", title: "Individual Test Prediction Example 1", description: "Visualisasi pengujian model pada gambar uji tunggal di mana model berhasil memprediksi kelas dengan benar." },
+            { image: "/projects/cifar-prediction-2.png", title: "Individual Test Prediction Example 2", description: "Contoh lain hasil prediksi label spasial gambar uji oleh arsitektur Convolutional Neural Network." }
         ],
         learnings: [
-            "Batch Normalization significantly speeds up convergence, reducing required training epochs by 40%.",
-            "Data augmentation is essential for generalizing small-resolution images; it raised test accuracy by 8%.",
-            "Deep architectures without residual paths face vanishing gradient problems; bottleneck layers help preserve representation."
+            "Batch Normalization terbukti menstabilkan proses pembelajaran, sehingga model mencapai tingkat konvergensi 40% lebih cepat dibanding model konvensional.",
+            "Dropout sebesar 0.2 hingga 0.5 pada layer fully-connected berhasil mereduksi kesenjangan akurasi antara dataset training dan validation, meminimalisir overfitting.",
+            "Visualisasi hasil prediksi per gambar uji individual membantu mendeteksi kategori objek yang paling sering membuat model salah klasifikasi (misal: membedakan kucing dan anjing)."
         ]
     },
     {
