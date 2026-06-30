@@ -102,7 +102,7 @@ const projectsData = [
         title: "GIS Dashboard Pemantauan Carbon Stock & Biomassa PT Pusri",
         tagline: "Dashboard geospasial interaktif untuk memetakan cadangan karbon dan biomassa vegetasi di kawasan industri PT Pupuk Sriwidjaja Palembang.",
         description: "Merancang dan membangun Sistem Informasi Geografis (SIG) berbasis web menggunakan Streamlit Python dan Folium untuk memonitor, memetakan, dan menganalisis estimasi Aboveground Biomass (AGB) serta cadangan karbon RTH PT Pusri.",
-        image: "/projects/carbon-dashboard.png",
+        image: "/projects/carbon-dashboard-1.png",
         technologies: ["Python", "Streamlit", "Folium", "Scikit-Learn", "GeoPandas", "QGIS", "Plotly", "GIS", "Machine Learning"],
         category: "data-science",
         date: "2026",
@@ -119,7 +119,7 @@ const projectsData = [
             { label: "Model Accuracy (R²)", value: "0.87", description: "Machine learning prediction performance" }
         ],
         overview: "Proyek kerja praktik di PT Pupuk Sriwidjaja Palembang (PT Pusri) ini berfokus pada pembangunan Dashboard Sistem Informasi Geografis (SIG) interaktif berbasis web untuk memantau cadangan karbon dan biomassa atas permukaan (Aboveground Biomass/AGB). Dashboard ini mengintegrasikan data pengolahan citra drone vegetasi (NDVI) dan karakteristik fisik lapangan (Diameter at Breast Height/DBH) dengan pemodelan Machine Learning, membantu Departemen K3LH memonitor kelestarian ruang terbuka hijau industri secara cepat dan intuitif.",
-        challenge: "Data geospasial mentah (shapefile dan GeoPackage) dan hasil prediksi model estimasi machine learning umumnya sangat kompleks untuk dipahami oleh pihak manajemen dan tim K3LH non-teknis. Dibutuhkan visualisasi terpadu yang menampilkan persebaran spasial karbon per blok RTH, hubungan allometrik variabel fisik, serta tren temporal secara real-time.",
+        challenge: "Tantangan utama dari proyek ini adalah visualisasi data spasial (GeoPackage/shapefile) dan prediksi machine learning agar mudah diakses oleh pihak manajemen non-teknis. Dibutuhkan peta interaktif, allometric plots, serta distribusi kontributor karbon per blok secara modular.",
         solution: "Mengembangkan dashboard interaktif menggunakan Python dan framework Streamlit. Peta interaktif spasial dirender menggunakan Folium (`streamlit-folium`) untuk menampilkan heatmap densitas karbon per blok (Kalidoni dan Ilir Timur II). Selain itu, grafik Plotly ditambahkan untuk menunjukkan hubungan allometrik diameter pohon vs biomassa, chart distribusi donut spesies, serta treemap kontribusi karbon per blok.",
         process: [
             { phase: "GIS Preprocessing", description: "Mengolah batas-batas koordinat blok RTH PT Pusri dan memetakan indeks NDVI dari citra drone menggunakan QGIS." },
@@ -128,10 +128,10 @@ const projectsData = [
             { phase: "Visualisasi & Integrasi Map", description: "Mengintegrasikan peta interaktif Folium, chart hubungan allometrik, serta diagram donut kontribusi karbon." }
         ],
         gallery: [
-            { image: "/projects/carbon-dashboard.png", title: "PT Pusri Carbon Monitoring Dashboard Interface", description: "Main Dashboard Page" },
-            { image: "/projects/carbon-map.png", title: "Folium interactive mapping showing carbon density distribution across green open space blocks.", description: "Interactive GIS Map" },
-            { image: "/projects/carbon-comparison.png", title: "Plotly comparison charts mapping machine learning model prediction vs actual ground measurements.", description: "Predicted vs Actual Validation" },
-            { image: "/projects/carbon-feature-importance.png", title: "Feature importance weights displaying variables contributing to the carbon stock estimation.", description: "Feature Importance Chart" }
+            { image: "/projects/carbon-dashboard-1.png", title: "PT Pusri Carbon Monitoring Dashboard Overview", description: "Halaman ringkasan eksekutif dashboard menampilkan metrik KPI biomassa dan peta spasial." },
+            { image: "/projects/carbon-dashboard-2.png", title: "Allometric & Bloc Carbon Analysis Tab", description: "Halaman analisis hubungan allometrik diameter pohon (DBH) terhadap volume karbon per blok." },
+            { image: "/projects/carbon-comparison.png", title: "Predicted vs Actual Validation Graph", description: "Perbandingan hasil estimasi machine learning dengan data lapangan riil." },
+            { image: "/projects/carbon-feature-importance.png", title: "Model Feature Importance Chart", description: "Bobot pengaruh variabel vegetasi seperti NDVI terhadap prediksi biomassa." }
         ],
         learnings: [
             "Optimasi rendering peta Folium di Streamlit memerlukan manajemen dataset yang terkompresi (seperti GeoPackage) untuk mencegah kelambatan load.",
