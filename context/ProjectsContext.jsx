@@ -108,7 +108,7 @@ const projectsData = [
         date: "2026",
         year: "2026",
         status: "Completed",
-        liveUrl: "#",
+        liveUrl: "https://carbon-stock-dashboard-jevpaqbv2mmnhktmh2dojr.streamlit.app/",
         githubUrl: "#",
         featured: true,
         highlight: true,
