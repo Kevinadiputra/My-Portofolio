@@ -145,7 +145,7 @@ const projectsData = [
         title: "Klasifikasi Perilaku Pengguna Perangkat Seluler (User Behavior Classification)",
         tagline: "Memprediksi kelas perilaku pengguna perangkat seluler berdasarkan metrik penggunaan aplikasi, daya baterai, dan data internet.",
         description: "Membangun sistem klasifikasi multi-kelas untuk memprediksi kategori perilaku pengguna (skala 1-5) dengan membandingkan performa 9 model Machine Learning menggunakan K-Fold Cross-Validation dan analisis Feature Importance.",
-        image: "/projects/recommendation-system.svg",
+        image: "/projects/user-behavior-correlation.png",
         technologies: ["Python", "Pandas", "Scikit-Learn", "XGBoost", "MinMaxScaler", "LabelEncoder", "Machine Learning"],
         category: "data-science",
         date: "2024",
@@ -172,8 +172,10 @@ const projectsData = [
             { phase: "Feature Importance Evaluation", description: "Mengevaluasi skor kontribusi fitur menggunakan pohon keputusan untuk mengidentifikasi variabel klasifikasi utama." }
         ],
         gallery: [
-            { image: "/projects/recommendation-system.svg", title: "Multivariate Correlation Matrix Heatmap", description: "Analisis matriks korelasi menunjukkan keterkaitan kuat antara waktu penggunaan aplikasi, durasi layar menyala, dan pengurasan baterai." },
-            { image: "/projects/analytics-dashboard.svg", title: "Classifier Feature Importance Plot", description: "Visualisasi kontribusi fitur di mana jumlah aplikasi terinstal, pengurasan baterai, dan penggunaan data mendominasi keputusan klasifikasi." }
+            { image: "/projects/user-behavior-correlation.png", title: "Multivariate Correlation Matrix Heatmap", description: "Analisis matriks korelasi Pearson menunjukkan korelasi linear yang kuat antara waktu penggunaan aplikasi, durasi layar menyala, dan pengurasan baterai." },
+            { image: "/projects/user-behavior-distribution.png", title: "User Behavior Class Target Distribution", description: "Sebaran jumlah sampel dari 5 kelas klasifikasi perilaku pengguna seluler menunjukkan distribusi yang seimbang." },
+            { image: "/projects/user-behavior-cv-accuracy.png", title: "5-Fold Cross-Validation Accuracy Comparison", description: "Bagan perbandingan mean akurasi dan deviasi standar dari 9 model klasifikasi selama proses validasi silang." },
+            { image: "/projects/user-behavior-feature-importance.png", title: "Random Forest Feature Importance Plot", description: "Visualisasi kontribusi fitur di mana jumlah aplikasi terinstal, pengurasan baterai, dan penggunaan data mendominasi keputusan klasifikasi." }
         ],
         learnings: [
             "Fitur yang paling berpengaruh di semua model klasifikasi adalah variabel aktivitas perangkat (jumlah aplikasi diinstal, baterai terbuang, data terpakai) dibandingkan faktor demografis pengguna (usia, gender).",
