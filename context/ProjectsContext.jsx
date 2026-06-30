@@ -274,11 +274,11 @@ const projectsData = [
     {
         id: 5,
         slug: "sentiment-analysis-subway-surfers",
-        title: "Sentiment Analysis on Subway Surfers Reviews",
-        tagline: "NLP system for analyzing mobile game review sentiments.",
-        description: "Performed sentiment analysis on user reviews of the Subway Surfers mobile game using natural language processing (NLP) techniques.",
-        image: "/projects/sentiment-engine.svg",
-        technologies: ["Python", "NLP", "TensorFlow", "Pandas", "Scikit-Learn"],
+        title: "Analisis Sentimen Ulasan Game Subway Surfers (Subway Surfers Reviews Sentiment Analysis)",
+        tagline: "Analisis NLP untuk mengklasifikasikan sentimen ulasan pengguna game Subway Surfers menggunakan kamus leksikon VADER.",
+        description: "Melakukan scraping ulasan game Subway Surfers di Google Play Store dan menganalisis polaritas sentimen ulasan menggunakan SentimentIntensityAnalyzer VADER untuk membagi ulasan ke dalam kategori positif, negatif, dan netral.",
+        image: "/projects/sentiment-vader-compound.png",
+        technologies: ["Python", "NLP", "NLTK", "VADER", "Pandas", "Seaborn", "Google Play Scraper", "Jupyter Notebook"],
         category: "nlp",
         date: "2024",
         year: "2024",
@@ -288,29 +288,30 @@ const projectsData = [
         featured: false,
         highlight: false,
         metrics: [
-            { label: "Accuracy", value: "88.7%", description: "Sentiment classification accuracy" },
-            { label: "Reviews Scraped", value: "20,000+", description: "Play Store user reviews processed" },
-            { label: "Vocabulary Size", value: "15,000", description: "Unique token dictionary length" },
-            { label: "F1 Score", value: "0.87", description: "Weighted harmonic mean score" }
+            { label: "Reviews Scraped", value: "10k+ Reviews", description: "Google Play Store review records processed" },
+            { label: "Lexicon Analyzer", value: "VADER Lexicon", description: "NLTK library rule-based polarity scoring" },
+            { label: "Scores Visualised", value: "3 Tiers", description: "Positive, Neutral, and Negative sentiments logged" },
+            { label: "Analytical Charts", value: "3 Custom Plots", description: "Review distribution by stars and compound ratings" }
         ],
-        overview: "App store reviews contain vital user feedback, but reading them manually is impossible at scale. This project uses Natural Language Processing (NLP) to parse, clean, and classify player reviews of the game Subway Surfers into positive, negative, and neutral sentiments, allowing developers to spot bug complaints and feature requests instantly.",
-        challenge: "App reviews are filled with informal slang, emojis, spelling mistakes, and abbreviations. Standard text processing fails on such text. Classifying mixed-sentiment reviews (e.g., 'Love the game but it keeps crashing') was also difficult.",
-        solution: "I built an NLP text preprocessing pipeline in Python, performing tokenization, lemmatization, stop-word removal, and cleaning slang. Converted text to numeric vectors using TF-IDF and word embeddings. Trained and compared classification models (Naive Bayes, Logistic Regression, LSTM using TensorFlow) to identify the optimal sentiment classifier.",
+        overview: "Ulasan pengguna di toko aplikasi berisi umpan balik langsung yang sangat berharga namun sulit dipantau secara manual pada skala besar. Proyek ini mengimplementasikan web scraping ulasan game seluler Subway Surfers dari Google Play Store, lalu menerapkan modul NLTK VADER (Valence Aware Dictionary and sEntiment Reasoner) untuk menilai compound score sentimen setiap ulasan secara otomatis berdasarkan kosakata leksikon sentimen.",
+        challenge: "Tantangan utama dari analisis ulasan Google Play Store adalah format penulisan yang kasual, penggunaan slang, singkatan kata, dan bias rating bintang (seperti pengguna yang memberikan rating 5 bintang namun isi ulasannya berisi komplain atau kritik negatif).",
+        solution: "Menggunakan Google Play Scraper untuk menarik data ulasan secara berkala. Menerapkan NLTK SentimentIntensityAnalyzer untuk menghasilkan skor kepositifan (pos), kenetralan (neu), kenegatifan (neg), dan skor gabungan (compound score). Ulasan dikategorikan secara objektif berdasarkan skor compound tersebut untuk mempermudah identifikasi masalah performa game atau keluhan bug.",
         process: [
-            { phase: "Text Preprocessing", description: "Cleaned HTML tags, handled emoji mappings, lowercased, and performed tokenization." },
-            { phase: "Text Normalization", description: "Removed custom stop-words and applied lemmatization to extract root word forms." },
-            { phase: "Vectorization", description: "Transformed text inputs into numerical representations using TF-IDF and word tokenizers." },
-            { phase: "Sentiment Classification", description: "Trained Naive Bayes and deep LSTM networks to classify sentiments as positive, negative, or neutral." },
-            { phase: "Evaluation & Analytics", description: "Analyzed word frequencies and generated word clouds highlighting core feedback issues." }
+            { phase: "Review Scraping", description: "Menarik data konten ulasan, rating bintang, ID review, dan waktu rilis menggunakan google-play-scraper." },
+            { phase: "Data Profiling", description: "Mengevaluasi sebaran ulasan berdasarkan rating bintang masukan (1 hingga 5 bintang) dengan bagan batang." },
+            { phase: "VADER Lexicon Processing", description: "Menginisialisasi SentimentIntensityAnalyzer dan melakukan iterasi kalkulasi skor polaritas kata untuk setiap baris ulasan." },
+            { phase: "Compound Score Mapping", description: "Menggabungkan skor polaritas VADER kembali ke dataframe ulasan dan memvisualisasikan rata-rata skor gabungan (compound score) untuk tiap bintang." },
+            { phase: "Polarity Breakdown Analysis", description: "Menganalisis dan membandingkan grafik sebaran skor sentimen spesifik (positif, netral, negatif) terhadap rating bintang." }
         ],
         gallery: [
-            { image: "/api/placeholder/800/600", title: "Word Frequency Cloud", description: "Word cloud mapping the most common words in negative reviews (e.g., 'crash', 'lag')." },
-            { image: "/api/placeholder/800/600", title: "Model Accuracy Comparison", description: "Bar chart comparing Naive Bayes, Random Forest, and LSTM accuracy scores." }
+            { image: "/projects/sentiment-stars-bar.png", title: "Review Count by Star Rating", description: "Visualisasi jumlah ulasan Subway Surfers yang masuk berdasarkan rating bintang 1 sampai 5." },
+            { image: "/projects/sentiment-vader-compound.png", title: "VADER Compound Score by Star Rating", description: "Grafik skor compound gabungan sentimen VADER yang menunjukkan korelasi kuat antara rating bintang dan emosi ulasan." },
+            { image: "/projects/sentiment-polarity-breakdown.png", title: "Positive Neutral Negative Sentiment Breakdown", description: "Bagan batang tiga tingkat yang membagi kontribusi skor kepositifan, kenetralan, dan kenegatifan untuk setiap rating bintang." }
         ],
         learnings: [
-            "Lemmatization preserves the semantic roots of words better than simple stemming, raising classifier precision.",
-            "LSTM networks capture word order and dependencies (e.g., handling negations like 'not good') much better than bag-of-words models.",
-            "Informal text cleaning (such as mapping emojis to words) preserves sentiment signals that would otherwise be discarded as noise."
+            "Skor compound VADER berkolerasi linear positif yang sangat konsisten dengan rating bintang ulasan, membuktikan keandalan leksikon rule-based untuk teks kasual bahasa Inggris.",
+            "Rating 3 bintang didominasi oleh skor sentimen netral (neu) yang tinggi, menunjukkan bahwa bintang 3 seringkali berupa saran atau ulasan berimbang.",
+            "Skraping data ulasan langsung dari Play Store memberikan wawasan langsung yang cepat mengenai bug rilis terbaru tanpa menunggu laporan manual pengguna."
         ]
     },
     {
