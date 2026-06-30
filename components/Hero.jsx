@@ -61,7 +61,7 @@ const Hero = () => {
     ];
 
     return (
-        <section id="home" className="relative h-auto lg:h-[88vh] min-h-[660px] lg:max-h-[820px] flex items-center overflow-hidden py-10 lg:py-0 pt-24 lg:pt-20">
+        <section id="home" className="relative w-full min-h-[92vh] flex flex-col justify-between overflow-hidden pt-[80px] pb-6">
             <div className="absolute inset-0 hero-surface" />
             <div className="absolute inset-0 hero-grid" />
             <div className="absolute inset-0 noise-overlay" />
@@ -71,12 +71,13 @@ const Hero = () => {
                 <img src="/globe.svg" alt="" className="w-full h-full invert" />
             </div>
 
-            <div className="relative z-10 w-full max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 lg:pt-4 pb-20 md:pb-24 my-auto">
-                <div className="grid lg:grid-cols-[55fr_45fr] gap-12 lg:gap-16 items-center">
+            {/* Main Content Area */}
+            <div className="relative z-10 w-full max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 flex-grow flex items-center">
+                <div className="grid lg:grid-cols-[55fr_45fr] gap-12 lg:gap-16 items-start w-full py-8 lg:py-12">
                     
                     {/* Hero Left: Text Column with strict spacing hierarchy */}
                     <div className="flex flex-col justify-center">
-                        {/* Available Badge */}
+                        {/* Available Ticker */}
                         <div className="flex items-center gap-3 text-xs text-white/50">
                             <span className="inline-flex items-center gap-2 rounded-none border border-accent/30 bg-accent/10 px-2.5 py-0.5 text-accent font-semibold tracking-wide text-[10px]">
                                 <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
@@ -85,27 +86,27 @@ const Hero = () => {
                             <span className="text-white/30 tracking-wider text-[10px]">Portfolio 2026</span>
                         </div>
 
-                        {/* Headline - Spacing: 24px */}
+                        {/* Headline H1 - Spacing: 24px */}
                         <motion.h1
                             initial="hidden"
                             animate="visible"
                             variants={fadeUpVariants}
-                            className="font-display text-4xl sm:text-5xl md:text-[50px] lg:text-[56px] xl:text-[62px] font-extrabold tracking-tight text-white leading-[1.1] xl:leading-[1.05] max-w-[600px] mt-[24px]"
+                            className="font-display text-4xl sm:text-5xl md:text-[50px] lg:text-[56px] xl:text-[60px] font-extrabold tracking-tight text-white leading-[1.1] xl:leading-[1.08] max-w-[620px] mt-[24px]"
                         >
                             Building Machine Learning Systems and Transforming Data into Actionable Insights.
                         </motion.h1>
                         
-                        {/* Nama - Spacing: 24px */}
-                        <p className="text-base md:text-lg font-display font-semibold text-white/80 mt-[24px]">
+                        {/* Nama - Spacing: 16px */}
+                        <p className="text-base md:text-lg font-display font-semibold text-white/80 mt-[16px]">
                             Hi, I'm <span className="text-accent">{profile?.name || "Kevin Adiputra"}</span>.
                         </p>
 
-                        {/* Job Title - Spacing: 16px */}
-                        <div className="flex items-center gap-3 mt-[16px]">
-                            <span className="text-[10px] font-mono px-2 py-0.5 border border-white/10 bg-white/[0.02] text-white/40 tracking-wider uppercase">
+                        {/* Job Title Typing Box - Spacing: 16px */}
+                        <div className="flex flex-wrap items-center gap-3 mt-[16px] min-h-[32px]">
+                            <span className="text-[10px] font-mono px-2 py-0.5 border border-white/10 bg-white/[0.02] text-white/40 tracking-wider uppercase whitespace-nowrap">
                                 Current focus
                             </span>
-                            <h2 className="text-sm md:text-base font-bold font-display text-white/80">
+                            <h2 className="text-sm md:text-base font-bold font-display text-white/80 whitespace-nowrap min-w-0">
                                 {displayText}
                                 <span className="text-accent animate-pulse">|</span>
                             </h2>
@@ -141,17 +142,17 @@ const Hero = () => {
                             {heroStats.map((stat) => (
                                 <div 
                                     key={stat.label} 
-                                    className="surface-card py-2.5 px-4 flex flex-col justify-center h-[92px] hover:border-accent/30 hover:shadow-[0_0_15px_rgba(104,212,204,0.04)] transition-all duration-300"
+                                    className="surface-card py-2.5 px-4 flex flex-col justify-center h-[80px] hover:border-accent/30 hover:shadow-[0_0_15px_rgba(104,212,204,0.04)] transition-all duration-300"
                                 >
-                                    <div className="text-2xl md:text-3xl lg:text-[36px] font-display font-extrabold text-accent leading-none mb-1">
+                                    <div className="text-xl md:text-2xl lg:text-[28px] font-display font-extrabold text-accent leading-none mb-1">
                                         {stat.value}
                                     </div>
-                                    <div className="text-[10px] md:text-[12px] lg:text-[16px] font-mono tracking-wider text-white/40 uppercase leading-none truncate">{stat.label}</div>
+                                    <div className="text-[10px] md:text-[11px] lg:text-[12px] font-mono tracking-wider text-white/40 uppercase leading-none truncate">{stat.label}</div>
                                 </div>
                             ))}
                         </div>
 
-                        {/* Social Media Links - Spacing: 24px */}
+                        {/* Social Links - Spacing: 24px */}
                         <div className="flex items-center justify-between pt-1 mt-[24px] max-w-[480px]">
                             <div className="flex items-center gap-3">
                                 {[
@@ -166,10 +167,10 @@ const Hero = () => {
                                             href={item.url}
                                             target={item.url.startsWith("mailto:") ? undefined : "_blank"}
                                             rel={item.url.startsWith("mailto:") ? undefined : "noopener noreferrer"}
-                                            className="w-10 h-10 bg-tertiary/60 hover:bg-accent hover:text-primary rounded-none border border-white/5 hover:border-accent/30 flex items-center justify-center transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_10px_rgba(104,212,204,0.25)]"
+                                            className="w-9 h-9 bg-tertiary/60 hover:bg-accent hover:text-primary rounded-none border border-white/5 hover:border-accent/30 flex items-center justify-center transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_10px_rgba(104,212,204,0.25)]"
                                             aria-label={item.label}
                                         >
-                                            <Icon size={16} />
+                                            <Icon size={14} />
                                         </a>
                                     );
                                 })}
@@ -178,8 +179,8 @@ const Hero = () => {
                     </div>
 
                     {/* Hero Right: Profile Card Column */}
-                    <div className="flex justify-center lg:justify-end">
-                        <div className="notch-card glass-panel p-4 md:p-5 w-full max-w-[280px] relative overflow-hidden flex flex-col gap-3">
+                    <div className="flex justify-center lg:justify-end w-full">
+                        <div className="notch-card glass-panel p-5 md:p-6 w-full max-w-[310px] relative overflow-hidden flex flex-col gap-4">
                             {/* Card Header */}
                             <div className="flex items-center justify-between text-xs text-white/50 border-b border-white/5 pb-2">
                                 <span className="inline-flex items-center gap-1.5 font-mono text-[10px]">
@@ -190,7 +191,7 @@ const Hero = () => {
                             </div>
 
                             {/* Photo Container */}
-                            <div className="relative group cursor-pointer w-full max-w-[210px] mx-auto">
+                            <div className="relative group cursor-pointer w-full max-w-[230px] mx-auto">
                                 {/* Technical decorative corners */}
                                 <div className="absolute -inset-1 border border-white/5 bg-transparent z-0 transition-colors duration-500 group-hover:border-accent/15 group-hover:bg-accent/[0.01]" />
                                 <div className="absolute top-0 left-0 w-2.5 h-2.5 border-t border-l border-accent/60 -translate-x-1 -translate-y-1 transition-transform duration-500 group-hover:-translate-x-2 group-hover:-translate-y-2 z-20" />
@@ -250,24 +251,13 @@ const Hero = () => {
                 </div>
             </div>
 
-            {/* Rotating Data Ribbon */}
-            <div className="data-ribbon absolute left-[-2%] right-[-2%] bottom-6 md:bottom-8 rotate-[-0.75deg] h-[44px] flex items-center overflow-hidden select-none">
-                <div className="data-ribbon__track flex items-center gap-12 md:gap-16 whitespace-nowrap">
-                    {["Data Science", "MLOps Automation", "Machine Learning", "Data Analytics", "Data Science", "MLOps Automation", "Machine Learning", "Data Analytics"].map((item, index) => (
-                        <span key={`${item}-${index}`} className="inline-flex items-center gap-12 md:gap-16 text-xs font-medium tracking-[0.22em] text-white/60 uppercase">
-                            {item}
-                            <span className="text-white/20 select-none font-mono">/</span>
-                        </span>
-                    ))}
-                </div>
-            </div>
-
-            {/* Clickable Minimalist Mouse Scroll Indicator */}
-            <div className="absolute bottom-16 md:bottom-20 left-1/2 -translate-x-1/2 z-20 flex justify-center">
+            {/* Bottom Footer Area of Hero containing scroll button and ribbon in natural document flow */}
+            <div className="relative w-full mt-auto pt-6 flex flex-col items-center justify-center z-20">
+                {/* Clickable Minimalist Mouse Scroll Indicator */}
                 <motion.button
                     onClick={scrollToAbout}
                     aria-label="Scroll to about section"
-                    className="flex flex-col items-center opacity-30 hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
+                    className="flex flex-col items-center opacity-30 hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent mb-6"
                     whileHover={{ y: 2 }}
                     whileTap={{ scale: 0.95 }}
                 >
@@ -287,6 +277,18 @@ const Hero = () => {
                     </div>
                     <ArrowDown size={10} className="text-accent/60 mt-1 animate-pulse" />
                 </motion.button>
+
+                {/* Rotating Data Ribbon */}
+                <div className="data-ribbon w-[104%] left-[-2%] rotate-[-0.75deg] h-[44px] flex items-center overflow-hidden select-none bg-primary/20 backdrop-blur-sm border-y border-white/5">
+                    <div className="data-ribbon__track flex items-center gap-12 md:gap-16 whitespace-nowrap">
+                        {["Data Science", "MLOps Automation", "Machine Learning", "Data Analytics", "Data Science", "MLOps Automation", "Machine Learning", "Data Analytics"].map((item, index) => (
+                            <span key={`${item}-${index}`} className="inline-flex items-center gap-12 md:gap-16 text-xs font-medium tracking-[0.22em] text-white/60 uppercase">
+                                {item}
+                                <span className="text-white/20 select-none font-mono">/</span>
+                            </span>
+                        ))}
+                    </div>
+                </div>
             </div>
         </section>
     );
