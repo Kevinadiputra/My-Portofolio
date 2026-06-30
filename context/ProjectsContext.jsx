@@ -19,7 +19,7 @@ const projectsData = [
         title: "End-to-End Machine Learning Operations Pipeline",
         tagline: "Membangun pipeline MLOps lengkap mulai dari eksperimen model, tracking, deployment, CI/CD, hingga monitoring menggunakan tools industri modern.",
         description: "Project ini mengimplementasikan lifecycle machine learning secara lengkap menggunakan pendekatan MLOps. Pipeline mencakup preprocessing data, eksperimen model, experiment tracking menggunakan MLflow, deployment model, monitoring menggunakan Prometheus dan Grafana, serta automation workflow menggunakan GitHub Actions.",
-        image: "public/projects/DagsHub MLflow Experiments Artifacts.png",
+        image: "/projects/DagsHub MLflow Experiments Artifacts.png",
         technologies: ["Python", "Scikit-Learn", "MLflow", "Docker", "GitHub Actions", "Prometheus", "Grafana", "FastAPI", "MLOps"],
         category: "mlops",
         date: "2026",
@@ -46,8 +46,8 @@ const projectsData = [
             { phase: "Monitoring Setup", description: "Implemented Prometheus metrics exporter in FastAPI to monitor latency, request count, and output prediction drift, visualized in Grafana." }
         ],
         gallery: [
-            { image: "public/projects/GitHub Actions Workflow CI Run.png", title: "MLflow Registry Interface", description: "Centralized model registry mapping experiments and version history." },
-            { image: "public/projects/grafana-metrics.png", title: "Grafana Metrics Dashboard", description: "Grafana visualization plotting request latency, CPU/memory usage, and prediction distributions." }
+            { image: "/projects/GitHub Actions Workflow CI Run.png", title: "MLflow Registry Interface", description: "Centralized model registry mapping experiments and version history." },
+            { image: "/projects/grafana-metrics.png", title: "Grafana Metrics Dashboard", description: "Grafana visualization plotting request latency, CPU/memory usage, and prediction distributions." }
         ],
         learnings: [
             "Decoupling data preprocessing from model inference prevents training-serving skew, a common source of bugs in production.",
