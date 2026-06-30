@@ -99,44 +99,44 @@ const projectsData = [
     {
         id: 1,
         slug: "above-ground-biomass-estimation",
-        title: "Above Ground Biomass Estimation Using Machine Learning and Remote Sensing",
-        tagline: "Estimating aboveground forest biomass and carbon stock using remote sensing and machine learning.",
-        description: "Developed a machine learning model to estimate forest biomass using Random Forest and XGBoost. Utilized remote sensing datasets, LiDAR scans, and QGIS for spatial validation and analysis.",
-        image: "/projects/analytics-dashboard.svg",
-        technologies: ["Python", "Scikit-Learn", "Random Forest", "XGBoost", "QGIS", "Remote Sensing", "LiDAR"],
+        title: "GIS Dashboard Pemantauan Carbon Stock & Biomassa PT Pusri",
+        tagline: "Dashboard geospasial interaktif untuk memetakan cadangan karbon dan biomassa vegetasi di kawasan industri PT Pupuk Sriwidjaja Palembang.",
+        description: "Merancang dan membangun Sistem Informasi Geografis (SIG) berbasis web menggunakan Streamlit Python dan Folium untuk memonitor, memetakan, dan menganalisis estimasi Aboveground Biomass (AGB) serta cadangan karbon RTH PT Pusri.",
+        image: "/projects/carbon-dashboard.png",
+        technologies: ["Python", "Streamlit", "Folium", "Scikit-Learn", "GeoPandas", "QGIS", "Plotly", "GIS", "Machine Learning"],
         category: "data-science",
-        date: "2024",
-        year: "2024",
+        date: "2026",
+        year: "2026",
         status: "Completed",
         liveUrl: "#",
         githubUrl: "#",
         featured: true,
         highlight: true,
         metrics: [
-            { label: "R² Score", value: "0.87", description: "Biomass prediction variance explained" },
-            { label: "RMSE", value: "12.4 tC/ha", description: "Root Mean Squared Error on test set" },
-            { label: "MAE", value: "9.2 tC/ha", description: "Mean Absolute Error" },
-            { label: "LiDAR Samples", value: "15,000+", description: "Annotated spatial data points" }
+            { label: "Carbon Stock", value: "236.4 tC", description: "Total vegetation carbon captured" },
+            { label: "Aboveground Biomass", value: "503.2 ton", description: "Total forest/canopy mass estimate" },
+            { label: "RTH Areas Monitored", value: "12 Blocks", description: "Factory and office green zones mapped" },
+            { label: "Model Accuracy (R²)", value: "0.87", description: "Machine learning prediction performance" }
         ],
-        overview: "As part of a carbon offsetting initiative, estimating aboveground biomass and carbon stock accurately is crucial. This project leverages remote sensing, LiDAR datasets, and machine learning (Random Forest and XGBoost) to model and estimate carbon levels across diverse forest regions, providing a scalable and cost-effective alternative to physical tree counting.",
-        challenge: "The main challenges lay in processing high-dimensional and noisy spatial datasets from satellites, aligning LiDAR point cloud data with ground truth measurements, and addressing spatial autocorrelation during model validation. Overfitting on localized canopy features was also a major concern.",
-        solution: "I developed a pipeline using Python and spatial analysis libraries to preprocess and clean the raster/vector data. Extracted vegetation indices (NDVI, EVI) from remote sensing images and combined them with canopy height models (CHM) from LiDAR. We trained Random Forest and XGBoost models, evaluating performance with MAE, RMSE, and R². QGIS was used to validate spatial estimations and map the carbon distribution visually.",
+        overview: "Proyek kerja praktik di PT Pupuk Sriwidjaja Palembang (PT Pusri) ini berfokus pada pembangunan Dashboard Sistem Informasi Geografis (SIG) interaktif berbasis web untuk memantau cadangan karbon dan biomassa atas permukaan (Aboveground Biomass/AGB). Dashboard ini mengintegrasikan data pengolahan citra drone vegetasi (NDVI) dan karakteristik fisik lapangan (Diameter at Breast Height/DBH) dengan pemodelan Machine Learning, membantu Departemen K3LH memonitor kelestarian ruang terbuka hijau industri secara cepat dan intuitif.",
+        challenge: "Data geospasial mentah (shapefile dan GeoPackage) dan hasil prediksi model estimasi machine learning umumnya sangat kompleks untuk dipahami oleh pihak manajemen dan tim K3LH non-teknis. Dibutuhkan visualisasi terpadu yang menampilkan persebaran spasial karbon per blok RTH, hubungan allometrik variabel fisik, serta tren temporal secara real-time.",
+        solution: "Mengembangkan dashboard interaktif menggunakan Python dan framework Streamlit. Peta interaktif spasial dirender menggunakan Folium (`streamlit-folium`) untuk menampilkan heatmap densitas karbon per blok (Kalidoni dan Ilir Timur II). Selain itu, grafik Plotly ditambahkan untuk menunjukkan hubungan allometrik diameter pohon vs biomassa, chart distribusi donut spesies, serta treemap kontribusi karbon per blok.",
         process: [
-            { phase: "Research", description: "Analyzed existing diagnostic architectures and reviewed domain literature on carbon estimation methodologies." },
-            { phase: "Data Collection", description: "Aggregated multi-temporal satellite imagery and high-density LiDAR point clouds." },
-            { phase: "Data Processing", description: "Calculated vegetation indices and normalized LiDAR returns to extract ground and canopy levels." },
-            { phase: "Model Development", description: "Trained Random Forest and XGBoost estimators using nested spatial cross-validation." },
-            { phase: "Evaluation", description: "Validated model performance using RMSE, MAE, and R² scores, assessing feature importance graphs." },
-            { phase: "Visualization", description: "Generated spatial carbon density maps in QGIS for visual distribution analysis." }
+            { phase: "GIS Preprocessing", description: "Mengolah batas-batas koordinat blok RTH PT Pusri dan memetakan indeks NDVI dari citra drone menggunakan QGIS." },
+            { phase: "Estimasi Machine Learning", description: "Melatih model XGBoost dan Random Forest menggunakan data latih DBH fisik pohon untuk memprediksi AGB." },
+            { phase: "UI & Layout Design", description: "Merancang antarmuka dashboard Streamlit dengan sidebar filter interaktif (Tahun, Area, Jenis Vegetasi)." },
+            { phase: "Visualisasi & Integrasi Map", description: "Mengintegrasikan peta interaktif Folium, chart hubungan allometrik, serta diagram donut kontribusi karbon." }
         ],
         gallery: [
-            { image: "/api/placeholder/800/600", title: "Biomass Density Mapping", description: "Spatial biomass distribution map plotted via QGIS." },
-            { image: "/api/placeholder/800/600", title: "Feature Importance Chart", description: "XGBoost feature importances showing LiDAR height metrics dominate prediction power." }
+            { image: "/projects/carbon-dashboard.png", title: "PT Pusri Carbon Monitoring Dashboard Interface", description: "Main Dashboard Page" },
+            { image: "/projects/carbon-map.png", title: "Folium interactive mapping showing carbon density distribution across green open space blocks.", description: "Interactive GIS Map" },
+            { image: "/projects/carbon-comparison.png", title: "Plotly comparison charts mapping machine learning model prediction vs actual ground measurements.", description: "Predicted vs Actual Validation" },
+            { image: "/projects/carbon-feature-importance.png", title: "Feature importance weights displaying variables contributing to the carbon stock estimation.", description: "Feature Importance Chart" }
         ],
         learnings: [
-            "Integrating LiDAR height data with multispectral indices improves carbon stock prediction accuracy by 25% compared to satellite imagery alone.",
-            "XGBoost handles non-linear canopy structures better than Random Forest, though it requires stricter regularization to prevent overfitting on local plots.",
-            "Spatial validation is essential in geospatial modeling; standard random k-fold splits underestimate spatial prediction errors."
+            "Optimasi rendering peta Folium di Streamlit memerlukan manajemen dataset yang terkompresi (seperti GeoPackage) untuk mencegah kelambatan load.",
+            "Penyajian hubungan allometrik (scatter plot) sangat membantu menjelaskan korelasi logis diameter pohon terhadap kapasitas penyimpanan karbon ke pihak manajemen.",
+            "Dashboard interaktif memangkas waktu analisis laporan keberlanjutan RTH industri secara signifikan dibandingkan metode tabular manual."
         ]
     },
     {
