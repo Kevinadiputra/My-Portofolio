@@ -72,7 +72,7 @@ const Header = () => {
                     </button>
 
                     {/* Desktop Navigation */}
-                    <nav className="hidden md:flex items-center gap-1 rounded-2xl border border-white/10 bg-white/[0.03] p-1">
+                    <nav className="hidden md:flex items-center gap-1 border border-white/10 bg-white/[0.03] p-1">
                         {navItems.map((item) => {
                             const isActive = (item.type === "route" && pathname === item.href) ||
                                 (item.type === "section" && pathname === "/");
@@ -81,7 +81,7 @@ const Header = () => {
                                 <button
                                     key={item.name}
                                     onClick={(e) => handleNavigation(item, e.ctrlKey || e.metaKey)}
-                                    className={`rounded-xl px-3.5 py-1.5 text-xs font-semibold transition-all duration-200 ${isActive && item.type === "route"
+                                    className={`rounded-none px-3.5 py-1.5 text-xs font-semibold transition-all duration-200 ${isActive && item.type === "route"
                                         ? "bg-accent text-primary"
                                         : "text-white/70 hover:bg-white/10 hover:text-white"
                                         }`}
@@ -94,7 +94,7 @@ const Header = () => {
 
                     {/* Mobile Menu Button */}
                     <button
-                        className="md:hidden rounded-xl border border-white/10 p-2 text-white hover:text-accent transition-colors"
+                        className="md:hidden rounded-none border border-white/10 p-2 text-white hover:text-accent transition-colors"
                         onClick={() => setIsOpen(!isOpen)}
                         aria-label={isOpen ? "Close menu" : "Open menu"}
                         aria-expanded={isOpen}
@@ -106,12 +106,12 @@ const Header = () => {
                 {/* Mobile Navigation */}
                 {isOpen && (
                     <div className="md:hidden pb-4 border-t border-white/10">
-                        <nav className="mt-4 grid gap-2 rounded-2xl bg-secondary/95 p-3">
+                        <nav className="mt-4 grid gap-2 bg-secondary/95 p-3">
                             {navItems.map((item) => (
                                 <button
                                     key={item.name}
                                     onClick={() => handleNavigation(item)}
-                                    className="rounded-xl px-3 py-3 text-left text-sm font-medium text-white/70 transition-colors duration-200 hover:bg-white/10 hover:text-accent"
+                                    className="rounded-none px-3 py-3 text-left text-sm font-medium text-white/70 transition-colors duration-200 hover:bg-white/10 hover:text-accent"
                                 >
                                     {item.name}
                                 </button>

@@ -1,16 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { ArrowDown, Download, Github, Linkedin, Mail, Sparkles } from "lucide-react";
 import { useProfile } from "@/context/ProfileContext";
 import { motion } from "framer-motion";
-
-const phrases = [
-    "Data Scientist",
-    "Machine Learning Engineer",
-    "MLOps Enthusiast",
-    "Data Analyst",
-];
 
 const fadeUpVariants = {
     hidden: { opacity: 0, y: 15 },
@@ -25,29 +17,7 @@ const fadeUpVariants = {
 };
 
 const Hero = () => {
-    const [displayText, setDisplayText] = useState("");
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [currentPhrase, setCurrentPhrase] = useState(0);
     const { profile } = useProfile();
-
-    useEffect(() => {
-        const phrase = phrases[currentPhrase];
-
-        if (currentIndex < phrase.length) {
-            const timer = setTimeout(() => {
-                setDisplayText(phrase.substring(0, currentIndex + 1));
-                setCurrentIndex(currentIndex + 1);
-            }, 90);
-            return () => clearTimeout(timer);
-        }
-
-        const timer = setTimeout(() => {
-            setCurrentIndex(0);
-            setDisplayText("");
-            setCurrentPhrase((prev) => (prev + 1) % phrases.length);
-        }, 1800);
-        return () => clearTimeout(timer);
-    }, [currentIndex, currentPhrase]);
 
     const scrollToAbout = () => {
         document.querySelector("#about")?.scrollIntoView({ behavior: "smooth" });
@@ -107,8 +77,7 @@ const Hero = () => {
                                 Current focus
                             </span>
                             <h2 className="text-sm md:text-base font-bold font-display text-white/80 whitespace-nowrap min-w-0">
-                                {displayText}
-                                <span className="text-accent animate-pulse">|</span>
+                                {profile?.title || "Machine Learning Engineer & Data Scientist"}
                             </h2>
                         </div>
 

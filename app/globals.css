@@ -12,6 +12,10 @@
   --color-tertiary: #1a1f2a;
   --color-tertiary-hover: #232a37;
   --color-muted: #9da9b8;
+  --color-admin-panel: #111820;
+  --color-admin-panel-strong: #151f29;
+  --color-admin-line: rgba(255, 255, 255, 0.12);
+  --color-admin-soft: rgba(255, 255, 255, 0.58);
 }
 
 body {
@@ -30,20 +34,6 @@ html {
 ::selection {
   background: var(--color-accent);
   color: #0b0b12;
-}
-
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--color-secondary);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-accent);
-  border-radius: 4px;
 }
 
 /* Scrollbar styling */
@@ -226,6 +216,544 @@ html {
   transform: translateY(0);
 }
 
+.admin-auth-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  background:
+    linear-gradient(135deg, rgba(104, 212, 204, 0.08), transparent 34%),
+    var(--color-primary);
+}
+
+.admin-auth-card {
+  width: min(100%, 440px);
+  padding: clamp(1.5rem, 4vw, 2.75rem);
+  border: 1px solid var(--color-admin-line);
+  background: var(--color-admin-panel);
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%);
+}
+
+.admin-eyebrow {
+  color: var(--color-accent);
+  font: 600 0.68rem/1.2 var(--font-mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.admin-auth-card h1,
+.admin-page-header h1 {
+  margin: 0.65rem 0 0;
+  color: white;
+  font: 700 clamp(2rem, 4vw, 3.6rem)/0.98 var(--font-display);
+  letter-spacing: -0.05em;
+}
+
+.admin-auth-card > p:not(.admin-form-error),
+.admin-page-header p,
+.admin-panel p {
+  color: var(--color-admin-soft);
+}
+
+.admin-form {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 2rem;
+}
+
+.admin-form label {
+  color: rgba(255, 255, 255, 0.78);
+  font: 600 0.75rem/1.2 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-form input {
+  width: 100%;
+  border: 1px solid var(--color-admin-line);
+  border-radius: 0;
+  background: var(--color-primary);
+  color: white;
+  padding: 0.85rem 0.9rem;
+  outline: none;
+}
+
+.admin-form input:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(104, 212, 204, 0.16);
+}
+
+.admin-submit-button,
+.admin-primary-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.9rem;
+  border: 1px solid var(--color-accent);
+  border-radius: 0;
+  background: var(--color-accent);
+  color: var(--color-primary);
+  padding: 0.75rem 1rem;
+  font: 700 0.75rem/1 var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: transform 180ms ease, background-color 180ms ease;
+}
+
+.admin-submit-button {
+  margin-top: 0.75rem;
+  cursor: pointer;
+}
+
+.admin-submit-button:hover,
+.admin-primary-action:hover {
+  transform: translateY(-2px);
+  background: var(--color-accent-hover);
+}
+
+.admin-submit-button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+  transform: none;
+}
+
+.admin-form-error {
+  margin-top: 1rem;
+  border-left: 2px solid #f29b8f;
+  background: rgba(242, 155, 143, 0.08);
+  color: #ffc2b8;
+  padding: 0.7rem 0.8rem;
+  font-size: 0.85rem;
+}
+
+.admin-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  background: var(--color-primary);
+}
+
+.admin-sidebar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  gap: 2rem;
+  border-right: 1px solid var(--color-admin-line);
+  background: #0e1319;
+  padding: 1.5rem;
+}
+
+.admin-brand {
+  display: inline-block;
+  margin-top: 0.55rem;
+  color: white;
+  font: 700 1.05rem/1 var(--font-display);
+  letter-spacing: -0.03em;
+}
+
+.admin-nav {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.admin-nav a,
+.admin-logout {
+  border: 1px solid transparent;
+  border-radius: 0;
+  color: rgba(255, 255, 255, 0.62);
+  padding: 0.7rem 0.75rem;
+  text-align: left;
+  font: 500 0.82rem/1.2 var(--font-mono);
+  transition: color 180ms ease, border-color 180ms ease, background-color 180ms ease;
+}
+
+.admin-nav a:hover,
+.admin-nav a:focus-visible,
+.admin-logout:hover,
+.admin-logout:focus-visible {
+  border-color: rgba(104, 212, 204, 0.3);
+  background: rgba(104, 212, 204, 0.08);
+  color: var(--color-accent);
+}
+
+.admin-logout {
+  margin-top: auto;
+  cursor: pointer;
+}
+
+.admin-content {
+  min-width: 0;
+  padding: clamp(1.25rem, 4vw, 4rem);
+}
+
+.admin-page {
+  width: min(100%, 1180px);
+  margin: 0 auto;
+}
+
+.admin-page-header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  border-bottom: 1px solid var(--color-admin-line);
+  padding-bottom: 1.75rem;
+}
+
+.admin-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.admin-stat-card,
+.admin-panel {
+  border: 1px solid var(--color-admin-line);
+  background: var(--color-admin-panel);
+  padding: 1.15rem;
+}
+
+.admin-stat-card {
+  display: grid;
+  gap: 1rem;
+  min-height: 130px;
+}
+
+.admin-stat-card span {
+  color: var(--color-admin-soft);
+  font: 500 0.7rem/1.3 var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.admin-stat-card strong {
+  color: var(--color-accent);
+  font: 700 clamp(2rem, 4vw, 3.3rem)/0.9 var(--font-display);
+  letter-spacing: -0.06em;
+}
+
+.admin-dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.admin-panel-heading {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-admin-line);
+  padding-bottom: 0.9rem;
+}
+
+.admin-panel h2 {
+  margin: 0.5rem 0 0;
+  color: white;
+  font: 600 1.3rem/1.1 var(--font-display);
+}
+
+.admin-change-list {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-change-list li {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 0.9rem 0;
+}
+
+.admin-change-list li:last-child {
+  border-bottom: 0;
+}
+
+.admin-change-list span,
+.admin-change-list time {
+  color: var(--color-admin-soft);
+  font: 500 0.68rem/1.2 var(--font-mono);
+  text-transform: uppercase;
+}
+
+.admin-change-list strong {
+  overflow: hidden;
+  color: white;
+  font-size: 0.9rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-shortcuts {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 1.4rem;
+}
+
+.admin-shortcuts a {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid var(--color-admin-line);
+  color: white;
+  padding: 0.8rem;
+  font: 500 0.78rem/1.2 var(--font-mono);
+  transition: border-color 180ms ease, color 180ms ease;
+}
+
+.admin-shortcuts a:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.admin-empty-state,
+.admin-empty-panel {
+  color: var(--color-admin-soft);
+}
+
+.admin-crud-layout {
+  display: grid;
+  grid-template-columns: minmax(230px, 0.38fr) minmax(0, 1fr);
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.admin-record-list {
+  align-self: start;
+}
+
+.admin-list-controls {
+  display: grid;
+  gap: 0.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-admin-line);
+}
+
+.admin-list-controls input,
+.admin-list-controls select {
+  min-width: 0;
+  width: 100%;
+  border: 1px solid var(--color-admin-line);
+  border-radius: 0;
+  background: var(--color-primary);
+  color: white;
+  padding: 0.7rem 0.75rem;
+  font: 500 0.74rem/1.2 var(--font-mono);
+}
+
+.admin-list-controls input:focus,
+.admin-list-controls select:focus {
+  border-color: var(--color-accent);
+  outline: none;
+}
+
+.admin-records {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-records button {
+  display: grid;
+  width: 100%;
+  gap: 0.35rem;
+  border: 1px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.admin-records button:hover,
+.admin-records button:focus-visible,
+.admin-records button.is-selected {
+  border-color: rgba(104, 212, 204, 0.36);
+  background: rgba(104, 212, 204, 0.08);
+}
+
+.admin-records strong {
+  overflow: hidden;
+  font-size: 0.84rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-records span {
+  color: var(--color-admin-soft);
+  font: 500 0.65rem/1.2 var(--font-mono);
+  text-transform: uppercase;
+}
+
+.admin-editor-panel {
+  min-width: 0;
+}
+
+.admin-editor-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.admin-editor-form > label {
+  display: grid;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.admin-editor-form > label:has(textarea),
+.admin-editor-form > label:has(input[type="url"]),
+.admin-editor-form > label:has(input[type="text"]:nth-of-type(1)) {
+  min-width: 0;
+}
+
+.admin-editor-form label > span {
+  color: rgba(255, 255, 255, 0.72);
+  font: 600 0.68rem/1.2 var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.admin-editor-form input:not([type="checkbox"]),
+.admin-editor-form textarea {
+  width: 100%;
+  min-width: 0;
+  resize: vertical;
+  border: 1px solid var(--color-admin-line);
+  border-radius: 0;
+  background: var(--color-primary);
+  color: white;
+  padding: 0.75rem;
+  font: 400 0.82rem/1.45 var(--font-body);
+}
+
+.admin-editor-form input:not([type="checkbox"]):focus,
+.admin-editor-form textarea:focus {
+  border-color: var(--color-accent);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(104, 212, 204, 0.12);
+}
+
+.admin-checkbox-field {
+  display: flex !important;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2.6rem;
+}
+
+.admin-checkbox-field input {
+  accent-color: var(--color-accent);
+}
+
+.admin-editor-actions {
+  display: flex;
+  grid-column: 1 / -1;
+  align-items: center;
+  gap: 0.85rem;
+  border-top: 1px solid var(--color-admin-line);
+  padding-top: 1rem;
+}
+
+.admin-unsaved-indicator {
+  color: #f3c27f;
+  font: 500 0.68rem/1.2 var(--font-mono);
+  text-transform: uppercase;
+}
+
+.admin-danger-action {
+  border: 1px solid rgba(242, 155, 143, 0.4);
+  border-radius: 0;
+  background: transparent;
+  color: #ffc2b8;
+  cursor: pointer;
+  padding: 0.5rem 0.7rem;
+  font: 600 0.66rem/1 var(--font-mono);
+  text-transform: uppercase;
+}
+
+.admin-danger-action:hover,
+.admin-danger-action:focus-visible {
+  background: rgba(242, 155, 143, 0.12);
+}
+
+.admin-form-success {
+  border-left: 2px solid var(--color-accent);
+  background: rgba(104, 212, 204, 0.08);
+  color: var(--color-accent);
+  padding: 0.7rem 0.8rem;
+  font-size: 0.84rem;
+}
+
+@media (max-width: 860px) {
+  .admin-shell {
+    display: block;
+  }
+
+  .admin-sidebar {
+    position: static;
+    min-height: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--color-admin-line);
+  }
+
+  .admin-nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-logout {
+    margin-top: 0;
+  }
+
+  .admin-stat-grid,
+  .admin-dashboard-grid,
+  .admin-crud-layout {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-crud-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-auth-shell,
+  .admin-content {
+    padding: 1rem;
+  }
+
+  .admin-page-header {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .admin-stat-grid,
+  .admin-dashboard-grid,
+  .admin-crud-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-editor-form {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-change-list li {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+}
+
 @keyframes ribbon-scroll {
   from {
     transform: translateX(0);
@@ -257,6 +785,19 @@ html {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
   .data-ribbon__track {
     animation: none;
   }

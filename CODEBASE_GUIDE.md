@@ -19,6 +19,7 @@ Website ini adalah portofolio profesional untuk **Kevin Adiputra** (Machine Lear
 | **Iconography** | Lucide React | `^0.525.0` | Ikon SVG teroptimasi |
 | **Typography** | `next/font/google` | Built-in | Space Grotesk, IBM Plex Mono, IBM Plex Sans |
 | **State Management**| React Context API | Native | ProfileContext, ProjectsContext, CertificatesContext |
+| **Admin CMS/Auth** | Supabase SSR + PostgreSQL | Optional runtime integration | Server session refresh, admin membership, RLS-backed content tables |
 | **Hosting & CI/CD** | Vercel & GitHub Actions | - | Static & Dynamic Server-rendered output |
 
 ---
@@ -79,12 +80,14 @@ flowchart TD
 ```
 
 ### 2.2 Prinsip Arsitektur Utama
-1. **Zero Database Dependency (Fast & Deterministic):**  
-   Seluruh data portofolio (biodata, proyek, sertifikat, tautan berkas) dikelola secara terstruktur dan terpusat di dalam `context/*.jsx`. Ini memastikan waktu *build* dan *loading* secepat kilat (sub-detik) tanpa latensi fetch database eksternal.
+1. **Legacy Public Data Source (Fast & Deterministic):**
+   Saat ini halaman publik masih membaca data legacy secara terstruktur dari `context/*.jsx`. Ini menjaga build tetap deterministik sampai provider publik dipindahkan ke Supabase.
 2. **Defensive Error Boundaries:**  
    Setiap seksi di `app/page.jsx` dibungkus dalam `components/ErrorBoundary.jsx`. Jika ada komponen yang mengalami kegagalan kalkulasi/render, seksi lain tetap berfungsi normal tanpa menyebabkan *white screen* total.
 3. **Smooth Scroll & Route Hybrid:**  
    Navbar `Header.jsx` mendukung dua tipe navigasi: *anchor scroll* (`#about`, `#projects`, dsb.) ketika pengguna berada di homepage, dan transisi rute Next.js ketika berada di halaman sub-studi kasus (`/projects/[slug]`).
+4. **Admin CMS Boundary:**
+   Area `/admin` menggunakan Supabase Auth untuk sesi, `admin_profiles` untuk otorisasi pemilik, dan Row Level Security untuk membedakan draft dengan konten published. Public content providers masih menjadi sumber data legacy sampai migrasi Supabase diterapkan dan editor CRUD dihubungkan.
 
 ---
 
@@ -127,6 +130,14 @@ D:\PORTOFOLIO\My-Personal-Portofolio\
 │   ├── projects/                     # Screenshot hasil visualisasi, dashboard, dan grafik model ML
 │   ├── profile-picture.jpg           # Foto profil utama Kevin Adiputra
 │   └── *.svg                         # Icon & placeholder SVG fallback
+
+├── lib/                              # Server/browser integration helpers
+│   ├── admin-auth.js                 # Server-side admin authorization gate
+│   ├── admin-data.js                 # Database-backed dashboard snapshot
+│   └── supabase/                     # Browser, server, and proxy clients
+├── supabase/migrations/              # Reviewable PostgreSQL schema + RLS
+├── app/admin/                        # Protected admin shell and CMS route boundary
+├── components/admin/                 # Admin shell, logout, and dashboard primitives
 │
 ├── jsconfig.json                     # Path alias `@/*` mengarah ke root proyek
 ├── next.config.mjs                   # Konfigurasi Next.js 16 (Turbopack ready)
@@ -241,6 +252,9 @@ interface Certificate {
 ### 5.3 Skema Profil (`context/ProfileContext.jsx`)
 Menyimpan informasi personal: `name`, `title`, `bio`, `profilePicture` (`/profile-picture.jpg`), `email`, `phone`, `location`, `linkedin`, `github`, `website`, `skills`, `experience`, dan `education`.
 
+### 5.4 Admin CMS Schema (`supabase/migrations/202610250001_admin_cms.sql`)
+Menyediakan tabel `admin_profiles`, `projects`, `certificates`, `experience`, `education`, `skills`, `profiles`, dan `site_settings`. Tabel konten memiliki `is_published`, `display_order`, `created_at`, dan `updated_at` bila relevan. RLS mengizinkan pembacaan publik hanya untuk konten published; admin memperoleh akses CRUD setelah user Supabase dimasukkan ke `admin_profiles`.
+
 ---
 
 ## 6. Detail Studi Kasus Proyek yang Terdaftar
@@ -285,6 +299,9 @@ Jika AI lain membaca atau memodifikasi repository ini, **patuhi instruksi mutlak
    * Tombol download CV utama berada di [components/Hero.jsx](file:///D:/PORTOFOLIO/My-Personal-Portofolio/components/Hero.jsx#L124).
 4. **Verifikasi Sebelum Commit:**
    * Selalu jalankan `npm run build` untuk memverifikasi bahwa static compilation Next.js dan TypeScript linting berhasil 100% tanpa error.
+5. **Admin CMS:**
+   * Jangan menambahkan password, service-role key, atau bypass RLS ke source code.
+   * Terapkan migrasi Supabase dan buat row `admin_profiles` untuk user owner sebelum menguji `/admin`.
 
 ---
 
