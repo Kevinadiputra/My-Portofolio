@@ -37,6 +37,7 @@ export default function AdminCollectionPage({ collection, title, eyebrow, descri
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
     const [dirty, setDirty] = useState(false);
+    const [uploadingField, setUploadingField] = useState(null);
     const [hasInitialized, setHasInitialized] = useState(false);
 
     const loadRecords = useCallback(async () => {
@@ -100,6 +101,30 @@ export default function AdminCollectionPage({ collection, title, eyebrow, descri
         setRecord((current) => ({ ...current, [field.name]: field.type === "checkbox" ? value : parseValue(field, value) }));
         setDirty(true);
         setMessage("");
+    }
+
+    async function uploadMedia(field, event) {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        setUploadingField(field.name);
+        setError("");
+        setMessage("");
+        try {
+            const formData = new FormData();
+            formData.set("file", file);
+            formData.set("folder", collection);
+            const response = await fetch("/api/admin/upload", { method: "POST", body: formData });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error || "Unable to upload file.");
+            updateField(field, result.url);
+            setMessage(`${field.label} uploaded. Save changes to persist the record.`);
+        } catch (uploadError) {
+            setError(uploadError.message);
+        } finally {
+            setUploadingField(null);
+            event.target.value = "";
+        }
     }
 
     async function saveRecord(event) {
@@ -211,6 +236,14 @@ export default function AdminCollectionPage({ collection, title, eyebrow, descri
                                 <label key={field.name}>
                                     <span>{field.label}{field.required ? " *" : ""}</span>
                                     <textarea rows={field.type === "json" ? 6 : 4} value={formatValue(field, value)} onChange={(event) => updateField(field, event.target.value)} required={field.required} />
+                                </label>
+                            );
+
+                            if (field.type === "media") return (
+                                <label key={field.name}>
+                                    <span>{field.label}{field.required ? " *" : ""}</span>
+                                    <input type="file" accept={field.accept} onChange={(event) => uploadMedia(field, event)} disabled={uploadingField === field.name || isSaving} />
+                                    {value && <a className="admin-media-link" href={value} target="_blank" rel="noreferrer">{uploadingField === field.name ? "Uploading…" : "Open current asset"}</a>}
                                 </label>
                             );
 

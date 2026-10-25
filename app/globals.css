@@ -638,6 +638,21 @@ html {
   font: 400 0.82rem/1.45 var(--font-body);
 }
 
+.admin-editor-form input[type="file"] {
+  border: 1px dashed var(--color-admin-line);
+  border-radius: 0;
+  color: var(--color-admin-soft);
+  padding: 0.65rem;
+  font: 500 0.72rem/1.2 var(--font-mono);
+}
+
+.admin-media-link {
+  color: var(--color-accent);
+  font: 500 0.68rem/1.2 var(--font-mono);
+  text-decoration: underline;
+  text-underline-offset: 0.2rem;
+}
+
 .admin-editor-form input:not([type="checkbox"]):focus,
 .admin-editor-form textarea:focus {
   border-color: var(--color-accent);
