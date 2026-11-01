@@ -1,262 +1,260 @@
 "use client";
 
-import { ArrowDown, Download, Github, Linkedin, Mail, Sparkles } from "lucide-react";
+import { ArrowRight, Download, Github, Linkedin, Mail, MapPin } from "lucide-react";
 import { useProfile } from "@/context/ProfileContext";
+import { useProjects } from "@/context/ProjectsContext";
+import { useCertificates } from "@/context/CertificatesContext";
 import { motion } from "framer-motion";
 
-const fadeUpVariants = {
-    hidden: { opacity: 0, y: 15 },
-    visible: { 
-        opacity: 1, 
+const fadeUp = (delay = 0) => ({
+    hidden: { opacity: 0, y: 12 },
+    visible: {
+        opacity: 1,
         y: 0,
         transition: {
-            duration: 0.6,
-            ease: [0.16, 1, 0.3, 1]
-        }
-    }
-};
+            duration: 0.45,
+            delay,
+            ease: [0.22, 1, 0.36, 1],
+        },
+    },
+});
 
 const Hero = () => {
-    const { profile } = useProfile();
+    const { profile, education } = useProfile();
+    const { projects } = useProjects();
+    const { certificates } = useCertificates();
 
-    const scrollToAbout = () => {
-        document.querySelector("#about")?.scrollIntoView({ behavior: "smooth" });
+    const scrollToSection = (selector) => {
+        document.querySelector(selector)?.scrollIntoView({ behavior: "smooth" });
     };
 
-    const highlights = ["Data Science", "Machine Learning", "MLOps Pipelines", "Data Analytics"];
-    const heroStats = [
-        { value: "2+", label: "Years" },
-        { value: "15+", label: "Projects" },
-        { value: "5+", label: "Orchestrations" },
+    const primaryEducation = education?.[0];
+    const focusDomains = [
+        "Data Science & EDA",
+        "Predictive Machine Learning",
+        "MLOps & Workflow Orchestration",
+        "Spatial & BI Dashboards",
+    ];
+
+    const summaryMetrics = [
+        {
+            value: String(projects?.length || 6),
+            label: "Documented Case Studies",
+        },
+        {
+            value: String(certificates?.length || 11),
+            label: "Verified Certifications",
+        },
+        {
+            value: "End-to-End",
+            label: "Data, Modeling & MLOps",
+        },
     ];
 
     return (
-        <section id="home" className="relative w-full min-h-[92vh] flex flex-col justify-between overflow-hidden pt-[80px] pb-6">
-            <div className="absolute inset-0 hero-surface" />
-            <div className="absolute inset-0 hero-grid" />
-            <div className="absolute inset-0 noise-overlay" />
-            
-            {/* Ambient Spinning Wireframe Globe */}
-            <div className="absolute right-[-10%] top-[-5%] w-[40vw] h-[40vw] min-w-[350px] min-h-[350px] opacity-[0.04] pointer-events-none z-0 animate-[spin_50s_linear_infinite] select-none">
-                <img src="/globe.svg" alt="" className="w-full h-full invert" />
-            </div>
+        <section
+            id="home"
+            className="relative w-full min-h-[88vh] flex flex-col justify-between overflow-hidden pt-24 pb-12 border-b border-white/10"
+        >
+            <div className="absolute inset-0 hero-surface pointer-events-none" />
+            <div className="absolute inset-0 hero-grid pointer-events-none" />
 
-            {/* Main Content Area */}
-            <div className="relative z-10 w-full max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 flex-grow flex items-center">
-                <div className="grid lg:grid-cols-[55fr_45fr] gap-12 lg:gap-16 items-start w-full py-8 lg:py-12">
-                    
-                    {/* Hero Left: Text Column with strict spacing hierarchy */}
-                    <div className="flex flex-col justify-center">
-                        {/* Available Ticker */}
-                        <div className="flex items-center gap-3 text-xs text-white/50">
-                            <span className="inline-flex items-center gap-2 rounded-none border border-accent/30 bg-accent/10 px-2.5 py-0.5 text-accent font-semibold tracking-wide text-[10px]">
-                                <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-                                Available
-                            </span>
-                            <span className="text-white/30 tracking-wider text-[10px]">Portfolio 2026</span>
-                        </div>
-
-                        {/* Headline H1 - Spacing: 24px */}
-                        <motion.h1
+            <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-grow flex items-center">
+                <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-12 lg:gap-16 items-center w-full py-6 lg:py-10">
+                    {/* Left Column: Identity, Headline, CTAs */}
+                    <div className="flex flex-col">
+                        <motion.div
                             initial="hidden"
                             animate="visible"
-                            variants={fadeUpVariants}
-                            className="font-display text-4xl sm:text-5xl md:text-[50px] lg:text-[56px] xl:text-[60px] font-extrabold tracking-tight text-white leading-[1.1] xl:leading-[1.08] max-w-[620px] mt-[24px]"
+                            variants={fadeUp(0)}
+                            className="flex flex-wrap items-center gap-3"
                         >
-                            Building Machine Learning Systems and Transforming Data into Actionable Insights.
-                        </motion.h1>
-                        
-                        {/* Nama - Spacing: 16px */}
-                        <p className="text-base md:text-lg font-display font-semibold text-white/80 mt-[16px]">
-                            Hi, I'm <span className="text-accent">{profile?.name || "Kevin Adiputra"}</span>.
-                        </p>
-
-                        {/* Job Title Typing Box - Spacing: 16px */}
-                        <div className="flex flex-wrap items-center gap-3 mt-[16px] min-h-[32px]">
-                            <span className="text-[10px] font-mono px-2 py-0.5 border border-white/10 bg-white/[0.02] text-white/40 tracking-wider uppercase whitespace-nowrap">
-                                Current focus
+                            <span className="inline-flex items-center gap-2 border border-accent/35 bg-accent/10 px-3 py-1 font-mono text-[11px] font-medium text-accent">
+                                <span className="w-1.5 h-1.5 bg-accent" />
+                                {profile?.availabilityStatus || "Available for Data Science, ML & MLOps Roles"}
                             </span>
-                            <h2 className="text-sm md:text-base font-bold font-display text-white/80 whitespace-nowrap min-w-0">
-                                {profile?.title || "Machine Learning Engineer & Data Scientist"}
-                            </h2>
-                        </div>
+                            <span className="font-mono text-[11px] text-white/45 uppercase tracking-wider">
+                                {primaryEducation?.institution || "Universitas Sriwijaya"} · Computer Systems
+                            </span>
+                        </motion.div>
 
-                        {/* Short Description - Spacing: 16px */}
-                        <p className="text-xs md:text-sm text-white/50 max-w-[500px] leading-relaxed mt-[16px]">
-                            I design practical data products: models that explain their work, dashboards
-                            that guide decisions, and pipelines that keep running after the demo.
-                        </p>
+                        <motion.div
+                            initial="hidden"
+                            animate="visible"
+                            variants={fadeUp(0.05)}
+                            className="mt-5"
+                        >
+                            <p className="font-mono text-xs sm:text-sm uppercase tracking-[0.18em] text-accent font-semibold">
+                                {profile?.name || "Kevin Adiputra Mahesa"} —{" "}
+                                <span className="text-white/80">
+                                    {profile?.title || "Machine Learning Engineer & Data Scientist"}
+                                </span>
+                            </p>
+                            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-[50px] font-bold tracking-tight text-white leading-[1.12] mt-3 max-w-2xl">
+                                Building machine learning models, analytical dashboards, and reproducible data pipelines.
+                            </h1>
+                        </motion.div>
 
-                        {/* CTA Buttons - Spacing: 24px */}
-                        <div className="flex flex-wrap gap-4 mt-[24px]">
-                            <a 
-                                href="https://drive.google.com/file/d/1D2sj8c3ITvXgHiw9e3lv7llX12fxWCCL/view?usp=sharing" 
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center justify-center h-[50px] px-[28px] text-xs sm:text-sm font-semibold rounded-none border border-accent bg-accent hover:bg-accent-hover text-primary transition-all duration-300 active:scale-[0.98] gap-2 shadow-[0_8px_30px_rgba(104,212,204,0.12)]"
+                        <motion.p
+                            initial="hidden"
+                            animate="visible"
+                            variants={fadeUp(0.1)}
+                            className="mt-5 text-sm sm:text-base text-white/70 max-w-xl leading-relaxed"
+                        >
+                            {profile?.bio ||
+                                "Computer Systems undergraduate at Universitas Sriwijaya focused on Data Science, Machine Learning, and MLOps. Experienced in building predictive models, spatial analytics dashboards, automated ETL workflows, and reproducible deployment pipelines."}
+                        </motion.p>
+
+                        {/* Primary & Secondary CTAs */}
+                        <motion.div
+                            initial="hidden"
+                            animate="visible"
+                            variants={fadeUp(0.15)}
+                            className="flex flex-wrap items-center gap-3.5 mt-7"
+                        >
+                            <button
+                                type="button"
+                                onClick={() => scrollToSection("#projects")}
+                                className="inline-flex items-center justify-center h-12 px-6 text-xs sm:text-sm font-mono uppercase tracking-wider font-semibold border border-accent bg-accent hover:bg-accent-hover text-primary transition-all duration-200 active:translate-y-0 gap-2"
                             >
-                                <Download size={15} />
-                                Download CV
-                            </a>
-                            <button 
-                                onClick={scrollToAbout} 
-                                className="inline-flex items-center justify-center h-[50px] px-[28px] text-xs sm:text-sm font-semibold rounded-none border border-white/10 bg-tertiary hover:bg-tertiary-hover text-white transition-all duration-300 active:scale-[0.98] shadow-md"
-                            >
-                                See how I work
+                                <span>View Selected Projects</span>
+                                <ArrowRight size={15} />
                             </button>
-                        </div>
 
-                        {/* Statistics Grid - Spacing: 32px */}
-                        <div className="grid grid-cols-3 gap-4 mt-[32px] max-w-[540px]">
-                            {heroStats.map((stat) => (
-                                <div 
-                                    key={stat.label} 
-                                    className="surface-card py-2.5 px-4 flex flex-col justify-center h-[80px] hover:border-accent/30 hover:shadow-[0_0_15px_rgba(104,212,204,0.04)] transition-all duration-300"
+                            {profile?.cvUrl && (
+                                <a
+                                    href={profile.cvUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center justify-center h-12 px-6 text-xs sm:text-sm font-mono uppercase tracking-wider font-medium border border-white/15 bg-secondary/90 hover:border-accent/50 hover:text-accent text-white/85 transition-colors duration-200 gap-2"
                                 >
-                                    <div className="text-xl md:text-2xl lg:text-[28px] font-display font-extrabold text-accent leading-none mb-1">
+                                    <Download size={15} />
+                                    <span>Download CV</span>
+                                </a>
+                            )}
+                        </motion.div>
+
+                        {/* Verifiable Portfolio Summary */}
+                        <motion.div
+                            initial="hidden"
+                            animate="visible"
+                            variants={fadeUp(0.2)}
+                            className="grid grid-cols-3 gap-3 mt-9 pt-7 border-t border-white/10 max-w-xl"
+                        >
+                            {summaryMetrics.map((stat) => (
+                                <div key={stat.label} className="border border-white/10 bg-secondary/60 p-3.5">
+                                    <div className="text-lg sm:text-xl font-display font-bold text-accent leading-none">
                                         {stat.value}
                                     </div>
-                                    <div className="text-[10px] md:text-[11px] lg:text-[12px] font-mono tracking-wider text-white/40 uppercase leading-none truncate">{stat.label}</div>
+                                    <div className="mt-1.5 text-[11px] font-mono text-white/55 leading-snug">
+                                        {stat.label}
+                                    </div>
                                 </div>
                             ))}
-                        </div>
+                        </motion.div>
 
-                        {/* Social Links - Spacing: 24px */}
-                        <div className="flex items-center justify-between pt-1 mt-[24px] max-w-[480px]">
-                            <div className="flex items-center gap-3">
+                        {/* Direct Social & Contact Links */}
+                        <motion.div
+                            initial="hidden"
+                            animate="visible"
+                            variants={fadeUp(0.24)}
+                            className="flex flex-wrap items-center gap-4 mt-6"
+                        >
+                            <div className="flex items-center gap-2.5">
                                 {[
-                                    { icon: Github, label: "GitHub profile", url: "https://github.com/Kevinadiputra" },
-                                    { icon: Linkedin, label: "LinkedIn profile", url: "https://www.linkedin.com/in/kevin-adiputra-mahesa-8339911b3/" },
-                                    { icon: Mail, label: "Email Kevin", url: `mailto:${profile?.email || "kevinadiputra1704@gmail.com"}` }
-                                ].map((item, index) => {
+                                    {
+                                        icon: Github,
+                                        label: "GitHub profile",
+                                        url: profile?.github || "https://github.com/Kevinadiputra",
+                                    },
+                                    {
+                                        icon: Linkedin,
+                                        label: "LinkedIn profile",
+                                        url:
+                                            profile?.linkedin ||
+                                            "https://www.linkedin.com/in/kevin-adiputra-mahesa-8339911b3/",
+                                    },
+                                    {
+                                        icon: Mail,
+                                        label: "Send email",
+                                        url: `mailto:${profile?.email || "kevinadiputra66@gmail.com"}`,
+                                    },
+                                ].map((item) => {
                                     const Icon = item.icon;
+                                    const isMail = item.url.startsWith("mailto:");
                                     return (
                                         <a
-                                            key={index}
+                                            key={item.label}
                                             href={item.url}
-                                            target={item.url.startsWith("mailto:") ? undefined : "_blank"}
-                                            rel={item.url.startsWith("mailto:") ? undefined : "noopener noreferrer"}
-                                            className="w-9 h-9 bg-tertiary/60 hover:bg-accent hover:text-primary rounded-none border border-white/5 hover:border-accent/30 flex items-center justify-center transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_10px_rgba(104,212,204,0.25)]"
+                                            target={isMail ? undefined : "_blank"}
+                                            rel={isMail ? undefined : "noopener noreferrer"}
+                                            className="w-9 h-9 bg-secondary border border-white/10 hover:border-accent hover:text-accent text-white/75 flex items-center justify-center transition-colors duration-200"
                                             aria-label={item.label}
                                         >
-                                            <Icon size={14} />
+                                            <Icon size={15} />
                                         </a>
                                     );
                                 })}
                             </div>
-                        </div>
-                    </div>
-
-                    {/* Hero Right: Profile Card Column */}
-                    <div className="flex justify-center lg:justify-end w-full">
-                        <div className="notch-card glass-panel p-5 md:p-6 w-full max-w-[310px] relative overflow-hidden flex flex-col gap-4">
-                            {/* Card Header */}
-                            <div className="flex items-center justify-between text-xs text-white/50 border-b border-white/5 pb-2">
-                                <span className="inline-flex items-center gap-1.5 font-mono text-[10px]">
-                                    <Sparkles size={12} className="text-accent" />
-                                    Profile index
-                                </span>
-                                <span className="text-accent font-mono text-[9px]">ID-ML-1704</span>
-                            </div>
-
-                            {/* Photo Container */}
-                            <div className="relative group cursor-pointer w-full max-w-[230px] mx-auto">
-                                {/* Technical decorative corners */}
-                                <div className="absolute -inset-1 border border-white/5 bg-transparent z-0 transition-colors duration-500 group-hover:border-accent/15 group-hover:bg-accent/[0.01]" />
-                                <div className="absolute top-0 left-0 w-2.5 h-2.5 border-t border-l border-accent/60 -translate-x-1 -translate-y-1 transition-transform duration-500 group-hover:-translate-x-2 group-hover:-translate-y-2 z-20" />
-                                <div className="absolute top-0 right-0 w-2.5 h-2.5 border-t border-r border-accent/60 translate-x-1 -translate-y-1 transition-transform duration-500 group-hover:translate-x-2 group-hover:-translate-y-2 z-20" />
-                                <div className="absolute bottom-0 left-0 w-2.5 h-2.5 border-b border-l border-accent/60 -translate-x-1 translate-y-1 transition-transform duration-500 group-hover:-translate-x-2 group-hover:translate-y-2 z-20" />
-                                <div className="absolute bottom-0 right-0 w-2.5 h-2.5 border-b border-r border-accent/60 translate-x-1 translate-y-1 transition-transform duration-500 group-hover:translate-x-2 group-hover:translate-y-2 z-20" />
-
-                                <div className="relative aspect-[4/5] w-full overflow-hidden bg-primary z-10 border border-white/10">
-                                    {/* Scanning line overlay */}
-                                    <div className="absolute inset-0 z-20 pointer-events-none mix-blend-screen opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                                        <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(104,212,204,0.05)_50%)] bg-[length:100%_3px]" />
-                                        <div className="absolute top-0 left-0 w-full h-[1px] bg-accent/80 shadow-[0_0_8px_2px_rgba(104,212,204,0.5)] animate-scan-line" />
-                                    </div>
-                                    
-                                    {profile?.profilePicture && profile.profilePicture !== "/api/placeholder/400/400" ? (
-                                        <img
-                                            src={profile.profilePicture}
-                                            alt={profile?.name || "Kevin Adiputra"}
-                                            className="w-full h-full object-cover object-center grayscale-[0.8] opacity-80 mix-blend-luminosity transition-all duration-700 group-hover:grayscale-0 group-hover:opacity-100 group-hover:mix-blend-normal group-hover:scale-105"
-                                        />
-                                    ) : (
-                                        <div className="w-full h-full flex items-center justify-center text-3xl font-display text-white">
-                                            {profile?.name?.split(" ").map((n) => n.charAt(0)).join("") || "KA"}
-                                        </div>
-                                    )}
-                                </div>
-
-                                {/* Data readout overlay */}
-                                <div className="absolute bottom-2 left-2 z-30 flex flex-col gap-0.5 opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
-                                    <span className="text-[7px] font-mono text-accent bg-primary/90 px-1.5 py-0.5 border border-accent/20 tracking-wider">
-                                        SRC: {profile?.name || "KEVIN_A"}
-                                    </span>
-                                    <span className="text-[7px] font-mono text-accent/80 bg-primary/90 px-1.5 py-0.5 border border-accent/20 tracking-wider">
-                                        STATUS: ONLINE_
-                                    </span>
-                                </div>
-                            </div>
-
-                            {/* Card Footer / Highlights & Based In */}
-                            <div className="mt-1 flex flex-col gap-2.5">
-                                <div className="flex flex-wrap gap-1.5 mt-3">
-                                    {highlights.map((item) => (
-                                        <span key={item} className="text-[8px] font-mono px-1.5 py-0.5 bg-white/[0.02] border border-white/5 text-white/50 tracking-wider">
-                                            {item}
-                                        </span>
-                                    ))}
-                                </div>
-                                
-                                <div className="border-t border-white/5 pt-2 flex items-center justify-between text-[11px] text-white/40 font-mono">
-                                    <span>Location:</span>
-                                    <span className="text-accent font-semibold text-[10px]">Based in Indonesia</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            {/* Bottom Footer Area of Hero containing scroll button and ribbon in natural document flow */}
-            <div className="relative w-full mt-auto pt-6 flex flex-col items-center justify-center z-20">
-                {/* Clickable Minimalist Mouse Scroll Indicator */}
-                <motion.button
-                    onClick={scrollToAbout}
-                    aria-label="Scroll to about section"
-                    className="flex flex-col items-center opacity-30 hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent mb-6"
-                    whileHover={{ y: 2 }}
-                    whileTap={{ scale: 0.95 }}
-                >
-                    <div className="w-[18px] h-[28px] border border-white/30 rounded-full flex justify-center pt-1.5">
-                        <motion.div
-                            animate={{
-                                y: [0, 6, 0],
-                                opacity: [1, 0.4, 1]
-                            }}
-                            transition={{
-                                duration: 1.8,
-                                repeat: Infinity,
-                                ease: "easeInOut"
-                            }}
-                            className="w-1 h-1.5 bg-accent rounded-full"
-                        />
-                    </div>
-                    <ArrowDown size={10} className="text-accent/60 mt-1 animate-pulse" />
-                </motion.button>
-
-                {/* Rotating Data Ribbon */}
-                <div className="data-ribbon w-[104%] left-[-2%] rotate-[-0.75deg] h-[44px] flex items-center overflow-hidden select-none bg-primary/20 backdrop-blur-sm border-y border-white/5">
-                    <div className="data-ribbon__track flex items-center gap-12 md:gap-16 whitespace-nowrap">
-                        {["Data Science", "MLOps Automation", "Machine Learning", "Data Analytics", "Data Science", "MLOps Automation", "Machine Learning", "Data Analytics"].map((item, index) => (
-                            <span key={`${item}-${index}`} className="inline-flex items-center gap-12 md:gap-16 text-xs font-medium tracking-[0.22em] text-white/60 uppercase">
-                                {item}
-                                <span className="text-white/20 select-none font-mono">/</span>
+                            <span className="inline-flex items-center gap-1.5 font-mono text-xs text-white/50">
+                                <MapPin size={13} className="text-accent" />
+                                {profile?.location || "Palembang, Indonesia"}
                             </span>
-                        ))}
+                        </motion.div>
                     </div>
+
+                    {/* Right Column: Structured Profile Card */}
+                    <motion.div
+                        initial="hidden"
+                        animate="visible"
+                        variants={fadeUp(0.12)}
+                        className="flex justify-center lg:justify-end w-full"
+                    >
+                        <div className="border border-white/12 bg-secondary/90 p-5 sm:p-6 w-full max-w-[350px] flex flex-col gap-4">
+                            <div className="flex items-center justify-between border-b border-white/10 pb-3 font-mono text-[11px]">
+                                <span className="text-white/60 uppercase tracking-wider">Engineer Profile</span>
+                                <span className="text-accent">S1 Sistem Komputer</span>
+                            </div>
+
+                            <div className="relative aspect-[4/5] w-full overflow-hidden bg-primary border border-white/10">
+                                {profile?.profilePicture &&
+                                profile.profilePicture !== "/api/placeholder/400/400" ? (
+                                    <img
+                                        src={profile.profilePicture}
+                                        alt={profile?.name || "Kevin Adiputra Mahesa"}
+                                        className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-[1.02]"
+                                    />
+                                ) : (
+                                    <div className="w-full h-full flex items-center justify-center text-3xl font-display text-white">
+                                        KA
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="space-y-3 pt-1">
+                                <div>
+                                    <div className="font-mono text-[10px] uppercase tracking-wider text-white/45 mb-2">
+                                        Technical Focus
+                                    </div>
+                                    <div className="flex flex-wrap gap-1.5">
+                                        {focusDomains.map((item) => (
+                                            <span
+                                                key={item}
+                                                className="text-[11px] font-mono px-2 py-0.5 bg-primary/70 border border-white/10 text-white/75"
+                                            >
+                                                {item}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="border-t border-white/10 pt-3 flex items-center justify-between text-xs font-mono">
+                                    <span className="text-white/45">Primary Stack</span>
+                                    <span className="text-accent">Python · SQL · Airflow · MLflow</span>
+                                </div>
+                            </div>
+                        </div>
+                    </motion.div>
                 </div>
             </div>
         </section>

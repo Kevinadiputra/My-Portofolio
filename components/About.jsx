@@ -1,107 +1,125 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useProfile } from "@/context/ProfileContext";
 
 const fadeUpVariants = {
-    hidden: { opacity: 0, y: 15 },
-    visible: { 
-        opacity: 1, 
+    hidden: { opacity: 0, y: 12 },
+    visible: {
+        opacity: 1,
         y: 0,
         transition: {
-            duration: 0.6,
-            ease: [0.16, 1, 0.3, 1]
-        }
-    }
+            duration: 0.45,
+            ease: [0.22, 1, 0.36, 1],
+        },
+    },
 };
 
-const About = () => {
-    const stats = [
-        { number: "2+", label: "Years experience" },
-        { number: "15+", label: "Projects completed" },
-        { number: "10M+", label: "Data points analyzed" },
-        { number: "100%", label: "Reproducible pipelines" },
-    ];
+const WORKFLOW_PILLARS = [
+    {
+        step: "01",
+        title: "Problem Framing & Data Profiling",
+        detail:
+            "Auditing raw distributions, handling missing values or extreme skewness (IQR, log1p), and eliminating multicollinearity before model selection.",
+    },
+    {
+        step: "02",
+        title: "Predictive & Spatial Modeling",
+        detail:
+            "Training and benchmarking supervised learning, ensemble (XGBoost, Random Forest), CNN, and lexicon NLP models with K-Fold cross-validation.",
+    },
+    {
+        step: "03",
+        title: "Pipeline & DAG Orchestration",
+        detail:
+            "Structuring modular Extract-Transform-Load workflows with Python, Pandas, Pytest coverage, and Apache Airflow DAG scheduling.",
+    },
+    {
+        step: "04",
+        title: "Deployment, Tracking & Monitoring",
+        detail:
+            "Logging experiments in MLflow, packaging inference APIs with FastAPI and Docker, and tracking runtime metrics with Prometheus and Grafana.",
+    },
+];
 
-    const areasOfInterest = [
-        { num: "01", name: "Data Science" },
-        { num: "02", name: "Machine Learning" },
-        { num: "03", name: "Deep Learning" },
-        { num: "04", name: "Computer Vision" },
-        { num: "05", name: "Natural Language Processing" },
-        { num: "06", name: "MLOps" },
-        { num: "07", name: "Data Analytics" },
-        { num: "08", name: "Remote Sensing Analytics" },
-    ];
+const About = () => {
+    const { profile, education } = useProfile();
+    const primaryEdu = education?.[0];
 
     return (
-        <section id="about" className="relative bg-secondary py-24">
+        <section id="about" className="relative bg-secondary py-24 border-b border-white/10">
             <div className="section-shell">
-                <div className="mb-16 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                <div className="mb-14 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                     <div>
-                        <p className="section-kicker mb-3">About</p>
+                        <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent mb-2">
+                            01 / Engineering Approach
+                        </p>
                         <motion.h2
                             initial="hidden"
                             whileInView="visible"
-                            viewport={{ once: true, margin: "-100px" }}
+                            viewport={{ once: true, margin: "-80px" }}
                             variants={fadeUpVariants}
                             className="h2 text-white"
                         >
-                            How I approach data work
+                            How I Approach Data & ML Systems
                         </motion.h2>
                     </div>
-                    <p className="section-copy lg:text-right">
-                        I like the full path: understanding the problem, shaping the dataset,
-                        testing the model, then shipping the smallest useful product.
+                    <p className="text-sm sm:text-base text-white/65 max-w-xl">
+                        Focusing on the complete lifecycle: from exploratory data validation and feature
+                        engineering to reproducible pipelines and decision-ready interfaces.
                     </p>
                 </div>
 
-                <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
-                    <div className="space-y-8">
-                        <div className="space-y-4">
-                            <h3 className="h3 text-white">
-                                Data Scientist and Machine Learning Engineer passionate about data-driven solutions.
+                <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 items-start">
+                    <div className="space-y-6">
+                        <div className="border border-white/10 bg-primary/50 p-6 sm:p-8 space-y-4">
+                            <div className="font-mono text-xs uppercase tracking-wider text-accent">
+                                Background & Focus
+                            </div>
+                            <h3 className="font-display text-xl sm:text-2xl font-bold text-white leading-snug">
+                                Computer Systems Undergraduate Specializing in Data Science, Machine Learning, and MLOps
                             </h3>
-                            <p className="section-copy">
-                                I am a Computer Systems undergraduate at Sriwijaya University with a strong passion for Data Science, Machine Learning, and MLOps. My experience spans exploratory data analysis, predictive modeling, deep learning, and workflow orchestration using Apache Airflow. I enjoy transforming complex datasets into actionable insights and developing scalable machine learning solutions that solve real-world problems.
+                            <p className="text-sm sm:text-base text-white/75 leading-relaxed">
+                                {profile?.bio ||
+                                    "I am a Computer Systems undergraduate at Universitas Sriwijaya focused on Data Science, Machine Learning, and MLOps. My work spans exploratory data analysis, predictive modeling, computer vision, and automated workflow orchestration."}
                             </p>
-                            <p className="section-copy">
-                                I build end-to-end ML pipelines and scalable data workflows, from orchestration and data cleaning to automated model deployment, experiment tracking, and monitoring. The goal is a maintainable and high-performance system that delivers real value.
+                            <p className="text-sm sm:text-base text-white/70 leading-relaxed">
+                                Rather than treating models as isolated notebooks, I focus on how data is ingested,
+                                validated, tested with unit tests, tracked in MLflow, and served through interactive
+                                dashboards or containerized APIs.
                             </p>
-                        </div>
 
-                        <div className="grid grid-cols-2 gap-3">
-                            {stats.map((stat) => (
-                                <div key={stat.label} className="surface-card p-6">
-                                    <div className="font-display text-2xl sm:text-3xl font-semibold text-accent md:text-4xl">
-                                        {stat.number}
+                            {primaryEdu && (
+                                <div className="pt-4 mt-4 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 font-mono text-xs">
+                                    <div>
+                                        <span className="text-white font-semibold">{primaryEdu.institution}</span>
+                                        <span className="text-white/50"> · {primaryEdu.degree}</span>
                                     </div>
-                                    <div className="mt-2 text-xs font-mono uppercase tracking-wider text-white/55">{stat.label}</div>
+                                    <span className="text-accent">{primaryEdu.period}</span>
                                 </div>
-                            ))}
+                            )}
                         </div>
                     </div>
 
-                    <div>
-                        <div className="border border-white/10 p-6 md:p-8 bg-primary/20 rounded-none relative">
-                            <span className="font-mono text-xs uppercase tracking-[0.25em] text-accent mb-6 block">
-                                Areas of Interest
-                            </span>
-                            <div className="divide-y divide-white/10">
-                                {areasOfInterest.map((area) => (
-                                    <div key={area.num} className="group py-3.5 flex items-center justify-between transition-all duration-300 hover:pl-2">
-                                        <div className="flex items-center gap-4">
-                                            <span className="font-mono text-[10px] text-accent/50 tracking-wider">
-                                                {area.num}
-                                            </span>
-                                            <span className="font-display text-base sm:text-lg font-bold tracking-tight uppercase text-white group-hover:text-accent transition-colors duration-300">
-                                                {area.name}
-                                              </span>
-                                        </div>
-                                        <div className="h-1.5 w-1.5 bg-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                                    </div>
-                                ))}
+                    <div className="grid gap-3.5 sm:grid-cols-2">
+                        {WORKFLOW_PILLARS.map((pillar) => (
+                            <div
+                                key={pillar.step}
+                                className="border border-white/10 bg-primary/40 p-5 flex flex-col justify-between hover:border-accent/35 transition-colors duration-200"
+                            >
+                                <div>
+                                    <span className="font-mono text-xs text-accent font-semibold">
+                                        {pillar.step}
+                                    </span>
+                                    <h4 className="font-display text-base font-bold text-white mt-2">
+                                        {pillar.title}
+                                    </h4>
+                                    <p className="text-xs sm:text-sm text-white/65 leading-relaxed mt-2">
+                                        {pillar.detail}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
+                        ))}
                     </div>
                 </div>
             </div>

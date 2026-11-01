@@ -1,152 +1,176 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
+import { useProfile } from "@/context/ProfileContext";
 
 const fadeUpVariants = {
-    hidden: { opacity: 0, y: 15 },
-    visible: { 
-        opacity: 1, 
+    hidden: { opacity: 0, y: 12 },
+    visible: {
+        opacity: 1,
         y: 0,
         transition: {
-            duration: 0.6,
-            ease: [0.16, 1, 0.3, 1]
-        }
-    }
+            duration: 0.45,
+            ease: [0.22, 1, 0.36, 1],
+        },
+    },
+};
+
+const CATEGORY_ORDER = [
+    "Programming",
+    "Data Science",
+    "Machine Learning",
+    "MLOps",
+    "Data Analytics",
+    "Tools & Infrastructure",
+];
+
+const CATEGORY_DESCRIPTIONS = {
+    Programming: "Core languages used for data manipulation, algorithmic modeling, and automation.",
+    "Data Science": "Statistical profiling, exploratory analysis, feature engineering, and spatial datasets.",
+    "Machine Learning": "Supervised learning, ensemble methods, deep learning (CNN), and NLP pipelines.",
+    MLOps: "Workflow orchestration, experiment tracking, containerization, CI/CD, and runtime monitoring.",
+    "Data Analytics": "Interactive web dashboards, geospatial mapping, and visual reporting.",
+    "Tools & Infrastructure": "Testing frameworks, ETL engineering, version control, and cloud fundamentals.",
 };
 
 const Skills = () => {
-    const [activeCategory, setActiveCategory] = useState("data-science");
+    const { skills } = useProfile();
+    const [activeCategory, setActiveCategory] = useState("all");
 
-    const skillCategories = {
-        "data-science": {
-            title: "Data Science",
-            skills: [
-                { name: "Python", level: 95 },
-                { name: "Pandas", level: 90 },
-                { name: "NumPy", level: 90 },
-                { name: "Scikit-Learn", level: 90 },
-                { name: "Data Visualization", level: 85 },
-                { name: "Exploratory Data Analysis", level: 95 },
-                { name: "Statistical Analysis", level: 85 },
-            ],
-        },
-        "machine-learning": {
-            title: "Machine Learning",
-            skills: [
-                { name: "Supervised Learning", level: 90 },
-                { name: "Regression", level: 95 },
-                { name: "Classification", level: 90 },
-                { name: "Model Evaluation", level: 85 },
-                { name: "Feature Engineering", level: 90 },
-            ],
-        },
-        "deep-learning": {
-            title: "Deep Learning",
-            skills: [
-                { name: "TensorFlow", level: 80 },
-                { name: "Keras", level: 80 },
-                { name: "CNN", level: 85 },
-                { name: "Computer Vision", level: 80 },
-                { name: "NLP", level: 80 },
-            ],
-        },
-        "mlops": {
-            title: "Data Engineering & MLOps",
-            skills: [
-                { name: "Apache Airflow", level: 90 },
-                { name: "SQL", level: 90 },
-                { name: "Workflow Automation", level: 85 },
-                { name: "Data Pipelines", level: 90 },
-                { name: "Model Lifecycle", level: 80 },
-                { name: "Experiment Tracking", level: 80 },
-                { name: "ML Deployment Fundamentals", level: 75 },
-            ],
-        },
-        "cloud": {
-            title: "Cloud",
-            skills: [
-                { name: "Google Cloud Platform", level: 80 },
-                { name: "Amazon Web Services", level: 75 },
-            ],
-        },
-    };
+    const groupedSkills = useMemo(() => {
+        const groups = {};
+        (skills || []).forEach((skill) => {
+            const cat = skill.category || "Tools & Infrastructure";
+            if (!groups[cat]) groups[cat] = [];
+            groups[cat].push(skill);
+        });
 
-    const getLevel = (level) => {
-        if (level >= 85) return "Expert";
-        if (level >= 70) return "Advanced";
-        return "Intermediate";
-    };
+        const sortedCategories = Object.keys(groups).sort((a, b) => {
+            const idxA = CATEGORY_ORDER.indexOf(a);
+            const idxB = CATEGORY_ORDER.indexOf(b);
+            if (idxA === -1 && idxB === -1) return a.localeCompare(b);
+            if (idxA === -1) return 1;
+            if (idxB === -1) return -1;
+            return idxA - idxB;
+        });
+
+        return sortedCategories.map((category) => ({
+            category,
+            description:
+                CATEGORY_DESCRIPTIONS[category] ||
+                "Applied technical tools and frameworks used in portfolio projects.",
+            items: groups[category].sort(
+                (a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0)
+            ),
+        }));
+    }, [skills]);
+
+    const visibleGroups = useMemo(() => {
+        if (activeCategory === "all") return groupedSkills;
+        return groupedSkills.filter((group) => group.category === activeCategory);
+    }, [groupedSkills, activeCategory]);
 
     return (
-        <section id="skills" className="relative bg-primary py-24">
+        <section id="skills" className="relative bg-secondary py-24 border-b border-white/10">
             <div className="section-shell">
-                <div className="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                <div className="mb-12 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                     <div>
-                        <p className="section-kicker mb-3">Skills</p>
+                        <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent mb-2">
+                            03 / Technical Capabilities
+                        </p>
                         <motion.h2
                             initial="hidden"
                             whileInView="visible"
-                            viewport={{ once: true, margin: "-100px" }}
+                            viewport={{ once: true, margin: "-80px" }}
                             variants={fadeUpVariants}
-                            className="h2 mb-4 text-white"
+                            className="h2 text-white"
                         >
-                            Technical stack
+                            Skills & Engineering Stack
                         </motion.h2>
-                        <p className="section-copy">
-                            A practical toolkit for building, evaluating, and deploying
-                            intelligent data products.
-                        </p>
                     </div>
-                    <div className="hidden h-px w-32 bg-accent/40 lg:block" />
+                    <p className="text-sm sm:text-base text-white/65 max-w-xl">
+                        Grouped by functional domain and backed by documented projects and certifications—without arbitrary percentage bars.
+                    </p>
                 </div>
 
-                <div className="mb-10 flex flex-wrap gap-3">
-                    {Object.keys(skillCategories).map((category) => (
+                {/* Category Filter */}
+                <div className="mb-10 flex flex-wrap gap-2">
+                    <button
+                        type="button"
+                        onClick={() => setActiveCategory("all")}
+                        className={`px-3.5 py-2 text-xs font-mono uppercase tracking-wider border transition-colors duration-200 ${
+                            activeCategory === "all"
+                                ? "border-accent bg-accent text-primary font-semibold"
+                                : "border-white/10 bg-primary/60 text-white/65 hover:border-accent/40 hover:text-white"
+                        }`}
+                    >
+                        All Categories ({skills?.length || 0})
+                    </button>
+                    {groupedSkills.map((group) => (
                         <button
-                            key={category}
-                            onClick={() => setActiveCategory(category)}
-                            className={`chip px-4 py-2 transition-all duration-300 ${
-                                activeCategory === category ? "chip-active" : "hover:border-accent/40 hover:text-white"
+                            type="button"
+                            key={group.category}
+                            onClick={() => setActiveCategory(group.category)}
+                            className={`px-3.5 py-2 text-xs font-mono uppercase tracking-wider border transition-colors duration-200 ${
+                                activeCategory === group.category
+                                    ? "border-accent bg-accent text-primary font-semibold"
+                                    : "border-white/10 bg-primary/60 text-white/65 hover:border-accent/40 hover:text-white"
                             }`}
                         >
-                            {skillCategories[category].title}
+                            {group.category} ({group.items.length})
                         </button>
                     ))}
                 </div>
 
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {skillCategories[activeCategory].skills.map((skill) => (
-                        <article key={skill.name} className="surface-card p-5">
-                            <div className="mb-4 flex items-center justify-between">
-                                <h3 className="font-semibold text-white">{skill.name}</h3>
-                                <span className="font-mono text-sm text-accent">{skill.level}%</span>
-                            </div>
+                {/* Grouped Skill Cards */}
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    {visibleGroups.map((group, idx) => (
+                        <motion.article
+                            key={group.category}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true, margin: "-60px" }}
+                            variants={fadeUpVariants}
+                            className="border border-white/10 bg-primary/60 p-6 flex flex-col justify-between hover:border-accent/35 transition-colors duration-200"
+                        >
+                            <div>
+                                <div className="flex items-center justify-between border-b border-white/10 pb-3 mb-4">
+                                    <span className="font-mono text-xs text-accent font-semibold">
+                                        {String(idx + 1).padStart(2, "0")}
+                                    </span>
+                                    <span className="font-mono text-[11px] text-white/45">
+                                        {group.items.length} technologies
+                                    </span>
+                                </div>
 
-                            <div className="mb-4 h-2.5 overflow-hidden rounded-none bg-primary/80">
-                                <div
-                                    className="h-full rounded-none bg-accent shadow-[0_0_24px_rgba(104,212,204,0.35)] transition-all duration-1000 ease-out"
-                                    style={{ width: `${skill.level}%` }}
-                                />
-                            </div>
+                                <h3 className="font-display text-lg font-bold text-white">
+                                    {group.category}
+                                </h3>
+                                <p className="text-xs text-white/60 leading-relaxed mt-1.5 mb-5">
+                                    {group.description}
+                                </p>
 
-                            <span className="chip">{getLevel(skill.level)}</span>
-                        </article>
+                                <ul className="space-y-2">
+                                    {group.items.map((skill) => (
+                                        <li
+                                            key={skill.id || skill.name}
+                                            className="flex items-center justify-between gap-2 border border-white/8 bg-secondary/70 px-3 py-2"
+                                        >
+                                            <span className="text-xs sm:text-sm font-medium text-white/90">
+                                                {skill.name}
+                                            </span>
+                                            {skill.proficiency && (
+                                                <span className="font-mono text-[10px] text-accent/85 bg-accent/10 border border-accent/20 px-2 py-0.5 shrink-0">
+                                                    {skill.proficiency}
+                                                </span>
+                                            )}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </motion.article>
                     ))}
-                </div>
-
-                <div className="mt-14 grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
-                    <div className="surface-card p-6">
-                        <p className="section-kicker mb-2">Now learning</p>
-                        <h3 className="h4 text-white">Kubernetes, MLOps Pipelines, & Distributed Systems</h3>
-                    </div>
-                    <div className="glass-panel rounded-none p-6">
-                        <p className="text-white/70 leading-relaxed font-body">
-                            I am focusing on production-grade infrastructure: orchestrating ML models on Kubernetes,
-                            deploying robust data orchestration systems, configuring GitOps pipelines, and optimizing
-                            Airflow runners for automated data retraining cycles.
-                        </p>
-                    </div>
                 </div>
             </div>
         </section>

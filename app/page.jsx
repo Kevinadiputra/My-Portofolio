@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Projects from "@/components/Projects";
+import Skills from "@/components/Skills";
 import Certificates from "@/components/Certificates";
 import Experience from "@/components/Experience";
 import Contact from "@/components/Contact";
@@ -12,33 +13,36 @@ import ScrollToTop from "@/components/ScrollToTop";
 import ErrorBoundary from "@/components/ErrorBoundary";
 
 const Home = () => {
-  return (
-    <div className="relative">
-      <Header />
-      <main id="main-content">
-        <ErrorBoundary>
-          <Hero />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <About />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <Projects />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <Certificates />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <Experience />
-        </ErrorBoundary>
-        <ErrorBoundary>
-          <Contact />
-        </ErrorBoundary>
-      </main>
-      <Footer />
-      <ScrollToTop />
-    </div>
-  );
+    return (
+        <div className="relative overflow-x-hidden">
+            <Header />
+            <main id="main-content">
+                <ErrorBoundary>
+                    <Hero />
+                </ErrorBoundary>
+                <ErrorBoundary>
+                    <About />
+                </ErrorBoundary>
+                <ErrorBoundary>
+                    <Projects />
+                </ErrorBoundary>
+                <ErrorBoundary>
+                    <Skills />
+                </ErrorBoundary>
+                <ErrorBoundary>
+                    <Certificates />
+                </ErrorBoundary>
+                <ErrorBoundary>
+                    <Experience />
+                </ErrorBoundary>
+                <ErrorBoundary>
+                    <Contact />
+                </ErrorBoundary>
+            </main>
+            <Footer />
+            <ScrollToTop />
+        </div>
+    );
 };
 
 export default Home;

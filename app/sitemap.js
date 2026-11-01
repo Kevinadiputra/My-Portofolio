@@ -1,34 +1,23 @@
-export default function sitemap() {
+import { getPublicPortfolioData } from "@/lib/portfolio-data";
+
+export default async function sitemap() {
+    const baseUrl = "https://kevin-adiputra-portfolio.vercel.app";
+    const { projects } = await getPublicPortfolioData();
+
+    const projectUrls = (projects || []).map((project) => ({
+        url: `${baseUrl}/projects/${project.slug}`,
+        lastModified: new Date(),
+        changeFrequency: "monthly",
+        priority: 0.8,
+    }));
+
     return [
         {
-            url: 'https://kevin-adiputra-portfolio.vercel.app',
+            url: baseUrl,
             lastModified: new Date(),
-            changeFrequency: 'monthly',
+            changeFrequency: "weekly",
             priority: 1,
         },
-        {
-            url: 'https://kevin-adiputra-portfolio.vercel.app/#about',
-            lastModified: new Date(),
-            changeFrequency: 'monthly',
-            priority: 0.8,
-        },
-        {
-            url: 'https://kevin-adiputra-portfolio.vercel.app/#projects',
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 0.9,
-        },
-        {
-            url: 'https://kevin-adiputra-portfolio.vercel.app/#certificates',
-            lastModified: new Date(),
-            changeFrequency: 'monthly',
-            priority: 0.7,
-        },
-        {
-            url: 'https://kevin-adiputra-portfolio.vercel.app/#contact',
-            lastModified: new Date(),
-            changeFrequency: 'monthly',
-            priority: 0.7,
-        },
-    ]
+        ...projectUrls,
+    ];
 }

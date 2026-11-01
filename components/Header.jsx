@@ -3,88 +3,132 @@
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
+import { useProfile } from "@/context/ProfileContext";
+
+const NAV_ITEMS = [
+    { name: "Home", href: "#home", id: "home" },
+    { name: "About", href: "#about", id: "about" },
+    { name: "Projects", href: "#projects", id: "projects" },
+    { name: "Skills", href: "#skills", id: "skills" },
+    { name: "Certificates", href: "#certificates", id: "certificates" },
+    { name: "Experience", href: "#experience", id: "experience" },
+    { name: "Contact", href: "#contact", id: "contact" },
+];
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [activeSection, setActiveSection] = useState("home");
     const router = useRouter();
     const pathname = usePathname();
+    const { profile, siteSettings } = useProfile();
 
     useEffect(() => {
         const handleScroll = () => {
-            setScrolled(window.scrollY > 50);
+            setScrolled(window.scrollY > 36);
         };
-
-        window.addEventListener("scroll", handleScroll);
+        handleScroll();
+        window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    const navItems = [
-        { name: "Home", href: "/", type: "route" },
-        { name: "About", href: "#about", type: "section" },
-        { name: "Work", href: "#projects", type: "section" },
-        { name: "Certificates", href: "#certificates", type: "section" },
-        { name: "Experience", href: "#experience", type: "section" },
-        { name: "Contact", href: "#contact", type: "section" },
-    ];
+    useEffect(() => {
+        if (pathname !== "/") return;
 
-    const handleNavigation = (item, forceNewTab = false) => {
-        if (item.type === "route") {
-            if (forceNewTab) {
-                window.open(item.href, '_blank', 'noopener,noreferrer');
-            } else {
-                if (item.href === "/" && pathname === "/") {
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                } else {
-                    router.push(item.href);
+        const elements = NAV_ITEMS.map((item) => document.getElementById(item.id)).filter(Boolean);
+        if (!elements.length) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                const visible = entries
+                    .filter((entry) => entry.isIntersecting)
+                    .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+                if (visible[0]?.target?.id) {
+                    setActiveSection(visible[0].target.id);
                 }
+            },
+            {
+                rootMargin: "-25% 0px -55% 0px",
+                threshold: [0.1, 0.35],
             }
-        } else if (item.type === "section") {
-            if (forceNewTab) {
-                window.open(`/${item.href}`, '_blank', 'noopener,noreferrer');
-            } else {
-                if (pathname !== "/") {
-                    router.push(`/${item.href}`);
-                } else {
-                    const element = document.querySelector(item.href);
-                    if (element) {
-                        element.scrollIntoView({ behavior: "smooth" });
-                    }
-                }
-            }
-        }
+        );
+
+        elements.forEach((el) => observer.observe(el));
+        return () => observer.disconnect();
+    }, [pathname]);
+
+    const handleNavigation = (item) => {
         setIsOpen(false);
+        if (pathname !== "/") {
+            router.push(`/${item.href}`);
+            return;
+        }
+        if (item.id === "home") {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            setActiveSection("home");
+            return;
+        }
+        const element = document.querySelector(item.href);
+        if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+            setActiveSection(item.id);
+        }
     };
+
+    const nameParts = (profile?.name || "Kevin Adiputra").split(" ");
+    const firstName = nameParts[0] || "Kevin";
+    const restName = nameParts.slice(1, 2).join(" ") || "Adiputra";
 
     return (
         <header
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-primary/80 backdrop-blur-xl border-b border-white/10" : "bg-transparent"
-                }`}
+            className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-200 ${
+                scrolled
+                    ? "bg-primary/90 backdrop-blur-md border-b border-white/10"
+                    : "bg-primary/40 backdrop-blur-sm border-b border-white/5"
+            }`}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center py-3">
+                <div className="flex justify-between items-center h-16">
                     <button
-                        onClick={() => router.push("/")}
-                        className="text-lg md:text-xl font-display font-semibold hover:text-accent transition-colors"
-                        aria-label="Go to homepage"
+                        type="button"
+                        onClick={() => handleNavigation(NAV_ITEMS[0])}
+                        className="flex items-center gap-2.5 text-left font-display text-base sm:text-lg font-bold tracking-tight text-white hover:text-accent transition-colors"
+                        aria-label="Go to top of homepage"
                     >
-                        <span className="text-accent">Kevin</span> Adiputra
+                        {siteSettings?.logo_url ? (
+                            <img
+                                src={siteSettings.logo_url}
+                                alt={siteSettings.site_name || profile?.name || "Logo"}
+                                className="h-7 w-auto object-contain"
+                            />
+                        ) : (
+                            <>
+                                <span className="inline-block w-2 h-2 bg-accent" />
+                                <span>
+                                    <span className="text-accent">{firstName}</span> {restName}
+                                </span>
+                            </>
+                        )}
                     </button>
 
                     {/* Desktop Navigation */}
-                    <nav className="hidden md:flex items-center gap-1 border border-white/10 bg-white/[0.03] p-1">
-                        {navItems.map((item) => {
-                            const isActive = (item.type === "route" && pathname === item.href) ||
-                                (item.type === "section" && pathname === "/");
-
+                    <nav
+                        aria-label="Primary navigation"
+                        className="hidden md:flex items-center gap-1 border border-white/10 bg-secondary/80 p-1"
+                    >
+                        {NAV_ITEMS.map((item) => {
+                            const isActive = pathname === "/" && activeSection === item.id;
                             return (
                                 <button
+                                    type="button"
                                     key={item.name}
-                                    onClick={(e) => handleNavigation(item, e.ctrlKey || e.metaKey)}
-                                    className={`rounded-none px-3.5 py-1.5 text-xs font-semibold transition-all duration-200 ${isActive && item.type === "route"
-                                        ? "bg-accent text-primary"
-                                        : "text-white/70 hover:bg-white/10 hover:text-white"
-                                        }`}
+                                    onClick={() => handleNavigation(item)}
+                                    aria-current={isActive ? "location" : undefined}
+                                    className={`px-3 py-1.5 text-xs font-mono uppercase tracking-wider transition-colors duration-150 ${
+                                        isActive
+                                            ? "bg-accent text-primary font-semibold"
+                                            : "text-white/70 hover:bg-white/[0.06] hover:text-white"
+                                    }`}
                                 >
                                     {item.name}
                                 </button>
@@ -92,30 +136,39 @@ const Header = () => {
                         })}
                     </nav>
 
-                    {/* Mobile Menu Button */}
+                    {/* Mobile Menu Toggle */}
                     <button
-                        className="md:hidden rounded-none border border-white/10 p-2 text-white hover:text-accent transition-colors"
-                        onClick={() => setIsOpen(!isOpen)}
-                        aria-label={isOpen ? "Close menu" : "Open menu"}
+                        type="button"
+                        className="md:hidden border border-white/15 bg-secondary/80 p-2 text-white hover:border-accent hover:text-accent transition-colors"
+                        onClick={() => setIsOpen((prev) => !prev)}
+                        aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
                         aria-expanded={isOpen}
                     >
-                        {isOpen ? <X size={24} /> : <Menu size={24} />}
+                        {isOpen ? <X size={20} /> : <Menu size={20} />}
                     </button>
                 </div>
 
                 {/* Mobile Navigation */}
                 {isOpen && (
                     <div className="md:hidden pb-4 border-t border-white/10">
-                        <nav className="mt-4 grid gap-2 bg-secondary/95 p-3">
-                            {navItems.map((item) => (
-                                <button
-                                    key={item.name}
-                                    onClick={() => handleNavigation(item)}
-                                    className="rounded-none px-3 py-3 text-left text-sm font-medium text-white/70 transition-colors duration-200 hover:bg-white/10 hover:text-accent"
-                                >
-                                    {item.name}
-                                </button>
-                            ))}
+                        <nav aria-label="Mobile navigation" className="mt-3 grid gap-1 bg-secondary p-2 border border-white/10">
+                            {NAV_ITEMS.map((item) => {
+                                const isActive = pathname === "/" && activeSection === item.id;
+                                return (
+                                    <button
+                                        type="button"
+                                        key={item.name}
+                                        onClick={() => handleNavigation(item)}
+                                        className={`px-3 py-2.5 text-left text-xs font-mono uppercase tracking-wider transition-colors ${
+                                            isActive
+                                                ? "bg-accent text-primary font-semibold"
+                                                : "text-white/75 hover:bg-white/10 hover:text-accent"
+                                        }`}
+                                    >
+                                        {item.name}
+                                    </button>
+                                );
+                            })}
                         </nav>
                     </div>
                 )}

@@ -1,337 +1,518 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useMemo } from "react";
 import Link from "next/link";
-import { ArrowUpRight, Eye } from "lucide-react";
+import { ArrowUpRight, ExternalLink, Github, FolderGit2 } from "lucide-react";
 import { useProjects } from "@/context/ProjectsContext";
-import { motion, useMotionValue, useSpring, useVelocity, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 
 const fadeUpVariants = {
-    hidden: { opacity: 0, y: 15 },
-    visible: { 
-        opacity: 1, 
+    hidden: { opacity: 0, y: 12 },
+    visible: {
+        opacity: 1,
         y: 0,
         transition: {
-            duration: 0.6,
-            ease: [0.16, 1, 0.3, 1]
-        }
-    }
+            duration: 0.45,
+            ease: [0.22, 1, 0.36, 1],
+        },
+    },
 };
+
+const CATEGORY_LABELS = {
+    "deep-learning": "Deep Learning",
+    "machine-learning": "Machine Learning",
+    nlp: "Natural Language Processing",
+    "data-science": "Data Science",
+    "data-engineering": "Data Engineering",
+    mlops: "MLOps",
+};
+
+function formatCategory(cat) {
+    if (!cat) return "Data Science";
+    return CATEGORY_LABELS[cat] || cat.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+}
 
 const Projects = () => {
     const [filter, setFilter] = useState("all");
-    const [hoveredSlug, setHoveredSlug] = useState(null);
-    const [isMobile, setIsMobile] = useState(true);
     const { projects, loading } = useProjects();
-    const router = useRouter();
 
-    const containerRef = useRef(null);
+    const homepageProjects = useMemo(
+        () => (projects || []).filter((p) => p.showOnHomepage !== false),
+        [projects]
+    );
 
-    // Mouse tracking for floating preview
-    const mouseX = useMotionValue(0);
-    const mouseY = useMotionValue(0);
+    const filters = useMemo(() => {
+        const base = [
+            { key: "all", label: "All Projects" },
+            { key: "featured", label: "Featured Case Studies" },
+            { key: "mlops", label: "MLOps" },
+            { key: "data-engineering", label: "Data Engineering" },
+            { key: "data-science", label: "Data Science" },
+            { key: "deep-learning", label: "Deep Learning" },
+            { key: "nlp", label: "NLP" },
+        ];
+        return base.filter(
+            (item) =>
+                item.key === "all" ||
+                item.key === "featured" ||
+                homepageProjects.some((p) => p.category === item.key)
+        );
+    }, [homepageProjects]);
 
-    const springConfig = { damping: 25, stiffness: 220, mass: 0.5 };
-    const cursorX = useSpring(mouseX, springConfig);
-    const cursorY = useSpring(mouseY, springConfig);
-
-    // Horizontal speed-based tilt
-    const xVelocity = useVelocity(mouseX);
-    const rotate = useTransform(xVelocity, [-2000, 2000], [-10, 10]);
-    const rotateSpring = useSpring(rotate, { damping: 30, stiffness: 180 });
-
-    // Floating preview appearance
-    const scale = useSpring(0.85, { damping: 20, stiffness: 200 });
-    const opacity = useSpring(0, { damping: 20, stiffness: 200 });
-
-    useEffect(() => {
-        const checkDevice = () => {
-            setIsMobile(window.innerWidth < 768);
-        };
-        checkDevice();
-        window.addEventListener("resize", checkDevice);
-        return () => window.removeEventListener("resize", checkDevice);
-    }, []);
-
-    useEffect(() => {
-        if (hoveredSlug !== null) {
-            scale.set(1.0);
-            opacity.set(1);
-        } else {
-            scale.set(0.85);
-            opacity.set(0);
-        }
-    }, [hoveredSlug, scale, opacity]);
-
-    const handleMouseMove = (e) => {
-        if (!containerRef.current) return;
-        const rect = containerRef.current.getBoundingClientRect();
-        mouseX.set(e.clientX - rect.left);
-        mouseY.set(e.clientY - rect.top);
+    const getProjectCount = (key) => {
+        if (key === "all") return homepageProjects.length;
+        if (key === "featured") return homepageProjects.filter((p) => p.featured || p.highlight).length;
+        return homepageProjects.filter((p) => p.category === key).length;
     };
 
-    const filters = [
-        { key: "all", label: "All work" },
-        { key: "highlight", label: "Case studies" },
-        { key: "deep-learning", label: "Deep learning" },
-        { key: "nlp", label: "NLP" },
-        { key: "data-science", label: "Data science" },
-        { key: "data-engineering", label: "Data engineering" },
-        { key: "mlops", label: "MLOps" },
-    ];
+    const filteredProjects = useMemo(() => {
+        return homepageProjects.filter((project) => {
+            if (filter === "all") return true;
+            if (filter === "featured") return project.featured || project.highlight;
+            return project.category === filter;
+        });
+    }, [homepageProjects, filter]);
 
-    const getProjectCount = (category) => {
-        if (category === "all") return projects.length;
-        if (category === "highlight") return projects.filter(p => p.highlight).length;
-        return projects.filter(p => p.category === category).length;
-    };
+    const featuredList = useMemo(
+        () => filteredProjects.filter((p) => p.featured || p.highlight),
+        [filteredProjects]
+    );
 
-    const filteredProjects = projects.filter((project) => {
-        if (filter === "all") return true;
-        if (filter === "highlight") return project.highlight;
-        return project.category === filter;
-    });
-
-    const formatCategory = (cat) => {
-        const mapping = {
-            "deep-learning": "DEEP LEARNING",
-            "nlp": "NATURAL LANGUAGE PROCESSING",
-            "data-science": "DATA SCIENCE",
-            "data-engineering": "DATA ENGINEERING",
-            "mlops": "MLOPS",
-        };
-        return mapping[cat] || cat.toUpperCase();
-    };
-
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.08,
-            },
-        },
-    };
-
-    const rowVariants = {
-        hidden: { y: 60, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: {
-                duration: 0.8,
-                ease: [0.16, 1, 0.3, 1],
-            },
-        },
-    };
+    const standardList = useMemo(
+        () =>
+            filter === "featured"
+                ? []
+                : filteredProjects.filter((p) => !(p.featured || p.highlight)),
+        [filteredProjects, filter]
+    );
 
     if (loading) {
         return (
-            <section id="projects" className="relative bg-secondary py-24">
-                <div className="section-shell grid gap-6 md:grid-cols-3">
-                    {[0, 1, 2].map((item) => <div key={item} className="skeleton h-80" />)}
+            <section id="projects" className="relative bg-primary py-24 border-b border-white/10">
+                <div className="section-shell grid gap-6 md:grid-cols-2">
+                    {[0, 1, 2, 3].map((item) => (
+                        <div key={item} className="skeleton h-80" />
+                    ))}
                 </div>
             </section>
         );
     }
 
     return (
-        <section id="projects" className="relative overflow-hidden bg-[#0b0b12] py-24 text-white">
-            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
+        <section id="projects" className="relative bg-primary py-24 text-white border-b border-white/10">
             <div className="section-shell relative z-10">
-                
-                {/* Editorial Header */}
-                <div className="mb-16 grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:items-end">
+                {/* Section Header */}
+                <div className="mb-12 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                     <div>
-                        <span className="font-mono text-xs uppercase tracking-[0.25em] text-accent mb-3 block">
-                            Archive & Learning
+                        <span className="font-mono text-xs uppercase tracking-[0.22em] text-accent mb-2 block">
+                            02 / Selected Work & Case Studies
                         </span>
                         <motion.h2
                             initial="hidden"
                             whileInView="visible"
-                            viewport={{ once: true, margin: "-100px" }}
+                            viewport={{ once: true, margin: "-80px" }}
                             variants={fadeUpVariants}
-                            className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white leading-none"
+                            className="h2 text-white"
                         >
-                            SELECTED WORK & EVIDENCE
+                            Projects & Engineering Evidence
                         </motion.h2>
                     </div>
-                    <p className="text-white/60 font-body text-base leading-relaxed max-w-xl lg:ml-auto">
-                        An editorial library documenting machine learning models, predictive intelligence, 
-                        and engineering certifications. Select a project to view details, architecture diagram, and key metrics.
+                    <p className="text-white/65 font-body text-sm sm:text-base leading-relaxed max-w-xl">
+                        Each case study documents the problem statement, technical approach, core stack, and
+                        verifiable evaluation metrics.
                     </p>
                 </div>
 
-                {/* Filter Navigation */}
-                <div className="mb-12 flex flex-wrap gap-x-8 gap-y-4 border-b border-white/10 pb-5 text-sm font-mono">
+                {/* Category Filter Tabs */}
+                <div
+                    role="tablist"
+                    aria-label="Filter projects by category"
+                    className="mb-12 flex flex-wrap gap-2 border-b border-white/10 pb-5"
+                >
                     {filters.map((filterOption) => {
                         const isActive = filter === filterOption.key;
                         const count = getProjectCount(filterOption.key);
                         return (
                             <button
+                                type="button"
+                                role="tab"
+                                aria-selected={isActive}
                                 key={filterOption.key}
                                 onClick={() => setFilter(filterOption.key)}
-                                className={`relative py-2 text-[10px] sm:text-xs uppercase tracking-widest transition-colors duration-300 focus:outline-none ${
-                                    isActive ? "text-accent font-semibold" : "text-white/50 hover:text-white"
+                                className={`px-3.5 py-2 text-xs font-mono uppercase tracking-wider border transition-colors duration-200 ${
+                                    isActive
+                                        ? "border-accent bg-accent text-primary font-semibold"
+                                        : "border-white/10 bg-secondary/70 text-white/65 hover:border-accent/40 hover:text-white"
                                 }`}
                             >
                                 <span>{filterOption.label}</span>
-                                <span className="ml-1 text-[9px] text-white/30 font-normal">({count})</span>
-                                {isActive && (
-                                    <motion.div
-                                        layoutId="activeFilterUnderline"
-                                        className="absolute bottom-0 left-0 h-0.5 w-full bg-accent"
-                                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                                    />
-                                )}
+                                <span
+                                    className={`ml-1.5 text-[10px] ${
+                                        isActive ? "text-primary/80" : "text-white/40"
+                                    }`}
+                                >
+                                    ({count})
+                                </span>
                             </button>
                         );
                     })}
                 </div>
 
-                {/* Project Archive List */}
                 {filteredProjects.length === 0 ? (
-                    <div className="border border-white/10 rounded-none p-16 text-center bg-white/[0.02]">
-                        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-none border border-accent/30 text-accent">
-                            <Eye size={24} />
-                        </div>
-                        <h3 className="mb-2 font-display text-xl font-bold uppercase tracking-wider text-white">No projects found</h3>
-                        <p className="text-white/50 font-mono text-xs uppercase tracking-wider">Try selecting another filter category.</p>
+                    <div className="border border-white/10 p-14 text-center bg-secondary/40">
+                        <FolderGit2 size={28} className="text-accent mx-auto mb-3" />
+                        <h3 className="font-display text-lg font-bold text-white">
+                            No projects in this category
+                        </h3>
+                        <p className="text-white/55 font-mono text-xs mt-1">
+                            Select another filter above to view all documented projects.
+                        </p>
                     </div>
                 ) : (
-                    <motion.div 
-                        ref={containerRef}
-                        onMouseMove={handleMouseMove}
-                        onMouseLeave={() => setHoveredSlug(null)}
-                        variants={containerVariants}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, margin: "-100px" }}
-                        className="relative border-t border-white/10"
-                    >
-                        {/* Cursor Following Floating Preview */}
-                        {!isMobile && (
-                            <motion.div
-                                className="pointer-events-none absolute z-50 overflow-hidden bg-primary border border-white/20 shadow-2xl rounded-none"
-                                style={{
-                                    x: cursorX,
-                                    y: cursorY,
-                                    rotate: rotateSpring,
-                                    scale,
-                                    opacity,
-                                    width: 380,
-                                    height: 250,
-                                    translateX: "-50%",
-                                    translateY: "-50%",
-                                }}
-                            >
-                                {projects.map((project) => (
-                                    <motion.img
-                                        key={project.id}
-                                        src={project.image}
-                                        alt={project.title}
-                                        className="absolute inset-0 h-full w-full object-cover"
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: hoveredSlug === project.slug ? 1 : 0 }}
-                                        transition={{ duration: 0.35, ease: "easeOut" }}
-                                    />
-                                ))}
-                            </motion.div>
+                    <div className="space-y-16">
+                        {/* Featured Case Studies */}
+                        {featuredList.length > 0 && (
+                            <div className="space-y-8">
+                                <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                                    <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-accent font-semibold">
+                                        Featured Case Studies ({featuredList.length})
+                                    </h3>
+                                    <span className="font-mono text-[11px] text-white/45">
+                                        Primary Engineering Systems
+                                    </span>
+                                </div>
+
+                                <div className="grid gap-8">
+                                    {featuredList.map((project, index) => (
+                                        <FeaturedProjectCard
+                                            key={project.id || project.slug}
+                                            project={project}
+                                            index={index}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
                         )}
 
-                        {/* Project Rows */}
-                        {filteredProjects.map((project, index) => {
-                            const isHovered = hoveredSlug === project.slug;
-                            const isAnyHovered = hoveredSlug !== null;
-                            const displayIndex = String(index + 1).padStart(2, "0");
+                        {/* Additional / Technical Archive Projects */}
+                        {standardList.length > 0 && (
+                            <div className="space-y-8">
+                                <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                                    <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-white/75 font-semibold">
+                                        Additional Experiments & Models ({standardList.length})
+                                    </h3>
+                                    <span className="font-mono text-[11px] text-white/45">
+                                        Applied Deep Learning & NLP
+                                    </span>
+                                </div>
 
-                            return (
-                                <motion.div
-                                    key={project.id}
-                                    variants={rowVariants}
-                                    className="group relative border-b border-white/10 overflow-hidden"
-                                    onMouseEnter={() => setHoveredSlug(project.slug)}
-                                    onMouseLeave={() => setHoveredSlug(null)}
-                                    animate={{
-                                        opacity: isAnyHovered ? (isHovered ? 1 : 0.25) : 1,
-                                    }}
-                                    transition={{ duration: 0.4, ease: "easeInOut" }}
-                                >
-                                    {/* Subtle Glow Hover Background */}
-                                    <div className="absolute inset-0 bg-gradient-to-r from-accent/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none -z-10" />
-                                    {/* Left Accent Bar */}
-                                    <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none -z-10" />
-                                    
-                                    <Link
-                                        href={`/projects/${project.slug}`}
-                                        scroll={true}
-                                        className="grid w-full py-6 md:py-8 grid-cols-1 md:grid-cols-[50px_1fr_auto_40px] items-center gap-4 md:gap-8 focus:outline-none text-left"
-                                        aria-label={`Open ${project.title} showcase`}
-                                    >
-                                        {/* 1. Project Number */}
-                                        <span className="font-mono text-xs md:text-sm tracking-wider text-white/40 group-hover:text-accent transition-colors duration-300">
-                                            {displayIndex}.
-                                        </span>
-
-                                        {/* 2. Project Title */}
-                                        <div className="flex flex-col gap-2">
-                                            <div className="flex flex-wrap items-center gap-3">
-                                                <h3
-                                                    className="font-display text-lg sm:text-xl md:text-2xl lg:text-[28px] font-bold uppercase tracking-tight leading-none transition-all duration-300 ease-out"
-                                                    style={{
-                                                        WebkitTextStroke: isHovered 
-                                                            ? '1px transparent' 
-                                                            : '1px rgba(255, 255, 255, 0.25)',
-                                                        color: isHovered ? 'var(--color-accent)' : 'transparent',
-                                                    }}
-                                                >
-                                                    {project.title}
-                                                </h3>
-                                                {project.year === "2026" && (
-                                                    <span className="px-2 py-0.5 text-[9px] font-mono font-bold tracking-widest text-primary bg-accent uppercase select-none rounded-none shadow-[0_0_12px_rgba(104,212,204,0.4)]">
-                                                        2026
-                                                    </span>
-                                                )}
-                                            </div>
-                                            
-                                            {/* Mobile Image (Inline) */}
-                                            <div className="block md:hidden overflow-hidden rounded-none bg-tertiary border border-white/10 aspect-video w-full mt-2">
-                                                <img 
-                                                    src={project.image} 
-                                                    alt={project.title} 
-                                                    className="w-full h-full object-cover"
-                                                />
-                                            </div>
-                                        </div>
-
-                                        {/* 3. Metadata */}
-                                        <div className="flex flex-col items-start md:items-end gap-1 font-mono md:text-right text-xs md:text-sm">
-                                            <span className="text-[10px] tracking-[0.2em] font-semibold text-accent uppercase">
-                                                {formatCategory(project.category)}
-                                            </span>
-                                            <span className="text-white/60 uppercase">
-                                                {project.technologies.slice(0, 2).join(" / ")}
-                                            </span>
-                                            <span className="text-white/30">
-                                                {project.date}
-                                            </span>
-                                        </div>
-
-                                        {/* 4. Minimal Arrow Icon */}
-                                        <div className="flex justify-end">
-                                            <ArrowUpRight 
-                                                className="w-5 h-5 text-white/40 group-hover:text-accent transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300 ease-out" 
-                                            />
-                                        </div>
-                                    </Link>
-                                </motion.div>
-                            );
-                        })}
-                    </motion.div>
-                )}            </div>
+                                <div className="grid gap-6 md:grid-cols-2">
+                                    {standardList.map((project, index) => (
+                                        <StandardProjectCard
+                                            key={project.id || project.slug}
+                                            project={project}
+                                            index={index + featuredList.length}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
+            </div>
         </section>
     );
 };
+
+function FeaturedProjectCard({ project, index }) {
+    const hasGithub = project.githubUrl && project.githubUrl !== "#";
+    const hasLive = project.liveUrl && project.liveUrl !== "#";
+    const topMetrics = Array.isArray(project.metrics) ? project.metrics.slice(0, 4) : [];
+
+    return (
+        <motion.article
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-60px" }}
+            variants={fadeUpVariants}
+            className="group border border-white/12 bg-secondary/75 hover:border-accent/40 transition-colors duration-200"
+        >
+            <div className="grid lg:grid-cols-[0.95fr_1.25fr] gap-0">
+                {/* Project Visual */}
+                <Link
+                    href={`/projects/${project.slug}`}
+                    className="relative block bg-primary border-b lg:border-b-0 lg:border-r border-white/10 overflow-hidden aspect-[16/10] lg:aspect-auto lg:min-h-[320px]"
+                    aria-label={`View ${project.title} case study`}
+                >
+                    <img
+                        src={project.image}
+                        alt={project.title}
+                        loading={index < 2 ? "eager" : "lazy"}
+                        className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.02]"
+                    />
+                    <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
+                        <span className="px-2.5 py-1 bg-primary/90 border border-accent/40 font-mono text-[10px] uppercase tracking-wider text-accent font-semibold">
+                            Featured · {formatCategory(project.category)}
+                        </span>
+                        {project.year && (
+                            <span className="px-2 py-1 bg-primary/90 border border-white/15 font-mono text-[10px] text-white/80">
+                                {project.year}
+                            </span>
+                        )}
+                    </div>
+                </Link>
+
+                {/* Case Study Details */}
+                <div className="p-6 sm:p-8 flex flex-col justify-between gap-6">
+                    <div className="space-y-4">
+                        <div className="flex flex-wrap items-center justify-between gap-2 font-mono text-xs text-white/50">
+                            <span>
+                                {String(index + 1).padStart(2, "0")} ·{" "}
+                                {project.projectRole || "ML Engineer & Data Scientist"}
+                            </span>
+                            <span className="text-accent">{project.status || "Completed"}</span>
+                        </div>
+
+                        <Link href={`/projects/${project.slug}`} className="block group/title">
+                            <h4 className="font-display text-xl sm:text-2xl font-bold text-white group-hover/title:text-accent transition-colors leading-snug">
+                                {project.title}
+                            </h4>
+                        </Link>
+
+                        <p className="text-sm text-white/75 leading-relaxed">
+                            {project.description || project.tagline}
+                        </p>
+
+                        {/* Problem & Approach Summary */}
+                        <div className="grid sm:grid-cols-2 gap-3 pt-1">
+                            {project.challenge && (
+                                <div className="border-l-2 border-white/20 pl-3 py-0.5">
+                                    <div className="font-mono text-[10px] uppercase tracking-wider text-white/45">
+                                        Problem Addressed
+                                    </div>
+                                    <p className="text-xs text-white/70 mt-1 line-clamp-3 leading-relaxed">
+                                        {project.challenge}
+                                    </p>
+                                </div>
+                            )}
+                            {project.solution && (
+                                <div className="border-l-2 border-accent pl-3 py-0.5">
+                                    <div className="font-mono text-[10px] uppercase tracking-wider text-accent">
+                                        Technical Approach
+                                    </div>
+                                    <p className="text-xs text-white/70 mt-1 line-clamp-3 leading-relaxed">
+                                        {project.solution}
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Verifiable Results / Metrics */}
+                        {topMetrics.length > 0 && (
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2">
+                                {topMetrics.map((metric, mIdx) => (
+                                    <div
+                                        key={mIdx}
+                                        className="border border-white/10 bg-primary/60 px-3 py-2"
+                                    >
+                                        <div className="font-display text-sm sm:text-base font-bold text-accent leading-tight">
+                                            {metric.value}
+                                        </div>
+                                        <div className="font-mono text-[10px] text-white/55 truncate mt-0.5">
+                                            {metric.label}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Footer: Technologies & Action Links */}
+                    <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div className="flex flex-wrap gap-1.5">
+                            {(project.technologies || []).slice(0, 6).map((tech) => (
+                                <span
+                                    key={tech}
+                                    className="font-mono text-[11px] px-2.5 py-0.5 border border-white/10 bg-primary/70 text-white/75"
+                                >
+                                    {tech}
+                                </span>
+                            ))}
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+                            {hasGithub && (
+                                <a
+                                    href={project.githubUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1.5 px-3 py-2 border border-white/15 bg-primary/80 hover:border-accent hover:text-accent text-xs font-mono text-white/80 transition-colors"
+                                >
+                                    <Github size={13} />
+                                    <span>Repository</span>
+                                </a>
+                            )}
+                            {hasLive && (
+                                <a
+                                    href={project.liveUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1.5 px-3 py-2 border border-white/15 bg-primary/80 hover:border-accent hover:text-accent text-xs font-mono text-white/80 transition-colors"
+                                >
+                                    <ExternalLink size={13} />
+                                    <span>Live Demo</span>
+                                </a>
+                            )}
+                            <Link
+                                href={`/projects/${project.slug}`}
+                                className="inline-flex items-center gap-1.5 px-4 py-2 border border-accent bg-accent hover:bg-accent-hover text-primary text-xs font-mono font-semibold uppercase tracking-wider transition-colors"
+                            >
+                                <span>Case Study</span>
+                                <ArrowUpRight size={14} />
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </motion.article>
+    );
+}
+
+function StandardProjectCard({ project, index }) {
+    const hasGithub = project.githubUrl && project.githubUrl !== "#";
+    const hasLive = project.liveUrl && project.liveUrl !== "#";
+    const topMetrics = Array.isArray(project.metrics) ? project.metrics.slice(0, 2) : [];
+
+    return (
+        <motion.article
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-60px" }}
+            variants={fadeUpVariants}
+            className="group border border-white/10 bg-secondary/60 hover:border-accent/40 transition-colors duration-200 flex flex-col justify-between"
+        >
+            <div>
+                <Link
+                    href={`/projects/${project.slug}`}
+                    className="relative block aspect-[16/9] w-full overflow-hidden bg-primary border-b border-white/10"
+                >
+                    <img
+                        src={project.image}
+                        alt={project.title}
+                        loading="lazy"
+                        className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.02]"
+                    />
+                    <div className="absolute top-3 left-3 flex items-center gap-1.5">
+                        <span className="px-2.5 py-0.5 bg-primary/90 border border-white/15 font-mono text-[10px] uppercase tracking-wider text-accent">
+                            {formatCategory(project.category)}
+                        </span>
+                        {project.year && (
+                            <span className="px-2 py-0.5 bg-primary/90 border border-white/10 font-mono text-[10px] text-white/70">
+                                {project.year}
+                            </span>
+                        )}
+                    </div>
+                </Link>
+
+                <div className="p-6 space-y-4">
+                    <div className="flex items-center justify-between font-mono text-[11px] text-white/45">
+                        <span>
+                            {String(index + 1).padStart(2, "0")} ·{" "}
+                            {project.projectRole || "ML Engineer"}
+                        </span>
+                        <span>{project.status || "Completed"}</span>
+                    </div>
+
+                    <Link href={`/projects/${project.slug}`} className="block group/title">
+                        <h4 className="font-display text-lg sm:text-xl font-bold text-white group-hover/title:text-accent transition-colors leading-snug">
+                            {project.title}
+                        </h4>
+                    </Link>
+
+                    <p className="text-xs sm:text-sm text-white/70 leading-relaxed">
+                        {project.description || project.tagline}
+                    </p>
+
+                    {project.solution && (
+                        <div className="border-l-2 border-accent/60 pl-3 py-0.5">
+                            <span className="font-mono text-[10px] uppercase text-accent block">
+                                Approach
+                            </span>
+                            <p className="text-xs text-white/65 line-clamp-2 mt-0.5">
+                                {project.solution}
+                            </p>
+                        </div>
+                    )}
+
+                    {topMetrics.length > 0 && (
+                        <div className="grid grid-cols-2 gap-2 pt-1">
+                            {topMetrics.map((metric, mIdx) => (
+                                <div
+                                    key={mIdx}
+                                    className="border border-white/10 bg-primary/50 px-3 py-2"
+                                >
+                                    <div className="font-display text-sm font-bold text-accent">
+                                        {metric.value}
+                                    </div>
+                                    <div className="font-mono text-[10px] text-white/50 truncate">
+                                        {metric.label}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            <div className="px-6 pb-6 pt-4 border-t border-white/10 space-y-4">
+                <div className="flex flex-wrap gap-1.5">
+                    {(project.technologies || []).slice(0, 5).map((tech) => (
+                        <span
+                            key={tech}
+                            className="font-mono text-[10px] px-2 py-0.5 border border-white/10 bg-primary/60 text-white/70"
+                        >
+                            {tech}
+                        </span>
+                    ))}
+                </div>
+
+                <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+                    <div className="flex items-center gap-2">
+                        {hasGithub && (
+                            <a
+                                href={project.githubUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 px-2.5 py-1.5 border border-white/15 hover:border-accent hover:text-accent text-xs font-mono text-white/75 transition-colors"
+                            >
+                                <Github size={12} />
+                                <span>Code</span>
+                            </a>
+                        )}
+                        {hasLive && (
+                            <a
+                                href={project.liveUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 px-2.5 py-1.5 border border-white/15 hover:border-accent hover:text-accent text-xs font-mono text-white/75 transition-colors"
+                            >
+                                <ExternalLink size={12} />
+                                <span>Demo / Notebook</span>
+                            </a>
+                        )}
+                    </div>
+
+                    <Link
+                        href={`/projects/${project.slug}`}
+                        className="inline-flex items-center gap-1 text-xs font-mono font-semibold text-accent hover:underline"
+                    >
+                        <span>Read Case Study</span>
+                        <ArrowUpRight size={14} />
+                    </Link>
+                </div>
+            </div>
+        </motion.article>
+    );
+}
 
 export default Projects;

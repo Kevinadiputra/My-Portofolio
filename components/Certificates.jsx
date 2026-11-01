@@ -1,339 +1,232 @@
 "use client";
 
-import { useMemo, useEffect } from "react";
-import { Award, Calendar, BarChart3, Tag } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Award, ExternalLink } from "lucide-react";
 import { useCertificates } from "@/context/CertificatesContext";
 import { motion } from "framer-motion";
 
 const fadeUpVariants = {
-    hidden: { opacity: 0, y: 15 },
-    visible: { 
-        opacity: 1, 
-        y: 0,
-        transition: {
-            duration: 0.6,
-            ease: [0.16, 1, 0.3, 1]
-        }
-    }
-};
-
-const containerVariants = {
-    hidden: { opacity: 0 },
+    hidden: { opacity: 0, y: 12 },
     visible: {
         opacity: 1,
-        transition: {
-            staggerChildren: 0.05,
-        },
-    },
-};
-
-const cardVariants = {
-    hidden: { y: 25, opacity: 0 },
-    visible: {
         y: 0,
-        opacity: 1,
         transition: {
-            duration: 0.5,
-            ease: [0.16, 1, 0.3, 1],
+            duration: 0.45,
+            ease: [0.22, 1, 0.36, 1],
         },
     },
 };
 
 const Certificates = () => {
     const { certificates, loading } = useCertificates();
+    const [activeFilter, setActiveFilter] = useState("all");
 
-    // Check for missing or invalid credential URLs and show console warning
-    useEffect(() => {
-        if (certificates && certificates.length > 0) {
-            certificates.forEach((c) => {
-                if (!c.credentialUrl) {
-                    console.warn(`Missing credential URL for certificate: ${c.title}`);
-                }
-            });
-        }
+    const categories = useMemo(() => {
+        const set = new Set();
+        (certificates || []).forEach((c) => {
+            if (c.category) set.add(c.category);
+        });
+        return ["all", "featured", ...Array.from(set)];
     }, [certificates]);
 
-    // Live Statistics Calculations
-    const stats = useMemo(() => {
-        const total = certificates.length;
-        
-        // Skill occurrence counts
-        const skillCounts = {};
-        certificates.forEach(c => {
-            c.skills.forEach(s => {
-                skillCounts[s] = (skillCounts[s] || 0) + 1;
-            });
-        });
-        const top = Object.entries(skillCounts)
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, 3);
-            
-        // Timeline counting (explicitly chronological: 2024 -> 2026)
-        const timeline = { "2024": 0, "2025": 0, "2026": 0 };
-        certificates.forEach(c => {
-            if (c.date in timeline) {
-                timeline[c.date] += 1;
-            } else {
-                timeline[c.date] = 1;
-            }
-        });
-        const timelineYears = ["2024", "2025", "2026"];
-        
-        // Category counting
-        const categories = {};
-        certificates.forEach(c => {
-            const cat = c.category || "Other";
-            categories[cat] = (categories[cat] || 0) + 1;
-        });
-        const topCategories = Object.entries(categories)
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, 3);
-            
-        return { total, top, timeline, timelineYears, topCategories };
-    }, [certificates]);
-
-    // Chronological sort by default (Newest first, secondary by ID desc)
     const sortedCertificates = useMemo(() => {
-        return [...certificates].sort((a, b) => {
-            const dateA = parseInt(a.date) || 0;
-            const dateB = parseInt(b.date) || 0;
-            if (dateB !== dateA) return dateB - dateA;
-            return b.id - a.id;
+        const list = [...(certificates || [])].sort((a, b) => {
+            if (a.displayOrder !== undefined && b.displayOrder !== undefined && a.displayOrder !== b.displayOrder) {
+                return a.displayOrder - b.displayOrder;
+            }
+            const dateA = parseInt(a.date, 10) || 0;
+            const dateB = parseInt(b.date, 10) || 0;
+            return dateB - dateA;
         });
-    }, [certificates]);
 
-    const handleKeyDown = (e, url) => {
-        if (!url) return;
-        if (e.key === " " || e.key === "Spacebar") {
-            e.preventDefault();
-            window.open(url, "_blank", "noopener,noreferrer");
-        }
-    };
+        if (activeFilter === "all") return list;
+        if (activeFilter === "featured") return list.filter((c) => c.featured);
+        return list.filter((c) => c.category === activeFilter);
+    }, [certificates, activeFilter]);
 
     if (loading) {
         return (
-            <section id="certificates" className="relative bg-[#0b0b12] py-24 text-white">
+            <section id="certificates" className="relative bg-primary py-24 text-white border-b border-white/10">
                 <div className="section-shell grid gap-6 md:grid-cols-3">
-                    {[0, 1, 2].map((item) => <div key={item} className="skeleton h-80" />)}
+                    {[0, 1, 2].map((item) => (
+                        <div key={item} className="skeleton h-72" />
+                    ))}
                 </div>
             </section>
         );
     }
 
     return (
-        <section id="certificates" className="relative overflow-hidden bg-[#0b0b12] py-24 text-white">
-            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
+        <section id="certificates" className="relative bg-primary py-24 text-white border-b border-white/10">
             <div className="section-shell relative z-10">
-                
                 {/* Section Header */}
-                <div className="mb-16 grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:items-end">
+                <div className="mb-12 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                     <div>
-                        <span className="font-mono text-xs uppercase tracking-[0.25em] text-accent mb-4 block">
-                            Verification
+                        <span className="font-mono text-xs uppercase tracking-[0.22em] text-accent mb-2 block">
+                            04 / Verified Credentials
                         </span>
-                        <motion.h3
+                        <motion.h2
                             initial="hidden"
                             whileInView="visible"
-                            viewport={{ once: true, margin: "-100px" }}
+                            viewport={{ once: true, margin: "-80px" }}
                             variants={fadeUpVariants}
-                            className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white leading-none"
+                            className="h2 text-white"
                         >
-                            CREDENTIALS & DEGREES
-                        </motion.h3>
+                            Certifications & Technical Training
+                        </motion.h2>
                     </div>
-                    <p className="text-white/60 font-body text-base sm:text-lg leading-relaxed max-w-xl lg:ml-auto">
-                        Academic proof and professional certifications supporting the engineering systems. 
-                        Verified credentials validate our expertise in core disciplines.
+                    <p className="text-white/65 font-body text-sm sm:text-base leading-relaxed max-w-xl">
+                        Verifiable certifications across Machine Learning, Apache Airflow orchestration, Data
+                        Engineering, and Python analytics.
                     </p>
                 </div>
 
-                {/* Elegant Statistics Section */}
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-16">
-                    {/* Stat Card 1: Total */}
-                    <div className="surface-card p-6 bg-[#12151d]/40 backdrop-blur-md relative overflow-hidden group min-h-[140px] flex flex-col justify-between rounded-none transition-all duration-300 hover:border-accent/30 hover:shadow-[0_0_20px_rgba(104,212,204,0.06)] hover:-translate-y-1">
-                        <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none -z-10" />
-                        <div className="flex items-center justify-between mb-4">
-                            <span className="text-[10px] font-mono text-white/40 tracking-wider uppercase">Credentials</span>
-                            <Award className="w-4 h-4 text-accent/60 group-hover:text-accent transition-colors duration-300" />
-                        </div>
-                        <div>
-                            <span className="block text-5xl font-display font-extrabold text-white leading-none tracking-tighter mb-2">
-                                {stats.total}
-                            </span>
-                            <span className="block text-[10px] font-mono text-accent uppercase tracking-widest font-semibold">
-                                Total Certifications
-                            </span>
-                        </div>
-                    </div>
-
-                    {/* Stat Card 2: Top Skills */}
-                    <div className="surface-card p-6 bg-[#12151d]/40 backdrop-blur-md relative overflow-hidden group min-h-[140px] flex flex-col justify-between rounded-none transition-all duration-300 hover:border-accent/30 hover:shadow-[0_0_20px_rgba(104,212,204,0.06)] hover:-translate-y-1">
-                        <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none -z-10" />
-                        <div className="flex items-center justify-between mb-3">
-                            <span className="text-[10px] font-mono text-white/40 tracking-wider uppercase">Top Focus Areas</span>
-                            <Tag className="w-4 h-4 text-accent/60 group-hover:text-accent transition-colors duration-300" />
-                        </div>
-                        <div className="space-y-1.5">
-                            {stats.top.map(([skillName, count]) => (
-                                <div key={skillName} className="flex items-center justify-between text-[11px] font-mono">
-                                    <span className="text-white/60 truncate max-w-[140px]">{skillName}</span>
-                                    <span className="text-accent font-semibold bg-accent/5 px-1.5 py-0.5 border border-accent/10">x{count}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Stat Card 3: Journey Timeline */}
-                    <div className="surface-card p-6 bg-[#12151d]/40 backdrop-blur-md relative overflow-hidden group min-h-[140px] flex flex-col justify-between rounded-none transition-all duration-300 hover:border-accent/30 hover:shadow-[0_0_20px_rgba(104,212,204,0.06)] hover:-translate-y-1">
-                        <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none -z-10" />
-                        <div className="flex items-center justify-between mb-3">
-                            <span className="text-[10px] font-mono text-white/40 tracking-wider uppercase">Learning Timeline</span>
-                            <Calendar className="w-4 h-4 text-accent/60 group-hover:text-accent transition-colors duration-300" />
-                        </div>
-                        <div className="flex items-center gap-3">
-                            {stats.timelineYears.map((yearVal, i) => (
-                                <div key={yearVal} className="flex items-center gap-3 flex-1 flex-row">
-                                    <div className="flex flex-col">
-                                        <span className="font-mono text-sm font-bold text-accent leading-none mb-1">{yearVal}</span>
-                                        <span className="text-[9px] font-mono text-white/40 leading-none">{stats.timeline[yearVal]} certs</span>
-                                    </div>
-                                    {i < stats.timelineYears.length - 1 && (
-                                        <div className="w-[1px] h-6 bg-white/10 ml-auto" />
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Stat Card 4: Expertise Domains */}
-                    <div className="surface-card p-6 bg-[#12151d]/40 backdrop-blur-md relative overflow-hidden group min-h-[140px] flex flex-col justify-between rounded-none transition-all duration-300 hover:border-accent/30 hover:shadow-[0_0_20px_rgba(104,212,204,0.06)] hover:-translate-y-1">
-                        <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none -z-10" />
-                        <div className="flex items-center justify-between mb-3">
-                            <span className="text-[10px] font-mono text-white/40 tracking-wider uppercase">Expertise Domains</span>
-                            <BarChart3 className="w-4 h-4 text-accent/60 group-hover:text-accent transition-colors duration-300" />
-                        </div>
-                        <div className="space-y-1.5">
-                            {stats.topCategories.map(([categoryName, count]) => (
-                                <div key={categoryName} className="flex items-center justify-between text-[11px] font-mono">
-                                    <span className="text-white/60 truncate max-w-[140px]">{categoryName}</span>
-                                    <span className="text-accent font-semibold bg-accent/5 px-1.5 py-0.5 border border-accent/10">{count}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                {/* Filter Bar */}
+                <div className="mb-10 flex flex-wrap gap-2 border-b border-white/10 pb-5">
+                    {categories.map((cat) => {
+                        const isActive = activeFilter === cat;
+                        const label =
+                            cat === "all"
+                                ? `All Credentials (${certificates?.length || 0})`
+                                : cat === "featured"
+                                ? "Featured"
+                                : cat;
+                        return (
+                            <button
+                                type="button"
+                                key={cat}
+                                onClick={() => setActiveFilter(cat)}
+                                className={`px-3.5 py-2 text-xs font-mono uppercase tracking-wider border transition-colors duration-200 ${
+                                    isActive
+                                        ? "border-accent bg-accent text-primary font-semibold"
+                                        : "border-white/10 bg-secondary/70 text-white/65 hover:border-accent/40 hover:text-white"
+                                }`}
+                            >
+                                {label}
+                            </button>
+                        );
+                    })}
                 </div>
 
-                {/* Recruiter-Friendly Certifications Grid */}
-                <motion.div 
-                    variants={containerVariants}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: "-100px" }}
-                    className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
-                >
+                {/* Certifications Grid */}
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {sortedCertificates.map((certificate) => {
-                        const isFeatured = certificate.featured;
-                        const disableCard = !certificate.credentialUrl;
-                        
-                        return (
-                            <motion.a 
-                                href={disableCard ? undefined : certificate.credentialUrl}
-                                target={disableCard ? undefined : "_blank"}
-                                rel={disableCard ? undefined : "noopener noreferrer"}
-                                key={certificate.id} 
-                                variants={cardVariants}
-                                whileHover={disableCard ? {} : { 
-                                    y: -8, 
-                                    boxShadow: "0 0 20px rgba(104, 212, 204, 0.15)",
-                                }}
-                                whileTap={disableCard ? {} : { 
-                                    y: -3, 
-                                    scale: 0.98 
-                                }}
-                                onKeyDown={(e) => handleKeyDown(e, disableCard ? null : certificate.credentialUrl)}
-                                transition={{ type: "tween", duration: 0.35, ease: "easeOut" }}
-                                className={`group flex flex-col p-8 bg-[#12151d]/40 backdrop-blur-md relative border ${
-                                    isFeatured ? "border-accent/30 shadow-[0_0_20px_rgba(104,212,204,0.04)]" : "border-white/10"
-                                } ${disableCard ? "cursor-default opacity-75" : "hover:border-accent/40 focus-visible:border-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent cursor-pointer"} rounded-none transition-colors duration-300`}
-                                aria-label={disableCard ? `Certification: ${certificate.title} by ${certificate.issuer} (No URL available)` : `Open certification for ${certificate.title} by ${certificate.issuer}`}
-                            >
-                                {/* Holographic Scan Effect */}
-                                {!disableCard && (
-                                    <div className="absolute inset-0 z-10 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-                                        <div className="absolute top-0 left-0 w-full h-[1px] bg-accent/80 shadow-[0_0_8px_rgba(104,212,204,0.8)] animate-scan-line" />
-                                    </div>
-                                )}
-                                
-                                {/* External Link Indicator - Pojok Kanan Atas */}
-                                {!disableCard && (
-                                    <div className="absolute top-6 right-6 text-white/30 group-hover:text-accent transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300 font-mono text-lg leading-none z-20">
-                                        ↗
-                                    </div>
-                                )}
+                        const isFeatured = Boolean(certificate.featured);
+                        const hasUrl = Boolean(certificate.credentialUrl);
+                        const hasImage =
+                            certificate.image &&
+                            !String(certificate.image).startsWith("/api/placeholder");
 
-                                {/* Card Header */}
-                                <div className="mb-6 flex items-start justify-between z-20 pr-6">
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-none border border-white/10 group-hover:border-accent/30 text-white/50 group-hover:text-accent transition-colors duration-500 bg-white/[0.02]">
-                                        <Award size={20} />
-                                    </div>
-                                    <div className="text-right flex flex-col items-end gap-1">
-                                        <span className="block text-[8px] font-mono text-white/30 tracking-widest uppercase">ID</span>
-                                        <span className="block text-[9px] font-mono text-accent/80 font-medium tracking-wider leading-none truncate max-w-[120px]">{certificate.credentialId}</span>
-                                    </div>
-                                </div>
-                                
-                                {/* Card Body */}
-                                <div className="mb-6 flex-grow z-20 flex flex-col">
-                                    {/* Featured Badge */}
-                                    {isFeatured && (
-                                        <div className="mb-3 flex">
-                                            <span className="px-2 py-0.5 text-[8px] font-mono font-bold tracking-wider text-accent border border-accent/30 bg-accent/10 uppercase select-none rounded-none shadow-[0_0_12px_rgba(104,212,204,0.15)] flex items-center">
-                                                🏆 Featured Certification
-                                            </span>
+                        return (
+                            <motion.article
+                                key={certificate.id || certificate.title}
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true, margin: "-50px" }}
+                                variants={fadeUpVariants}
+                                className={`group flex flex-col justify-between p-6 bg-secondary/70 border transition-colors duration-200 ${
+                                    isFeatured
+                                        ? "border-accent/35 hover:border-accent"
+                                        : "border-white/10 hover:border-accent/40"
+                                }`}
+                            >
+                                <div>
+                                    {hasImage && (
+                                        <div className="mb-4 aspect-[16/10] w-full overflow-hidden border border-white/10 bg-primary">
+                                            <img
+                                                src={certificate.image}
+                                                alt={certificate.title}
+                                                loading="lazy"
+                                                className="w-full h-full object-cover"
+                                            />
                                         </div>
                                     )}
 
-                                    <h4 className="mb-1 font-display text-lg font-bold text-white group-hover:text-accent transition-colors duration-300 uppercase tracking-tight leading-tight">
+                                    {/* Card Header */}
+                                    <div className="mb-4 flex items-start justify-between gap-3">
+                                        <div className="flex items-center gap-2">
+                                            <div className="flex h-9 w-9 items-center justify-center border border-white/10 bg-primary text-accent">
+                                                <Award size={16} />
+                                            </div>
+                                            {isFeatured && (
+                                                <span className="px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider text-accent border border-accent/30 bg-accent/10">
+                                                    Featured
+                                                </span>
+                                            )}
+                                        </div>
+
+                                        {certificate.credentialId && (
+                                            <div className="text-right font-mono">
+                                                <span className="block text-[9px] text-white/40 uppercase">
+                                                    Credential ID
+                                                </span>
+                                                <span className="block text-[11px] text-white/75 truncate max-w-[130px]">
+                                                    {certificate.credentialId}
+                                                </span>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <h3 className="font-display text-base sm:text-lg font-bold text-white group-hover:text-accent transition-colors leading-snug">
                                         {certificate.title}
-                                    </h4>
-                                    <span className="text-xs font-mono text-white/50 mb-3 block">
+                                    </h3>
+                                    <p className="text-xs font-mono text-accent/90 mt-1">
                                         {certificate.issuer}
-                                    </span>
-                                    
-                                    {/* Detailed Dates */}
-                                    <div className="mb-4 font-mono text-[9px] text-white/40 flex flex-wrap gap-x-2 items-center leading-none">
-                                        <span>Issued: <span className="text-white/60">{certificate.issued}</span></span>
+                                    </p>
+
+                                    <div className="mt-2.5 mb-3 font-mono text-[11px] text-white/50 flex flex-wrap gap-x-2 items-center">
+                                        <span>Issued: {certificate.issued}</span>
                                         {certificate.expires && (
                                             <>
-                                                <span>•</span>
-                                                <span>Expires: <span className="text-white/60">{certificate.expires}</span></span>
+                                                <span>·</span>
+                                                <span>Expires: {certificate.expires}</span>
                                             </>
                                         )}
                                     </div>
 
-                                    <p className="text-xs leading-relaxed text-white/50 mb-6 line-clamp-3 font-body">
-                                        {certificate.description}
-                                    </p>
-                                    
-                                    {/* Skill Tags */}
-                                    <div className="flex flex-wrap gap-1.5 mt-auto">
-                                        {certificate.skills.map((skillItem) => (
-                                            <span key={skillItem} className="text-[9px] font-mono bg-white/[0.02] border border-white/5 px-2 py-0.5 text-white/40 group-hover:text-white/70 group-hover:border-white/10 transition-colors">
-                                                {skillItem}
-                                            </span>
-                                        ))}
-                                    </div>
+                                    {certificate.description && (
+                                        <p className="text-xs leading-relaxed text-white/65 mb-4">
+                                            {certificate.description}
+                                        </p>
+                                    )}
+
+                                    {Array.isArray(certificate.skills) && certificate.skills.length > 0 && (
+                                        <div className="flex flex-wrap gap-1.5 mb-5">
+                                            {certificate.skills.map((skillItem) => (
+                                                <span
+                                                    key={skillItem}
+                                                    className="text-[10px] font-mono bg-primary/70 border border-white/10 px-2 py-0.5 text-white/70"
+                                                >
+                                                    {skillItem}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
-                                
-                                {/* Card Level Badge Footer */}
-                                <div className="mt-auto pt-4 border-t border-white/5 flex items-center justify-between text-[10px] font-mono text-white/40 z-20">
-                                    <span>Verified Certification</span>
-                                    <span className="uppercase tracking-wider text-white/50">{certificate.level}</span>
+
+                                <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs font-mono">
+                                    <span className="text-white/45 uppercase text-[10px]">
+                                        {certificate.category || certificate.level || "Verified"}
+                                    </span>
+
+                                    {hasUrl ? (
+                                        <a
+                                            href={certificate.credentialUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="inline-flex items-center gap-1.5 text-accent hover:underline font-medium"
+                                        >
+                                            <span>Verify Credential</span>
+                                            <ExternalLink size={12} />
+                                        </a>
+                                    ) : (
+                                        <span className="text-white/35 text-[11px]">Archived</span>
+                                    )}
                                 </div>
-                            </motion.a>
+                            </motion.article>
                         );
                     })}
-                </motion.div>
+                </div>
             </div>
         </section>
     );
