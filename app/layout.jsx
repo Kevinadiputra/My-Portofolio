@@ -99,6 +99,7 @@ export default async function RootLayout({ children }) {
                     initialSiteSettings={portfolioData.siteSettings}
                     initialExperiences={portfolioData.experiences}
                     initialEducation={portfolioData.education}
+                    initialAchievements={portfolioData.achievements}
                     initialSkills={portfolioData.skills}
                 >
                     <CertificatesProvider initialCertificates={portfolioData.certificates}>

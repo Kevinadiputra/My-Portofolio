@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState } from "react";
 import {
+    DEFAULT_ACHIEVEMENTS,
     DEFAULT_EDUCATION,
     DEFAULT_EXPERIENCE,
     DEFAULT_PROFILE,
@@ -25,12 +26,14 @@ export const ProfileProvider = ({
     initialSiteSettings,
     initialExperiences,
     initialEducation,
+    initialAchievements,
     initialSkills,
 }) => {
     const [profile] = useState(initialProfile || DEFAULT_PROFILE);
     const [siteSettings] = useState(initialSiteSettings || DEFAULT_SITE_SETTINGS);
     const [experiences] = useState(initialExperiences || DEFAULT_EXPERIENCE);
     const [education] = useState(initialEducation || DEFAULT_EDUCATION);
+    const [achievements] = useState(initialAchievements || DEFAULT_ACHIEVEMENTS);
     const [skills] = useState(initialSkills || DEFAULT_SKILLS);
     const [loading] = useState(false);
 
@@ -39,6 +42,7 @@ export const ProfileProvider = ({
         siteSettings,
         experiences,
         education,
+        achievements,
         skills,
         loading,
     };

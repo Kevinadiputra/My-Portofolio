@@ -41,6 +41,8 @@ function collectMediaPaths(row) {
         row.cv_url,
         row.favicon_url,
         row.og_image_url,
+        row.certificate_image_url,
+        row.evidence_image_url,
         ...(Array.isArray(row.gallery_urls) ? row.gallery_urls : []),
     ];
     return candidates.map(extractStoragePath).filter(Boolean);
@@ -72,6 +74,7 @@ export async function GET(request, { params }) {
     const query = searchParams.get("q")?.trim();
     const status = searchParams.get("status");
     const category = searchParams.get("category")?.trim();
+    const level = searchParams.get("level")?.trim();
     const page = Math.max(Number(searchParams.get("page") || 1), 1);
     const pageSize = Math.min(Math.max(Number(searchParams.get("pageSize") || 15), 1), 100);
 
@@ -84,6 +87,9 @@ export async function GET(request, { params }) {
     if (category && category !== "all") {
         builder = builder.eq("category", category);
     }
+    if (level && level !== "all") {
+        builder = builder.eq("level", level);
+    }
     if (config.orderField) builder = builder.order(config.orderField, { ascending: true });
     builder = builder.order("updated_at", { ascending: false });
 
@@ -93,7 +99,11 @@ export async function GET(request, { params }) {
 
     const { data, error, count } = await builder;
     if (error) {
-        return NextResponse.json({ error: "Gagal memuat data dari database." }, { status: 500 });
+        const errorMsg =
+            error.code === "PGRST205" || error.code === "42P01"
+                ? `Tabel database '${config.table}' belum tersedia di Supabase. Jalankan file migrasi SQL di Supabase SQL Editor.`
+                : "Gagal memuat data dari database.";
+        return NextResponse.json({ error: errorMsg }, { status: 500 });
     }
 
     return NextResponse.json(
@@ -134,7 +144,9 @@ export async function POST(request, { params }) {
         if (error) {
             const message =
                 error.code === "23505"
-                    ? "Data dengan nilai unik yang sama (seperti slug atau nama skill pada kategori yang sama) sudah terdaftar."
+                    ? "Data dengan nilai unik yang sama (seperti slug atau judul) sudah terdaftar."
+                    : error.code === "PGRST205" || error.code === "42P01"
+                    ? `Tabel database '${config.table}' belum tersedia di Supabase. Jalankan file migrasi SQL terlebih dahulu.`
                     : "Gagal menyimpan data ke database.";
             return NextResponse.json({ error: message }, { status: 400 });
         }

@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import { getAdminContext } from "@/lib/admin-auth";
 import { DEFAULT_CERTIFICATES, DEFAULT_PROJECTS } from "@/lib/portfolio-seed";
 import {
+    DEFAULT_ACHIEVEMENTS,
     DEFAULT_EDUCATION,
     DEFAULT_EXPERIENCE,
     DEFAULT_PROFILE,
@@ -32,7 +33,7 @@ export async function POST() {
     const { supabase } = context;
 
     try {
-        await supabase.from("profiles").upsert(
+        const { error: profileError } = await supabase.from("profiles").upsert(
             {
                 id: true,
                 name: DEFAULT_PROFILE.name,
@@ -50,8 +51,9 @@ export async function POST() {
             },
             { onConflict: "id" }
         );
+        if (profileError) throw profileError;
 
-        await supabase.from("site_settings").upsert(
+        const { error: settingsError } = await supabase.from("site_settings").upsert(
             {
                 id: true,
                 site_name: DEFAULT_SITE_SETTINGS.site_name,
@@ -65,6 +67,7 @@ export async function POST() {
             },
             { onConflict: "id" }
         );
+        if (settingsError) throw settingsError;
 
         const projectPayloads = DEFAULT_PROJECTS.map((project, index) => ({
             title: project.title,
@@ -98,7 +101,8 @@ export async function POST() {
             learnings: project.learnings || [],
         }));
 
-        await supabase.from("projects").upsert(projectPayloads, { onConflict: "slug" });
+        const { error: projectsError } = await supabase.from("projects").upsert(projectPayloads, { onConflict: "slug" });
+        if (projectsError) throw projectsError;
 
         const skillPayloads = DEFAULT_SKILLS.map((skill) => ({
             name: skill.name,
@@ -109,9 +113,10 @@ export async function POST() {
         }));
         await supabase.from("skills").upsert(skillPayloads, { onConflict: "name,category" });
 
-        const { count: certCount } = await supabase
+        const { count: certCount, error: certCheckError } = await supabase
             .from("certificates")
             .select("id", { count: "exact", head: true });
+        if (certCheckError) throw certCheckError;
 
         if (!certCount) {
             const certPayloads = DEFAULT_CERTIFICATES.map((cert, index) => ({
@@ -134,12 +139,14 @@ export async function POST() {
                 is_published: true,
                 display_order: index + 1,
             }));
-            await supabase.from("certificates").insert(certPayloads);
+            const { error: certInsertError } = await supabase.from("certificates").insert(certPayloads);
+            if (certInsertError) throw certInsertError;
         }
 
-        const { count: expCount } = await supabase
+        const { count: expCount, error: expCheckError } = await supabase
             .from("experience")
             .select("id", { count: "exact", head: true });
+        if (expCheckError) throw expCheckError;
 
         if (!expCount) {
             const expPayloads = DEFAULT_EXPERIENCE.map((exp, index) => ({
@@ -156,12 +163,14 @@ export async function POST() {
                 display_order: index + 1,
                 is_published: true,
             }));
-            await supabase.from("experience").insert(expPayloads);
+            const { error: expInsertError } = await supabase.from("experience").insert(expPayloads);
+            if (expInsertError) throw expInsertError;
         }
 
-        const { count: eduCount } = await supabase
+        const { count: eduCount, error: eduCheckError } = await supabase
             .from("education")
             .select("id", { count: "exact", head: true });
+        if (eduCheckError) throw eduCheckError;
 
         if (!eduCount) {
             const eduPayloads = DEFAULT_EDUCATION.map((edu, index) => ({
@@ -175,7 +184,39 @@ export async function POST() {
                 display_order: index + 1,
                 is_published: true,
             }));
-            await supabase.from("education").insert(eduPayloads);
+            const { error: eduInsertError } = await supabase.from("education").insert(eduPayloads);
+            if (eduInsertError) throw eduInsertError;
+        }
+
+        // Try seeding achievements if the table exists
+        try {
+            const { count: achCount } = await supabase
+                .from("achievements")
+                .select("id", { count: "exact", head: true });
+
+            if (!achCount) {
+                const achievementPayloads = DEFAULT_ACHIEVEMENTS.map((ach, index) => ({
+                    title: ach.title,
+                    category: ach.category,
+                    event_name: ach.event_name,
+                    organizer: ach.organizer,
+                    level: ach.level,
+                    award: ach.award,
+                    date_achieved: ach.date_achieved,
+                    short_description: ach.short_description,
+                    detailed_description: ach.detailed_description,
+                    certificate_image_url: ach.certificate_image_url,
+                    evidence_image_url: ach.evidence_image_url,
+                    credential_url: ach.credential_url,
+                    project_url: ach.project_url,
+                    display_order: index + 1,
+                    is_featured: Boolean(ach.is_featured),
+                    is_published: true,
+                }));
+                await supabase.from("achievements").insert(achievementPayloads);
+            }
+        } catch {
+            // Achievements table might not be migrated yet, non-fatal
         }
 
         revalidatePath("/", "layout");

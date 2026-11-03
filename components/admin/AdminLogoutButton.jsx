@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
 
-export default function AdminLogoutButton() {
+export default function AdminLogoutButton({ collapsed = false }) {
     const router = useRouter();
     const [isLoggingOut, setIsLoggingOut] = useState(false);
 
@@ -30,10 +30,11 @@ export default function AdminLogoutButton() {
             className="admin-logout"
             onClick={handleLogout}
             disabled={isLoggingOut}
+            title={collapsed ? "Logout" : undefined}
         >
             <span className="inline-flex items-center gap-2.5">
-                <LogOut size={15} />
-                <span>{isLoggingOut ? "Signing out…" : "Logout"}</span>
+                <LogOut size={15} className="shrink-0" />
+                {!collapsed && <span>{isLoggingOut ? "Signing out…" : "Logout"}</span>}
             </span>
         </button>
     );
