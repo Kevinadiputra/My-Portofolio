@@ -44,6 +44,9 @@ function collectMediaPaths(row) {
         row.certificate_image_url,
         row.evidence_image_url,
         ...(Array.isArray(row.gallery_urls) ? row.gallery_urls : []),
+        ...(Array.isArray(row.gallery)
+            ? row.gallery.map((g) => (typeof g === "string" ? g : g?.url || g?.media_url))
+            : []),
     ];
     return candidates.map(extractStoragePath).filter(Boolean);
 }
@@ -53,8 +56,10 @@ function revalidatePublicPortfolio(slug = null) {
         revalidatePath("/", "layout");
         revalidatePath("/");
         revalidatePath("/projects/[slug]", "page");
+        revalidatePath("/experience/[slug]", "page");
         if (slug) {
             revalidatePath(`/projects/${slug}`);
+            revalidatePath(`/experience/${slug}`);
         }
         revalidatePath("/sitemap.xml");
     } catch {

@@ -31,7 +31,7 @@ import { getAdminCollection, slugifyText } from "@/lib/admin-content";
 const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
 
 function emptyValue(field) {
-    if (field.type === "array" || field.type === "lines") return [];
+    if (field.type === "array" || field.type === "lines" || field.type === "roles_repeater" || field.type === "gallery_repeater" || field.type === "links_repeater") return [];
     if (field.type === "checkbox") return Boolean(field.defaultValue);
     if (field.type === "number") return 0;
     if (field.type === "json") {
@@ -941,6 +941,403 @@ export default function AdminCollectionPage({ collection, title, eyebrow, descri
 }
 
 // INDIVIDUAL FORM FIELD COMPONENT
+// ROLES REPEATER COMPONENT
+function RolesRepeater({ roles = [], onChange }) {
+    function addRole() {
+        const newRole = {
+            id: `role-${Date.now()}`,
+            position: "",
+            start_date: "",
+            end_date: "",
+            is_current: false,
+            description: "",
+            responsibilities: [],
+            achievements: [],
+            technologies: [],
+        };
+        onChange([...roles, newRole]);
+    }
+
+    function updateRole(index, field, val) {
+        const updated = [...roles];
+        updated[index] = { ...updated[index], [field]: val };
+        onChange(updated);
+    }
+
+    function removeRole(index) {
+        onChange(roles.filter((_, i) => i !== index));
+    }
+
+    function moveRole(index, direction) {
+        const target = index + direction;
+        if (target < 0 || target >= roles.length) return;
+        const updated = [...roles];
+        const [moved] = updated.splice(index, 1);
+        updated.splice(target, 0, moved);
+        onChange(updated);
+    }
+
+    return (
+        <div className="admin-repeater-container space-y-3">
+            {roles.map((role, idx) => (
+                <div key={role.id || idx} className="admin-repeater-card border border-white/10 bg-primary/70 p-4 space-y-3">
+                    <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                        <div className="flex items-center gap-2">
+                            <span className="w-5 h-5 flex items-center justify-center bg-accent/20 text-accent font-mono text-xs font-bold">
+                                {idx + 1}
+                            </span>
+                            <span className="font-mono text-xs text-white font-medium truncate max-w-[280px]">
+                                {role.position || "Untitled Position / Role"}
+                            </span>
+                            {role.is_current && (
+                                <span className="text-[10px] font-mono text-accent bg-accent/10 border border-accent/30 px-1.5 py-0.5">
+                                    Current
+                                </span>
+                            )}
+                        </div>
+                        <div className="flex items-center gap-1">
+                            <button
+                                type="button"
+                                disabled={idx === 0}
+                                onClick={() => moveRole(idx, -1)}
+                                className="admin-icon-btn h-7 w-7 disabled:opacity-30"
+                                title="Pindahkan ke atas"
+                            >
+                                <ChevronLeft size={13} className="rotate-90" />
+                            </button>
+                            <button
+                                type="button"
+                                disabled={idx === roles.length - 1}
+                                onClick={() => moveRole(idx, 1)}
+                                className="admin-icon-btn h-7 w-7 disabled:opacity-30"
+                                title="Pindahkan ke bawah"
+                            >
+                                <ChevronRight size={13} className="rotate-90" />
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => removeRole(idx)}
+                                className="admin-icon-btn h-7 w-7 text-red-400 hover:border-red-400/50"
+                                title="Hapus role ini"
+                            >
+                                <Trash2 size={13} />
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="grid gap-3 sm:grid-cols-2">
+                        <div className="sm:col-span-2">
+                            <label className="admin-label text-[11px]">Position / Role Title *</label>
+                            <input
+                                type="text"
+                                value={role.position || ""}
+                                onChange={(e) => updateRole(idx, "position", e.target.value)}
+                                placeholder="e.g. Project Officer — Build with AI 2026"
+                                className="admin-input text-xs"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="admin-label text-[11px]">Start Date</label>
+                            <input
+                                type="date"
+                                value={role.start_date || ""}
+                                onChange={(e) => updateRole(idx, "start_date", e.target.value)}
+                                className="admin-input text-xs"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="admin-label text-[11px]">End Date</label>
+                            <input
+                                type="date"
+                                value={role.end_date || ""}
+                                disabled={Boolean(role.is_current)}
+                                onChange={(e) => updateRole(idx, "end_date", e.target.value)}
+                                className="admin-input text-xs"
+                            />
+                        </div>
+
+                        <div className="sm:col-span-2">
+                            <label className="admin-checkbox-label text-xs">
+                                <input
+                                    type="checkbox"
+                                    checked={Boolean(role.is_current)}
+                                    onChange={(e) => updateRole(idx, "is_current", e.target.checked)}
+                                    className="admin-checkbox"
+                                />
+                                <span>Currently active in this position</span>
+                            </label>
+                        </div>
+
+                        <div className="sm:col-span-2">
+                            <label className="admin-label text-[11px]">Role Summary (Overview of Scope)</label>
+                            <textarea
+                                rows={2}
+                                value={role.description || ""}
+                                onChange={(e) => updateRole(idx, "description", e.target.value)}
+                                placeholder="Brief overview of duties and leadership scope in this position..."
+                                className="admin-input admin-textarea text-xs"
+                            />
+                        </div>
+
+                        <div className="sm:col-span-2">
+                            <label className="admin-label text-[11px]">
+                                Key Responsibilities & Contributions (One bullet point per line)
+                            </label>
+                            <textarea
+                                rows={3}
+                                value={Array.isArray(role.responsibilities) ? role.responsibilities.join("\n") : (role.responsibilities || "")}
+                                onChange={(e) =>
+                                    updateRole(
+                                        idx,
+                                        "responsibilities",
+                                        e.target.value.split(/\r?\n/).map((s) => s.trim()).filter(Boolean)
+                                    )
+                                }
+                                placeholder="Coordinated regional AI workshops and developer hackdays\nMentored 120+ participants in building practical ML apps"
+                                className="admin-input admin-textarea font-mono text-xs"
+                            />
+                        </div>
+
+                        <div className="sm:col-span-2">
+                            <label className="admin-label text-[11px]">
+                                Technologies & Skills (Comma-separated)
+                            </label>
+                            <input
+                                type="text"
+                                value={Array.isArray(role.technologies) ? role.technologies.join(", ") : (role.technologies || "")}
+                                onChange={(e) =>
+                                    updateRole(
+                                        idx,
+                                        "technologies",
+                                        e.target.value.split(",").map((s) => s.trim()).filter(Boolean)
+                                    )
+                                }
+                                placeholder="Python, Generative AI, Technical Leadership, Machine Learning"
+                                className="admin-input text-xs"
+                            />
+                        </div>
+                    </div>
+                </div>
+            ))}
+
+            <button
+                type="button"
+                onClick={addRole}
+                className="admin-secondary-action w-full justify-center text-xs py-2"
+            >
+                <Plus size={14} />
+                <span>+ Add Position / Role to this Organization</span>
+            </button>
+        </div>
+    );
+}
+
+// GALLERY REPEATER COMPONENT
+function GalleryRepeater({ gallery = [], onChange }) {
+    const [uploadingIdx, setUploadingIdx] = useState(null);
+
+    function addImage() {
+        onChange([...gallery, { url: "", caption: "" }]);
+    }
+
+    function updateItem(index, key, val) {
+        const updated = [...gallery];
+        updated[index] = { ...updated[index], [key]: val };
+        onChange(updated);
+    }
+
+    function removeItem(index) {
+        onChange(gallery.filter((_, i) => i !== index));
+    }
+
+    function moveItem(index, dir) {
+        const target = index + dir;
+        if (target < 0 || target >= gallery.length) return;
+        const updated = [...gallery];
+        const [moved] = updated.splice(index, 1);
+        updated.splice(target, 0, moved);
+        onChange(updated);
+    }
+
+    async function handleUpload(file, index) {
+        if (!file) return;
+        if (file.size > 5 * 1024 * 1024) {
+            alert("Ukuran gambar maksimal adalah 5 MB.");
+            return;
+        }
+        setUploadingIdx(index);
+        try {
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("folder", "experience");
+            const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
+            const data = await res.json();
+            if (res.ok && data.url) {
+                updateItem(index, "url", data.url);
+            } else {
+                alert(data.error || "Gagal mengunggah gambar.");
+            }
+        } catch {
+            alert("Gagal mengunggah gambar.");
+        } finally {
+            setUploadingIdx(null);
+        }
+    }
+
+    return (
+        <div className="admin-repeater-container space-y-3">
+            {gallery.map((item, idx) => (
+                <div key={idx} className="admin-repeater-card border border-white/10 bg-primary/70 p-3 space-y-2">
+                    <div className="flex items-center justify-between border-b border-white/10 pb-1.5">
+                        <span className="font-mono text-xs text-white/50">Documentation Photo #{idx + 1}</span>
+                        <div className="flex items-center gap-1">
+                            <button
+                                type="button"
+                                disabled={idx === 0}
+                                onClick={() => moveItem(idx, -1)}
+                                className="admin-icon-btn h-6 w-6 disabled:opacity-30"
+                                title="Pindahkan ke atas"
+                            >
+                                <ChevronLeft size={12} className="rotate-90" />
+                            </button>
+                            <button
+                                type="button"
+                                disabled={idx === gallery.length - 1}
+                                onClick={() => moveItem(idx, 1)}
+                                className="admin-icon-btn h-6 w-6 disabled:opacity-30"
+                                title="Pindahkan ke bawah"
+                            >
+                                <ChevronRight size={12} className="rotate-90" />
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => removeItem(idx)}
+                                className="admin-icon-btn h-6 w-6 text-red-400"
+                                title="Hapus gambar"
+                            >
+                                <Trash2 size={12} />
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="flex gap-3 items-start">
+                        {item.url ? (
+                            <img
+                                src={item.url}
+                                alt={item.caption || "Preview"}
+                                className="w-16 h-16 object-cover border border-white/10 shrink-0 bg-secondary"
+                            />
+                        ) : (
+                            <div className="w-16 h-16 border border-dashed border-white/20 flex items-center justify-center shrink-0 text-white/30 text-xs">
+                                <ImageIcon size={18} />
+                            </div>
+                        )}
+                        <div className="flex-1 space-y-2">
+                            <div className="flex gap-2">
+                                <input
+                                    type="text"
+                                    value={item.url || ""}
+                                    onChange={(e) => updateItem(idx, "url", e.target.value)}
+                                    placeholder="https://... atau klik Upload"
+                                    className="admin-input text-xs flex-1"
+                                />
+                                <label className="admin-upload-btn text-xs px-2.5 py-1">
+                                    <Upload size={12} />
+                                    <span>{uploadingIdx === idx ? "Uploading…" : "Upload"}</span>
+                                    <input
+                                        type="file"
+                                        accept="image/jpeg,image/png,image/webp,image/svg+xml"
+                                        disabled={uploadingIdx === idx}
+                                        onChange={(e) => {
+                                            const f = e.target.files?.[0];
+                                            if (f) handleUpload(f, idx);
+                                        }}
+                                        className="hidden"
+                                    />
+                                </label>
+                            </div>
+                            <input
+                                type="text"
+                                value={item.caption || ""}
+                                onChange={(e) => updateItem(idx, "caption", e.target.value)}
+                                placeholder="Caption / Deskripsi kegiatan foto (e.g. Workshop bersama tim GDGoC)"
+                                className="admin-input text-xs"
+                            />
+                        </div>
+                    </div>
+                </div>
+            ))}
+
+            <button
+                type="button"
+                onClick={addImage}
+                className="admin-secondary-action w-full justify-center text-xs py-2"
+            >
+                <Plus size={14} />
+                <span>+ Add Documentation Photo</span>
+            </button>
+        </div>
+    );
+}
+
+// LINKS REPEATER COMPONENT
+function LinksRepeater({ links = [], onChange }) {
+    function addLink() {
+        onChange([...links, { title: "", url: "" }]);
+    }
+
+    function updateLink(index, key, val) {
+        const updated = [...links];
+        updated[index] = { ...updated[index], [key]: val };
+        onChange(updated);
+    }
+
+    function removeLink(index) {
+        onChange(links.filter((_, i) => i !== index));
+    }
+
+    return (
+        <div className="admin-repeater-container space-y-2">
+            {links.map((link, idx) => (
+                <div key={idx} className="flex items-center gap-2 border border-white/10 bg-primary/70 p-2">
+                    <input
+                        type="text"
+                        value={link.title || ""}
+                        onChange={(e) => updateLink(idx, "title", e.target.value)}
+                        placeholder="Link Title (e.g. Website, Instagram)"
+                        className="admin-input text-xs w-1/3"
+                    />
+                    <input
+                        type="url"
+                        value={link.url || ""}
+                        onChange={(e) => updateLink(idx, "url", e.target.value)}
+                        placeholder="https://..."
+                        className="admin-input text-xs flex-1"
+                    />
+                    <button
+                        type="button"
+                        onClick={() => removeLink(idx)}
+                        className="admin-icon-btn h-7 w-7 text-red-400 shrink-0"
+                    >
+                        <Trash2 size={13} />
+                    </button>
+                </div>
+            ))}
+
+            <button
+                type="button"
+                onClick={addLink}
+                className="admin-secondary-action w-full justify-center text-xs py-2"
+            >
+                <Plus size={14} />
+                <span>+ Add External Link</span>
+            </button>
+        </div>
+    );
+}
+
 function FormField({
     field,
     value,
@@ -955,7 +1352,10 @@ function FormField({
         field.type === "textarea" ||
         field.type === "media" ||
         field.type === "json" ||
-        field.type === "lines";
+        field.type === "lines" ||
+        field.type === "roles_repeater" ||
+        field.type === "gallery_repeater" ||
+        field.type === "links_repeater";
 
     return (
         <div className={`admin-field-wrap ${isFullWidth ? "is-full" : ""}`}>
@@ -964,7 +1364,13 @@ function FormField({
                 {field.required && <span className="text-accent ml-1">*</span>}
             </label>
 
-            {field.type === "select" ? (
+            {field.type === "roles_repeater" ? (
+                <RolesRepeater roles={value || []} onChange={onChange} />
+            ) : field.type === "gallery_repeater" ? (
+                <GalleryRepeater gallery={value || []} onChange={onChange} />
+            ) : field.type === "links_repeater" ? (
+                <LinksRepeater links={value || []} onChange={onChange} />
+            ) : field.type === "select" ? (
                 <select
                     id={`field-${field.name}`}
                     value={value ?? ""}
@@ -1064,7 +1470,7 @@ function FormField({
                         <button
                             type="button"
                             onClick={() => {
-                                onChange(slugifyText(record.title || ""));
+                                onChange(slugifyText(record.title || record.organization || ""));
                                 setSlugEdited(false);
                             }}
                             className="admin-slug-sync-btn"

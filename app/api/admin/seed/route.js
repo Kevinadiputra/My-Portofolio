@@ -152,6 +152,8 @@ export async function POST() {
             const expPayloads = DEFAULT_EXPERIENCE.map((exp, index) => ({
                 position: exp.position,
                 organization: exp.organization,
+                slug: exp.slug || `exp-${index + 1}`,
+                organization_type: exp.organization_type || exp.employment_type || "Organization",
                 employment_type: exp.employment_type,
                 location: exp.location,
                 start_date: exp.start_date,
@@ -160,11 +162,34 @@ export async function POST() {
                 description: exp.description,
                 achievements: exp.achievements,
                 technologies: exp.technologies,
+                roles: exp.roles || [],
+                gallery: exp.gallery || [],
+                links: exp.links || [],
+                website_url: exp.website_url || null,
+                linkedin_url: exp.linkedin_url || null,
+                logo_url: exp.logo_url || null,
                 display_order: index + 1,
                 is_published: true,
             }));
             const { error: expInsertError } = await supabase.from("experience").insert(expPayloads);
-            if (expInsertError) throw expInsertError;
+            if (expInsertError) {
+                const legacyExpPayloads = DEFAULT_EXPERIENCE.map((exp, index) => ({
+                    position: exp.position,
+                    organization: exp.organization,
+                    employment_type: exp.employment_type,
+                    location: exp.location,
+                    start_date: exp.start_date,
+                    end_date: exp.end_date,
+                    is_current: exp.is_current,
+                    description: exp.description,
+                    achievements: exp.achievements,
+                    technologies: exp.technologies,
+                    display_order: index + 1,
+                    is_published: true,
+                }));
+                const { error: legacyError } = await supabase.from("experience").insert(legacyExpPayloads);
+                if (legacyError) throw legacyError;
+            }
         }
 
         const { count: eduCount, error: eduCheckError } = await supabase

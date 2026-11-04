@@ -1587,6 +1587,22 @@ html {
   }
 }
 
+/* Admin Repeaters (Roles, Gallery & Links) */
+.admin-repeater-container {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.admin-repeater-card {
+  border: 1px solid var(--color-admin-line);
+  background: rgba(17, 24, 32, 0.75);
+  padding: 1rem;
+}
+
+.admin-repeater-card:hover {
+  border-color: rgba(104, 212, 204, 0.25);
+}
+
 @keyframes ribbon-scroll {
   from {
     transform: translateX(0);
