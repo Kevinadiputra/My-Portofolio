@@ -839,15 +839,20 @@ export default function AdminCollectionPage({ collection, title, eyebrow, descri
                     >
                         {/* Drawer Header */}
                         <div className="admin-drawer-header">
-                            <div>
+                            <div className="min-w-0 flex-1">
                                 <div className="admin-eyebrow">
                                     {selectedId ? "EDIT RECORD" : "NEW RECORD"} / {config.label.toUpperCase()}
                                 </div>
                                 <h2 id="drawer-title" className="admin-drawer-title">
                                     {selectedId ? `Edit ${config.singularLabel}` : `Add New ${config.singularLabel}`}
                                 </h2>
+                                {selectedId && (record.title || record.position || record.institution || record.organization || record.name) && (
+                                    <p className="text-xs font-mono text-accent/80 truncate max-w-full mt-0.5">
+                                        {record.title || record.position || record.institution || record.organization || record.name}
+                                    </p>
+                                )}
                             </div>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 shrink-0">
                                 <button
                                     type="button"
                                     onClick={closeEditor}
@@ -862,8 +867,10 @@ export default function AdminCollectionPage({ collection, title, eyebrow, descri
                         {/* Drawer Form Body */}
                         <form onSubmit={(e) => handleSubmit(e)} className="admin-drawer-body">
                             {sections.map(({ title: sectionTitle, fields }) => (
-                                <fieldset key={sectionTitle} className="admin-drawer-section">
-                                    <legend className="admin-section-legend">{sectionTitle}</legend>
+                                <section key={sectionTitle} className="admin-drawer-section">
+                                    <div className="admin-section-legend">
+                                        <span>{sectionTitle}</span>
+                                    </div>
                                     <div className="admin-form-grid">
                                         {fields.map((field) => (
                                             <FormField
@@ -879,7 +886,7 @@ export default function AdminCollectionPage({ collection, title, eyebrow, descri
                                             />
                                         ))}
                                     </div>
-                                </fieldset>
+                                </section>
                             ))}
                         </form>
 
@@ -1360,10 +1367,12 @@ function FormField({
 
     return (
         <div className={`admin-field-wrap ${isFullWidth ? "is-full" : ""}`}>
-            <label htmlFor={`field-${field.name}`} className="admin-label">
-                <span>{field.label}</span>
-                {field.required && <span className="text-accent ml-1">*</span>}
-            </label>
+            {field.type !== "checkbox" && (
+                <label htmlFor={`field-${field.name}`} className="admin-label">
+                    <span>{field.label}</span>
+                    {field.required && <span className="text-accent ml-1">*</span>}
+                </label>
+            )}
 
             {field.type === "roles_repeater" ? (
                 <RolesRepeater roles={value || []} onChange={onChange} />
@@ -1407,6 +1416,14 @@ function FormField({
             ) : field.type === "media" ? (
                 <div className="admin-media-box w-full max-w-full min-w-0">
                     <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center w-full min-w-0">
+                        {value ? (
+                            <img
+                                src={value}
+                                alt="Preview"
+                                className="w-10 h-10 object-cover border border-white/10 shrink-0 bg-secondary"
+                                onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                            />
+                        ) : null}
                         <input
                             id={`field-${field.name}`}
                             type="text"

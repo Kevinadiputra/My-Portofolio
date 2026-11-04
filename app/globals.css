@@ -1215,7 +1215,7 @@ html {
 }
 
 .admin-drawer-panel {
-  width: min(750px, 92vw);
+  width: min(780px, 94vw);
   max-width: 100vw;
   height: 100%;
   max-height: 100dvh;
@@ -1226,6 +1226,7 @@ html {
   box-shadow: -12px 0 40px rgba(0, 0, 0, 0.6);
   overflow: hidden;
   box-sizing: border-box;
+  min-width: 0;
 }
 
 .admin-drawer-header {
@@ -1233,13 +1234,15 @@ html {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1.15rem 1.5rem;
+  padding: 1.15rem 1.75rem;
   border-bottom: 1px solid var(--color-admin-line);
   background: #0e141d;
-  flex-shrink: 0;
+  flex: 0 0 auto;
+  min-height: 64px;
   width: 100%;
   box-sizing: border-box;
   min-width: 0;
+  z-index: 10;
 }
 
 .admin-drawer-title {
@@ -1250,39 +1253,46 @@ html {
 }
 
 .admin-drawer-body {
-  flex: 1;
+  flex: 1 1 auto;
+  min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 1.5rem;
-  display: grid;
-  gap: 1.25rem;
+  padding: 1.5rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
   width: 100%;
   max-width: 100%;
   min-width: 0;
   box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
 }
 
 .admin-drawer-section {
   border: 1px solid var(--color-admin-line);
   background: var(--color-admin-panel);
-  padding: 1.25rem;
+  padding: 1.25rem 1.5rem;
   width: 100%;
   max-width: 100%;
   min-width: 0;
   box-sizing: border-box;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .admin-section-legend {
   color: var(--color-accent);
-  font: 700 0.68rem/1 var(--font-mono);
+  font: 700 0.7rem/1 var(--font-mono);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 1.15rem;
   width: 100%;
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .admin-drawer-footer {
@@ -1290,13 +1300,15 @@ html {
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  padding: 1rem 1.5rem;
+  padding: 1rem 1.75rem;
   border-top: 1px solid var(--color-admin-line);
   background: #0e141d;
-  flex-shrink: 0;
+  flex: 0 0 auto;
+  min-height: 64px;
   width: 100%;
   box-sizing: border-box;
   min-width: 0;
+  z-index: 10;
 }
 
 /* Singleton Page (Profile & Site Settings) Form */
@@ -1320,7 +1332,8 @@ html {
 .admin-form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  gap: 1.15rem;
+  align-items: start;
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
@@ -1331,6 +1344,8 @@ html {
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
 .admin-field-wrap.is-full {
@@ -1338,7 +1353,6 @@ html {
   min-width: 0;
   width: 100%;
   max-width: 100%;
-  box-sizing: border-box;
 }
 
 .admin-singleton-bottom-bar {
@@ -1356,7 +1370,7 @@ html {
 /* Form Controls */
 .admin-label {
   display: block;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.78);
   font: 600 0.7rem/1.3 var(--font-mono);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1374,10 +1388,16 @@ html {
   border-radius: 0;
   background: var(--color-primary);
   color: white;
-  padding: 0.7rem 0.8rem;
+  padding: 0.65rem 0.8rem;
   font: 400 0.82rem/1.45 var(--font-body);
   outline: none;
   transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+input.admin-input,
+select.admin-input {
+  height: 42px;
+  min-height: 42px;
 }
 
 .admin-input:focus {
@@ -1387,7 +1407,8 @@ html {
 
 .admin-textarea {
   resize: vertical;
-  min-height: 90px;
+  min-height: 96px;
+  height: auto;
   width: 100%;
   max-width: 100%;
   min-width: 0;
@@ -1496,12 +1517,16 @@ html {
 }
 
 .admin-preview-card,
-.admin-confirm-card {
+.admin-confirm-card,
+.admin-modal-card {
   width: min(100%, 540px);
+  max-height: calc(100dvh - 3rem);
+  overflow-y: auto;
   border: 1px solid var(--color-admin-line);
   background: var(--color-admin-panel);
   padding: 1.5rem;
   box-shadow: 0 28px 90px rgba(0, 0, 0, 0.75);
+  box-sizing: border-box;
 }
 
 /* Toast Notifications */
