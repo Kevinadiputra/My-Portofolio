@@ -11,12 +11,9 @@ import {
     X,
     ChevronLeft,
     CheckCircle2,
-    Sparkles,
     GraduationCap,
-    Image as ImageIcon,
     Building2,
     ArrowUpRight,
-    Share2,
     Layers,
 } from "lucide-react";
 import { useProfile } from "@/context/ProfileContext";
@@ -84,11 +81,11 @@ export default function Experience() {
             className="relative bg-secondary py-24 text-white border-b border-white/10 overflow-hidden"
         >
             <div className="section-shell relative z-10">
-                {/* Section Header */}
-                <div className="mb-16 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                {/* 1. Heading and Section Identity */}
+                <div className="mb-14 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between border-b border-white/10 pb-8">
                     <div>
-                        <span className="font-mono text-xs uppercase tracking-[0.22em] text-accent mb-2 block">
-                            05 / Career & Leadership
+                        <span className="font-mono text-xs uppercase tracking-[0.22em] text-accent mb-2.5 block font-semibold">
+                            05 / CAREER & LEADERSHIP
                         </span>
                         <motion.h2
                             initial="hidden"
@@ -97,21 +94,20 @@ export default function Experience() {
                             variants={fadeUpVariants}
                             className="h2 text-white"
                         >
-                            Interactive Career Timeline
+                            Experience
                         </motion.h2>
                     </div>
                     <p className="text-white/65 font-body text-sm sm:text-base leading-relaxed max-w-xl">
-                        Explore industry internships, machine learning research, and technology community
-                        leadership. Click any organization to inspect role evolutions, documentation, and key contributions.
+                        A collection of my professional experiences, internships, organizational roles, and contributions in technology communities.
                     </p>
                 </div>
 
-                {/* Timeline Component */}
-                <div className="relative mt-8">
-                    {/* Central Vertical Spine (Desktop center, mobile left) */}
+                {/* 2. Timeline Component */}
+                <div className="relative mt-10">
+                    {/* Central Vertical Spine: centered on desktop, left-aligned on mobile */}
                     <div
                         aria-hidden="true"
-                        className="absolute top-4 bottom-4 left-6 lg:left-1/2 -translate-x-1/2 w-0.5 bg-gradient-to-b from-accent/70 via-accent/30 to-white/5 pointer-events-none"
+                        className="absolute top-4 bottom-4 left-5 sm:left-6 lg:left-1/2 -translate-x-1/2 w-px bg-gradient-to-b from-accent/70 via-accent/30 to-white/10 pointer-events-none"
                     />
 
                     <div className="space-y-12 lg:space-y-16">
@@ -132,32 +128,30 @@ export default function Experience() {
                                         isEven ? "lg:flex-row-reverse" : ""
                                     }`}
                                 >
-                                    {/* Timeline Node Icon (Fixed along the vertical spine) */}
-                                    <div className="absolute left-6 lg:left-1/2 -translate-x-1/2 flex items-center justify-center z-20">
+                                    {/* Timeline Node on the Spine */}
+                                    <div className="absolute left-5 sm:left-6 lg:left-1/2 -translate-x-1/2 top-6 flex items-center justify-center z-20">
                                         <div
-                                            className={`w-11 h-11 flex items-center justify-center border transition-all duration-300 ${
+                                            className={`w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center border transition-all duration-300 ${
                                                 isCurrent
-                                                    ? "border-accent bg-primary text-accent shadow-[0_0_16px_rgba(104,212,204,0.4)]"
+                                                    ? "border-accent bg-primary text-accent shadow-[0_0_14px_rgba(104,212,204,0.35)]"
                                                     : "border-white/20 bg-primary text-white/70 hover:border-accent hover:text-accent"
                                             }`}
                                         >
                                             {exp.logoUrl || exp.logo_url ? (
                                                 <img
                                                     src={exp.logoUrl || exp.logo_url}
-                                                    alt={exp.organization || exp.company}
-                                                    className="w-7 h-7 object-contain"
+                                                    alt=""
+                                                    className="w-5 h-5 sm:w-6 sm:h-6 object-contain"
                                                 />
                                             ) : (
-                                                <Building2 size={18} />
+                                                <Briefcase size={16} className={isCurrent ? "text-accent" : "text-white/70"} />
                                             )}
                                         </div>
                                     </div>
 
-                                    {/* Content Card (Full width on mobile offset left, half width on desktop) */}
+                                    {/* Card Container (Single line on mobile, alternating on desktop) */}
                                     <div
-                                        className={`w-full lg:w-[calc(50%-2.5rem)] pl-16 lg:pl-0 ${
-                                            isEven ? "lg:pr-0 lg:pl-0" : ""
-                                        }`}
+                                        className={`w-full lg:w-[calc(50%-2.5rem)] pl-14 sm:pl-16 lg:pl-0`}
                                     >
                                         <article
                                             onClick={() => openExperienceDetail(exp)}
@@ -169,66 +163,102 @@ export default function Experience() {
                                             }}
                                             tabIndex={0}
                                             role="button"
-                                            aria-label={`Lihat detail pengalaman di ${exp.organization || exp.company}`}
-                                            className="group relative border border-white/10 bg-primary/70 p-6 sm:p-7 hover:border-accent/45 transition-all duration-200 cursor-pointer shadow-lg hover:shadow-2xl hover:translate-y-[-2px] text-left"
+                                            aria-label={`View experience details at ${exp.organization || exp.company}`}
+                                            className="group relative border border-white/10 bg-primary/75 p-6 sm:p-7 hover:border-accent/45 transition-all duration-200 cursor-pointer shadow-lg hover:shadow-2xl hover:translate-y-[-2px] text-left"
                                         >
-                                            {/* Organization & Status Header */}
-                                            <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                                                <span className="font-mono text-[11px] uppercase tracking-wider px-2 py-0.5 border border-white/10 bg-secondary text-white/75">
+                                            {/* Connector indicator for desktop & mobile */}
+                                            <span
+                                                aria-hidden="true"
+                                                className={`hidden lg:block absolute top-10 w-10 h-px bg-white/15 group-hover:bg-accent/40 transition-colors pointer-events-none ${
+                                                    isEven ? "-left-10" : "-right-10"
+                                                }`}
+                                            />
+                                            <span
+                                                aria-hidden="true"
+                                                className="block lg:hidden absolute top-10 -left-6 sm:-left-7 w-6 sm:w-7 h-px bg-white/15 group-hover:bg-accent/40 transition-colors pointer-events-none"
+                                            />
+
+                                            {/* Top Row: Organization Logo + Header Information */}
+                                            <div className="flex items-start gap-3.5 mb-4">
+                                                {/* 3. Organization Logo */}
+                                                <div className="w-11 h-11 shrink-0 border border-white/15 bg-secondary/90 flex items-center justify-center p-1.5 overflow-hidden">
+                                                    {exp.logoUrl || exp.logo_url ? (
+                                                        <img
+                                                            src={exp.logoUrl || exp.logo_url}
+                                                            alt={exp.organization || exp.company}
+                                                            className="w-full h-full object-contain"
+                                                        />
+                                                    ) : (
+                                                        <Building2 size={20} className="text-accent" />
+                                                    )}
+                                                </div>
+
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="flex flex-wrap items-center justify-between gap-1.5">
+                                                        <span className="font-mono text-xs text-accent font-semibold truncate block">
+                                                            {exp.organization || exp.company}
+                                                        </span>
+                                                        {isCurrent ? (
+                                                            <span className="inline-flex items-center gap-1.5 text-[10px] font-mono text-accent bg-accent/10 border border-accent/30 px-2 py-0.5 font-medium shrink-0">
+                                                                <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                                                                Currently Active
+                                                            </span>
+                                                        ) : (
+                                                            <span className="text-[10px] font-mono text-white/45 shrink-0">
+                                                                Completed
+                                                            </span>
+                                                        )}
+                                                    </div>
+
+                                                    <h3 className="font-display text-base sm:text-lg font-bold text-white group-hover:text-accent transition-colors leading-snug mt-0.5">
+                                                        {exp.position || exp.role}
+                                                    </h3>
+                                                </div>
+                                            </div>
+
+                                            {/* Period, Location & Type Badges */}
+                                            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs font-mono text-white/55 pb-3 border-b border-white/10">
+                                                <span className="px-2 py-0.5 border border-white/10 bg-secondary text-[10px] text-white/75 uppercase tracking-wider">
                                                     {exp.organizationType || exp.employmentType || "Organization"}
                                                 </span>
-
-                                                {isCurrent ? (
-                                                    <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-accent bg-accent/10 border border-accent/30 px-2 py-0.5 font-medium">
-                                                        <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-                                                        Currently Active
-                                                    </span>
-                                                ) : (
-                                                    <span className="text-[11px] font-mono text-white/45">
-                                                        Completed
-                                                    </span>
-                                                )}
-                                            </div>
-
-                                            {/* Primary Role & Organization Name */}
-                                            <h3 className="font-display text-lg sm:text-xl font-bold text-white group-hover:text-accent transition-colors leading-snug">
-                                                {exp.position || exp.role}
-                                            </h3>
-
-                                            <div className="text-accent font-mono text-xs sm:text-sm font-medium mt-1">
-                                                {exp.organization || exp.company}
-                                            </div>
-
-                                            {/* Period & Location Metadata */}
-                                            <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs font-mono text-white/50 mt-3 pb-3 border-b border-white/10">
-                                                <div className="flex items-center gap-1.5">
-                                                    <Calendar size={13} className="text-accent shrink-0" />
+                                                <div className="flex items-center gap-1 text-[11px]">
+                                                    <Calendar size={12} className="text-accent shrink-0" />
                                                     <span>{exp.period}</span>
                                                 </div>
                                                 {exp.location && (
-                                                    <div className="flex items-center gap-1.5">
-                                                        <MapPin size={13} className="text-accent shrink-0" />
+                                                    <div className="flex items-center gap-1 text-[11px]">
+                                                        <MapPin size={12} className="text-accent shrink-0" />
                                                         <span>{exp.location}</span>
                                                     </div>
                                                 )}
                                             </div>
 
-                                            {/* Multiple Roles Hierarchy Badge (if > 1 position held) */}
+                                            {/* Multiple Roles Hierarchy (e.g. GDGoC multiple positions) */}
                                             {roleCount > 1 && (
-                                                <div className="mt-3.5 p-2.5 bg-secondary/80 border border-white/5 space-y-1.5">
+                                                <div className="mt-3.5 p-3 bg-secondary/80 border border-white/5 space-y-2">
                                                     <div className="flex items-center gap-1.5 text-[11px] font-mono text-accent uppercase tracking-wider font-semibold">
                                                         <Layers size={13} />
-                                                        <span>{roleCount} Positions Held:</span>
+                                                        <span>{roleCount} Roles & Positions Held:</span>
                                                     </div>
-                                                    <ul className="space-y-1 pl-1 list-none">
+                                                    <ul className="space-y-1.5 pl-0.5 list-none">
                                                         {roles.map((r, rIdx) => (
                                                             <li
                                                                 key={r.id || rIdx}
-                                                                className="text-xs text-white/70 font-mono flex items-center justify-between"
+                                                                className="text-xs font-mono flex items-center justify-between gap-2"
                                                             >
-                                                                <span className="truncate pr-2">• {r.position}</span>
-                                                                <span className="text-[10px] text-white/40 shrink-0">
-                                                                    {r.period}
+                                                                <span className="flex items-center gap-2 truncate">
+                                                                    <span className="w-1.5 h-1.5 bg-accent/80 shrink-0" />
+                                                                    <span className="text-white/90 font-medium truncate">
+                                                                        {r.position}
+                                                                    </span>
+                                                                </span>
+                                                                <span className="text-[10px] text-white/45 shrink-0">
+                                                                    {r.period ||
+                                                                        (r.start_date
+                                                                            ? `${r.start_date.slice(0, 7)} — ${
+                                                                                  r.is_current ? "Present" : r.end_date?.slice(0, 7)
+                                                                              }`
+                                                                            : "")}
                                                                 </span>
                                                             </li>
                                                         ))}
@@ -236,37 +266,37 @@ export default function Experience() {
                                                 </div>
                                             )}
 
-                                            {/* Short Narrative Snippet */}
-                                            <p className="text-sm text-white/65 font-body line-clamp-2 mt-3 leading-relaxed">
+                                            {/* Short Description (Clamped 2-3 lines) */}
+                                            <p className="text-xs sm:text-sm text-white/65 font-body line-clamp-2 sm:line-clamp-3 mt-3 leading-relaxed">
                                                 {exp.description || exp.overview || "Click to explore responsibilities and documentation."}
                                             </p>
 
-                                            {/* Technology Pills */}
+                                            {/* Relevant Skills / Contribution Tags */}
                                             {exp.technologies && exp.technologies.length > 0 && (
-                                                <div className="flex flex-wrap gap-1.5 mt-4 pt-3 border-t border-white/5">
+                                                <div className="flex flex-wrap gap-1.5 mt-3.5 pt-3 border-t border-white/5">
                                                     {exp.technologies.slice(0, 4).map((tech, tIdx) => (
                                                         <span
                                                             key={tIdx}
-                                                            className="text-[10px] font-mono px-2 py-0.5 border border-white/10 bg-secondary/50 text-white/70"
+                                                            className="text-[10px] font-mono px-2 py-0.5 border border-white/10 bg-secondary/60 text-white/75"
                                                         >
                                                             {tech}
                                                         </span>
                                                     ))}
                                                     {exp.technologies.length > 4 && (
                                                         <span className="text-[10px] font-mono px-1.5 py-0.5 text-white/40">
-                                                            +{exp.technologies.length - 4} more
+                                                            +{exp.technologies.length - 4}
                                                         </span>
                                                     )}
                                                 </div>
                                             )}
 
-                                            {/* Click Affordance Action */}
+                                            {/* Action Link */}
                                             <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-mono text-white/70 group-hover:text-accent transition-colors">
                                                 <span className="font-semibold tracking-wide">
                                                     Explore Roles & Documentation
                                                 </span>
                                                 <ChevronRight
-                                                    size={15}
+                                                    size={14}
                                                     className="group-hover:translate-x-1 transition-transform text-accent"
                                                 />
                                             </div>
@@ -335,7 +365,7 @@ export default function Experience() {
                 )}
             </div>
 
-            {/* DETAIL MODAL / SLIDE-OVER DRAWER */}
+            {/* 4. Experience Detail View (Slide-over Drawer with Back to Experience) */}
             <AnimatePresence>
                 {selectedExp && (
                     <ExperienceDetailModal
@@ -346,7 +376,7 @@ export default function Experience() {
                 )}
             </AnimatePresence>
 
-            {/* LIGHTBOX VIEWER */}
+            {/* Fullscreen Lightbox Modal */}
             <AnimatePresence>
                 {selectedExp && lightboxIndex !== null && selectedExp.gallery?.[lightboxIndex] && (
                     <LightboxModal
@@ -361,7 +391,7 @@ export default function Experience() {
     );
 }
 
-// EXPERIENCE DETAIL MODAL (LINKEDIN-STYLE RICH VIEW)
+// 4. EXPERIENCE DETAIL MODAL
 function ExperienceDetailModal({ exp, onClose, onOpenLightbox }) {
     useEffect(() => {
         function handleKeyDown(e) {
@@ -378,7 +408,7 @@ function ExperienceDetailModal({ exp, onClose, onOpenLightbox }) {
 
     return (
         <div
-            className="fixed inset-0 z-50 flex justify-end bg-black/75 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex justify-end bg-black/80 backdrop-blur-sm"
             onClick={onClose}
             role="dialog"
             aria-modal="true"
@@ -392,33 +422,36 @@ function ExperienceDetailModal({ exp, onClose, onOpenLightbox }) {
                 onClick={(e) => e.stopPropagation()}
                 className="w-full max-w-2xl bg-[#0c1017] border-l border-white/10 h-full flex flex-col shadow-2xl overflow-hidden"
             >
-                {/* Drawer Header */}
-                <div className="flex items-center justify-between p-5 border-b border-white/10 bg-[#0e141d] shrink-0">
-                    <div className="flex items-center gap-2">
-                        <span className="font-mono text-xs uppercase tracking-wider text-accent font-semibold">
-                            Experience Details
-                        </span>
-                        <span className="text-white/30">/</span>
-                        <span className="font-mono text-xs text-white/50 truncate max-w-[260px]">
+                {/* Drawer Sticky Header with Explicit "← Back to Experience" Button */}
+                <div className="flex items-center justify-between p-4 sm:p-5 border-b border-white/10 bg-[#0e141d] shrink-0 sticky top-0 z-30">
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="inline-flex items-center gap-2 text-xs font-mono text-white/85 hover:text-accent border border-white/15 hover:border-accent px-3 py-1.5 bg-primary/80 transition-colors"
+                        aria-label="Back to Experience"
+                    >
+                        <ChevronLeft size={14} className="text-accent" />
+                        <span>Back to Experience</span>
+                    </button>
+
+                    <div className="flex items-center gap-3">
+                        <span className="font-mono text-xs text-white/45 hidden sm:inline truncate max-w-[200px]">
                             {exp.organization || exp.company}
                         </span>
-                    </div>
-
-                    <div className="flex items-center gap-2">
                         <button
                             type="button"
                             onClick={onClose}
                             className="p-1.5 border border-white/10 text-white/60 hover:text-white hover:border-accent transition-colors"
                             aria-label="Close modal"
                         >
-                            <X size={18} />
+                            <X size={16} />
                         </button>
                     </div>
                 </div>
 
                 {/* Drawer Scrollable Body */}
                 <div className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-8">
-                    {/* Organization Hero Card */}
+                    {/* Organization Overview Hero Card */}
                     <div className="border border-white/10 bg-primary/60 p-6 space-y-4">
                         <div className="flex items-start justify-between gap-4">
                             <div className="flex items-center gap-3.5">
@@ -512,16 +545,20 @@ function ExperienceDetailModal({ exp, onClose, onOpenLightbox }) {
                         </div>
                     )}
 
-                    {/* Section: Roles & Responsibilities (LinkedIn-Style Sub-Timeline) */}
+                    {/* Section: Roles & Responsibilities */}
                     <div className="space-y-4">
                         <div className="flex items-center justify-between">
                             <h3 className="font-mono text-xs uppercase tracking-wider text-accent font-semibold">
-                                Roles & Positions ({roles.length})
+                                {roles.length > 1
+                                    ? `Roles & Positions (${roles.length})`
+                                    : "Role & Key Responsibilities"}
                             </h3>
-                            <span className="text-[11px] font-mono text-white/40">Chronological Order</span>
+                            {roles.length > 1 && (
+                                <span className="text-[11px] font-mono text-white/40">Chronological Order</span>
+                            )}
                         </div>
 
-                        <div className="relative pl-6 space-y-6 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-white/15">
+                        <div className="relative pl-6 space-y-6 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-px before:bg-white/15">
                             {roles.map((role, idx) => (
                                 <div key={role.id || idx} className="relative space-y-2">
                                     {/* Role Node */}
@@ -539,7 +576,10 @@ function ExperienceDetailModal({ exp, onClose, onOpenLightbox }) {
                                                 {role.position}
                                             </h4>
                                             <span className="font-mono text-xs text-white/50 bg-secondary px-2 py-0.5 border border-white/5">
-                                                {role.period || (role.start_date ? `${role.start_date} — ${role.is_current ? "Present" : role.end_date}` : "")}
+                                                {role.period ||
+                                                    (role.start_date
+                                                        ? `${role.start_date} — ${role.is_current ? "Present" : role.end_date}`
+                                                        : "")}
                                             </span>
                                         </div>
 
@@ -665,7 +705,7 @@ function ExperienceDetailModal({ exp, onClose, onOpenLightbox }) {
                     )}
                 </div>
 
-                {/* Drawer Footer */}
+                {/* Drawer Footer with Back to Experience Button */}
                 <div className="p-4 border-t border-white/10 bg-[#0e141d] flex items-center justify-between shrink-0">
                     <span className="text-xs font-mono text-white/45">
                         {isCurrent ? "Active Role" : "Archived Experience"}
@@ -673,9 +713,10 @@ function ExperienceDetailModal({ exp, onClose, onOpenLightbox }) {
                     <button
                         type="button"
                         onClick={onClose}
-                        className="admin-secondary-action text-xs"
+                        className="admin-secondary-action text-xs inline-flex items-center gap-1.5"
                     >
-                        Close Detail View
+                        <ChevronLeft size={13} />
+                        <span>Back to Experience</span>
                     </button>
                 </div>
             </motion.div>
@@ -683,7 +724,7 @@ function ExperienceDetailModal({ exp, onClose, onOpenLightbox }) {
     );
 }
 
-// FULLSCREEN LIGHTBOX MODAL
+// 5. FULLSCREEN LIGHTBOX MODAL
 function LightboxModal({ gallery = [], currentIndex = 0, onClose, onNavigate }) {
     const item = gallery[currentIndex] || {};
 

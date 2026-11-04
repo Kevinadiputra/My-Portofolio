@@ -74,7 +74,7 @@ export default async function ExperiencePage({ params }) {
                             className="inline-flex items-center gap-2 text-xs font-mono text-white/60 hover:text-accent transition-colors"
                         >
                             <ArrowLeft size={14} />
-                            <span>Back to Career Timeline</span>
+                            <span>Back to Experience</span>
                         </Link>
                     </div>
 
