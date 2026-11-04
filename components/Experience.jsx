@@ -107,7 +107,7 @@ export default function Experience() {
                     {/* Central Vertical Spine: centered on desktop, left-aligned on mobile */}
                     <div
                         aria-hidden="true"
-                        className="absolute top-4 bottom-4 left-5 sm:left-6 lg:left-1/2 -translate-x-1/2 w-px bg-gradient-to-b from-accent/70 via-accent/30 to-white/10 pointer-events-none"
+                        className="absolute top-6 bottom-8 left-5 sm:left-6 lg:left-1/2 -translate-x-1/2 w-0.5 bg-accent/70 shadow-[0_0_8px_rgba(104,212,204,0.35)] pointer-events-none z-10"
                     />
 
                     <div className="space-y-12 lg:space-y-16">
@@ -133,7 +133,7 @@ export default function Experience() {
                                         <div
                                             className={`w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center border transition-all duration-300 ${
                                                 isCurrent
-                                                    ? "border-accent bg-primary text-accent shadow-[0_0_14px_rgba(104,212,204,0.35)]"
+                                                    ? "border-accent bg-primary text-accent shadow-[0_0_14px_rgba(104,212,204,0.45)]"
                                                     : "border-white/20 bg-primary text-white/70 hover:border-accent hover:text-accent"
                                             }`}
                                         >
@@ -169,13 +169,13 @@ export default function Experience() {
                                             {/* Connector indicator for desktop & mobile */}
                                             <span
                                                 aria-hidden="true"
-                                                className={`hidden lg:block absolute top-10 w-10 h-px bg-white/15 group-hover:bg-accent/40 transition-colors pointer-events-none ${
+                                                className={`hidden lg:block absolute top-[2.625rem] sm:top-11 w-10 h-0.5 bg-accent/70 group-hover:bg-accent transition-colors pointer-events-none z-10 ${
                                                     isEven ? "-left-10" : "-right-10"
                                                 }`}
                                             />
                                             <span
                                                 aria-hidden="true"
-                                                className="block lg:hidden absolute top-10 -left-6 sm:-left-7 w-6 sm:w-7 h-px bg-white/15 group-hover:bg-accent/40 transition-colors pointer-events-none"
+                                                className="block lg:hidden absolute top-[2.625rem] sm:top-11 -left-9 sm:-left-10 w-9 sm:w-10 h-0.5 bg-accent/70 group-hover:bg-accent transition-colors pointer-events-none z-10"
                                             />
 
                                             {/* Top Row: Organization Logo + Header Information */}

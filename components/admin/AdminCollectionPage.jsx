@@ -893,7 +893,7 @@ export default function AdminCollectionPage({ collection, title, eyebrow, descri
                                 Cancel
                             </button>
 
-                            <div className="flex items-center gap-2.5 ml-auto">
+                            <div className="flex items-center gap-2.5 ml-auto flex-wrap sm:flex-nowrap">
                                 <button
                                     type="button"
                                     onClick={(e) => handleSubmit(e, false)}
@@ -981,21 +981,21 @@ function RolesRepeater({ roles = [], onChange }) {
         <div className="admin-repeater-container space-y-3">
             {roles.map((role, idx) => (
                 <div key={role.id || idx} className="admin-repeater-card border border-white/10 bg-primary/70 p-4 space-y-3">
-                    <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                        <div className="flex items-center gap-2">
-                            <span className="w-5 h-5 flex items-center justify-center bg-accent/20 text-accent font-mono text-xs font-bold">
+                    <div className="flex items-center justify-between border-b border-white/10 pb-2 gap-2 min-w-0">
+                        <div className="flex items-center gap-2 min-w-0 flex-1">
+                            <span className="w-5 h-5 flex items-center justify-center bg-accent/20 text-accent font-mono text-xs font-bold shrink-0">
                                 {idx + 1}
                             </span>
-                            <span className="font-mono text-xs text-white font-medium truncate max-w-[280px]">
+                            <span className="font-mono text-xs text-white font-medium truncate min-w-0 flex-1">
                                 {role.position || "Untitled Position / Role"}
                             </span>
                             {role.is_current && (
-                                <span className="text-[10px] font-mono text-accent bg-accent/10 border border-accent/30 px-1.5 py-0.5">
+                                <span className="text-[10px] font-mono text-accent bg-accent/10 border border-accent/30 px-1.5 py-0.5 shrink-0">
                                     Current
                                 </span>
                             )}
                         </div>
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1 shrink-0">
                             <button
                                 type="button"
                                 disabled={idx === 0}
@@ -1025,40 +1025,40 @@ function RolesRepeater({ roles = [], onChange }) {
                         </div>
                     </div>
 
-                    <div className="grid gap-3 sm:grid-cols-2">
-                        <div className="sm:col-span-2">
+                    <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 w-full min-w-0">
+                        <div className="sm:col-span-2 min-w-0">
                             <label className="admin-label text-[11px]">Position / Role Title *</label>
                             <input
                                 type="text"
                                 value={role.position || ""}
                                 onChange={(e) => updateRole(idx, "position", e.target.value)}
                                 placeholder="e.g. Project Officer — Build with AI 2026"
-                                className="admin-input text-xs"
+                                className="admin-input text-xs w-full min-w-0"
                             />
                         </div>
 
-                        <div>
+                        <div className="min-w-0">
                             <label className="admin-label text-[11px]">Start Date</label>
                             <input
                                 type="date"
                                 value={role.start_date || ""}
                                 onChange={(e) => updateRole(idx, "start_date", e.target.value)}
-                                className="admin-input text-xs"
+                                className="admin-input text-xs w-full min-w-0"
                             />
                         </div>
 
-                        <div>
+                        <div className="min-w-0">
                             <label className="admin-label text-[11px]">End Date</label>
                             <input
                                 type="date"
                                 value={role.end_date || ""}
                                 disabled={Boolean(role.is_current)}
                                 onChange={(e) => updateRole(idx, "end_date", e.target.value)}
-                                className="admin-input text-xs"
+                                className="admin-input text-xs w-full min-w-0"
                             />
                         </div>
 
-                        <div className="sm:col-span-2">
+                        <div className="sm:col-span-2 min-w-0">
                             <label className="admin-checkbox-label text-xs">
                                 <input
                                     type="checkbox"
@@ -1070,18 +1070,18 @@ function RolesRepeater({ roles = [], onChange }) {
                             </label>
                         </div>
 
-                        <div className="sm:col-span-2">
+                        <div className="sm:col-span-2 min-w-0">
                             <label className="admin-label text-[11px]">Role Summary (Overview of Scope)</label>
                             <textarea
                                 rows={2}
                                 value={role.description || ""}
                                 onChange={(e) => updateRole(idx, "description", e.target.value)}
                                 placeholder="Brief overview of duties and leadership scope in this position..."
-                                className="admin-input admin-textarea text-xs"
+                                className="admin-input admin-textarea text-xs w-full min-w-0"
                             />
                         </div>
 
-                        <div className="sm:col-span-2">
+                        <div className="sm:col-span-2 min-w-0">
                             <label className="admin-label text-[11px]">
                                 Key Responsibilities & Contributions (One bullet point per line)
                             </label>
@@ -1096,11 +1096,11 @@ function RolesRepeater({ roles = [], onChange }) {
                                     )
                                 }
                                 placeholder="Coordinated regional AI workshops and developer hackdays\nMentored 120+ participants in building practical ML apps"
-                                className="admin-input admin-textarea font-mono text-xs"
+                                className="admin-input admin-textarea font-mono text-xs w-full min-w-0"
                             />
                         </div>
 
-                        <div className="sm:col-span-2">
+                        <div className="sm:col-span-2 min-w-0">
                             <label className="admin-label text-[11px]">
                                 Technologies & Skills (Comma-separated)
                             </label>
@@ -1115,7 +1115,7 @@ function RolesRepeater({ roles = [], onChange }) {
                                     )
                                 }
                                 placeholder="Python, Generative AI, Technical Leadership, Machine Learning"
-                                className="admin-input text-xs"
+                                className="admin-input text-xs w-full min-w-0"
                             />
                         </div>
                     </div>
@@ -1222,28 +1222,28 @@ function GalleryRepeater({ gallery = [], onChange }) {
                         </div>
                     </div>
 
-                    <div className="flex gap-3 items-start">
+                    <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center w-full min-w-0">
                         {item.url ? (
                             <img
                                 src={item.url}
                                 alt={item.caption || "Preview"}
-                                className="w-16 h-16 object-cover border border-white/10 shrink-0 bg-secondary"
+                                className="w-14 h-14 object-cover border border-white/10 shrink-0 bg-secondary"
                             />
                         ) : (
-                            <div className="w-16 h-16 border border-dashed border-white/20 flex items-center justify-center shrink-0 text-white/30 text-xs">
+                            <div className="w-14 h-14 border border-dashed border-white/20 flex items-center justify-center shrink-0 text-white/30 text-xs">
                                 <ImageIcon size={18} />
                             </div>
                         )}
-                        <div className="flex-1 space-y-2">
-                            <div className="flex gap-2">
+                        <div className="flex-1 min-w-0 w-full space-y-2">
+                            <div className="flex flex-col sm:flex-row gap-2 w-full min-w-0">
                                 <input
                                     type="text"
                                     value={item.url || ""}
                                     onChange={(e) => updateItem(idx, "url", e.target.value)}
                                     placeholder="https://... atau klik Upload"
-                                    className="admin-input text-xs flex-1"
+                                    className="admin-input text-xs flex-1 min-w-0 w-full"
                                 />
-                                <label className="admin-upload-btn text-xs px-2.5 py-1">
+                                <label className="admin-upload-btn text-xs px-2.5 py-1 shrink-0 justify-center">
                                     <Upload size={12} />
                                     <span>{uploadingIdx === idx ? "Uploading…" : "Upload"}</span>
                                     <input
@@ -1262,8 +1262,8 @@ function GalleryRepeater({ gallery = [], onChange }) {
                                 type="text"
                                 value={item.caption || ""}
                                 onChange={(e) => updateItem(idx, "caption", e.target.value)}
-                                placeholder="Caption / Deskripsi kegiatan foto (e.g. Workshop bersama tim GDGoC)"
-                                className="admin-input text-xs"
+                                placeholder="Caption / Deskripsi kegiatan foto"
+                                className="admin-input text-xs w-full min-w-0"
                             />
                         </div>
                     </div>
@@ -1301,25 +1301,26 @@ function LinksRepeater({ links = [], onChange }) {
     return (
         <div className="admin-repeater-container space-y-2">
             {links.map((link, idx) => (
-                <div key={idx} className="flex items-center gap-2 border border-white/10 bg-primary/70 p-2">
+                <div key={idx} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 border border-white/10 bg-primary/70 p-2 w-full min-w-0">
                     <input
                         type="text"
                         value={link.title || ""}
                         onChange={(e) => updateLink(idx, "title", e.target.value)}
                         placeholder="Link Title (e.g. Website, Instagram)"
-                        className="admin-input text-xs w-1/3"
+                        className="admin-input text-xs sm:w-1/3 min-w-0 w-full"
                     />
                     <input
                         type="url"
                         value={link.url || ""}
                         onChange={(e) => updateLink(idx, "url", e.target.value)}
                         placeholder="https://..."
-                        className="admin-input text-xs flex-1"
+                        className="admin-input text-xs flex-1 min-w-0 w-full"
                     />
                     <button
                         type="button"
                         onClick={() => removeLink(idx)}
-                        className="admin-icon-btn h-7 w-7 text-red-400 shrink-0"
+                        className="admin-icon-btn h-7 w-7 text-red-400 shrink-0 self-end sm:self-auto"
+                        title="Hapus link"
                     >
                         <Trash2 size={13} />
                     </button>
@@ -1404,17 +1405,17 @@ function FormField({
                     <span className="text-sm text-white/80">{field.label}</span>
                 </label>
             ) : field.type === "media" ? (
-                <div className="admin-media-box">
-                    <div className="flex gap-2 items-center">
+                <div className="admin-media-box w-full max-w-full min-w-0">
+                    <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center w-full min-w-0">
                         <input
                             id={`field-${field.name}`}
                             type="text"
                             value={value || ""}
                             onChange={(e) => onChange(e.target.value)}
                             placeholder="https://... atau klik Upload"
-                            className="admin-input flex-1"
+                            className="admin-input flex-1 min-w-0 w-full"
                         />
-                        <label className="admin-upload-btn">
+                        <label className="admin-upload-btn shrink-0 justify-center">
                             <Upload size={14} />
                             <span>{uploading ? "Uploading…" : "Upload"}</span>
                             <input
@@ -1430,13 +1431,13 @@ function FormField({
                         </label>
                     </div>
                     {value && (
-                        <div className="admin-media-preview-bar">
-                            <span className="truncate text-xs font-mono text-white/50">{value}</span>
+                        <div className="admin-media-preview-bar w-full min-w-0 overflow-hidden">
+                            <span className="truncate min-w-0 flex-1 text-xs font-mono text-white/50">{value}</span>
                             <a
                                 href={value}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-accent hover:underline text-xs font-mono inline-flex items-center gap-1"
+                                className="text-accent hover:underline text-xs font-mono inline-flex items-center gap-1 shrink-0 ml-2"
                             >
                                 <ExternalLink size={12} /> View
                             </a>
@@ -1450,10 +1451,10 @@ function FormField({
                     value={formatValue(field, value)}
                     onChange={(e) => onChange(parseValue(field, e.target.value))}
                     placeholder={field.placeholder}
-                    className="admin-input admin-textarea font-mono text-xs"
+                    className="admin-input admin-textarea font-mono text-xs w-full min-w-0"
                 />
             ) : (
-                <div className="relative">
+                <div className="relative w-full min-w-0">
                     <input
                         id={`field-${field.name}`}
                         type={field.type === "number" ? "number" : field.type === "date" ? "date" : "text"}
@@ -1464,7 +1465,7 @@ function FormField({
                             onChange(e.target.value);
                         }}
                         placeholder={field.placeholder}
-                        className="admin-input"
+                        className="admin-input w-full min-w-0"
                     />
                     {field.name === "slug" && (
                         <button
