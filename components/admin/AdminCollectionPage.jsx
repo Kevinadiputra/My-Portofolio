@@ -27,6 +27,8 @@ import {
     Image as ImageIcon,
 } from "lucide-react";
 import { getAdminCollection, slugifyText } from "@/lib/admin-content";
+import ProjectEditorDrawer from "./ProjectEditorDrawer";
+import ProjectPreviewModal from "./ProjectPreviewModal";
 
 const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
 
@@ -366,6 +368,42 @@ export default function AdminCollectionPage({ collection, title, eyebrow, descri
             }
         } catch (saveError) {
             showToast("error", saveError.message || "Gagal menyimpan perubahan ke database.");
+        } finally {
+            isSubmittingRef.current = false;
+            setIsSaving(false);
+        }
+    }
+
+    async function handleProjectSave(savedPayload) {
+        if (isSubmittingRef.current || isSaving) return;
+        isSubmittingRef.current = true;
+        setIsSaving(true);
+
+        const isUpdating = Boolean(selectedId);
+        const method = isUpdating ? "PATCH" : "POST";
+        const bodyPayload = isUpdating
+            ? { ...savedPayload, id: selectedId }
+            : savedPayload;
+
+        try {
+            const response = await fetch("/api/admin/content/projects", {
+                method,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(bodyPayload),
+            });
+
+            const result = await response.json();
+            if (!response.ok) {
+                throw new Error(result.error || "Gagal menyimpan data project.");
+            }
+
+            showToast("success", `Project "${savedPayload.title}" berhasil disimpan.`);
+            setDirty(false);
+            setIsEditorOpen(false);
+            await loadRecords();
+        } catch (saveError) {
+            showToast("error", saveError.message || "Gagal menyimpan project ke database.");
+            throw saveError;
         } finally {
             isSubmittingRef.current = false;
             setIsSaving(false);
@@ -829,108 +867,126 @@ export default function AdminCollectionPage({ collection, title, eyebrow, descri
 
             {/* DEDICATED EDITOR DRAWER / MODAL */}
             {isEditorOpen && (
-                <div className="admin-drawer-backdrop" onClick={closeEditor}>
-                    <div
-                        className="admin-drawer-panel"
-                        onClick={(e) => e.stopPropagation()}
-                        role="dialog"
-                        aria-modal="true"
-                        aria-labelledby="drawer-title"
-                    >
-                        {/* Drawer Header */}
-                        <div className="admin-drawer-header">
-                            <div className="min-w-0 flex-1">
-                                <div className="admin-eyebrow">
-                                    {selectedId ? "EDIT RECORD" : "NEW RECORD"} / {config.label.toUpperCase()}
+                collection === "projects" ? (
+                    <ProjectEditorDrawer
+                        initialRecord={record}
+                        selectedId={selectedId}
+                        onClose={closeEditor}
+                        onSave={handleProjectSave}
+                        isSaving={isSaving}
+                        showToast={showToast}
+                    />
+                ) : (
+                    <div className="admin-drawer-backdrop" onClick={closeEditor}>
+                        <div
+                            className="admin-drawer-panel"
+                            onClick={(e) => e.stopPropagation()}
+                            role="dialog"
+                            aria-modal="true"
+                            aria-labelledby="drawer-title"
+                        >
+                            {/* Drawer Header */}
+                            <div className="admin-drawer-header">
+                                <div className="min-w-0 flex-1">
+                                    <div className="admin-eyebrow">
+                                        {selectedId ? "EDIT RECORD" : "NEW RECORD"} / {config.label.toUpperCase()}
+                                    </div>
+                                    <h2 id="drawer-title" className="admin-drawer-title">
+                                        {selectedId ? `Edit ${config.singularLabel}` : `Add New ${config.singularLabel}`}
+                                    </h2>
+                                    {selectedId && (record.title || record.position || record.institution || record.organization || record.name) && (
+                                        <p className="text-xs font-mono text-accent/80 truncate max-w-full mt-0.5">
+                                            {record.title || record.position || record.institution || record.organization || record.name}
+                                        </p>
+                                    )}
                                 </div>
-                                <h2 id="drawer-title" className="admin-drawer-title">
-                                    {selectedId ? `Edit ${config.singularLabel}` : `Add New ${config.singularLabel}`}
-                                </h2>
-                                {selectedId && (record.title || record.position || record.institution || record.organization || record.name) && (
-                                    <p className="text-xs font-mono text-accent/80 truncate max-w-full mt-0.5">
-                                        {record.title || record.position || record.institution || record.organization || record.name}
-                                    </p>
-                                )}
+                                <div className="flex items-center gap-2 shrink-0">
+                                    <button
+                                        type="button"
+                                        onClick={closeEditor}
+                                        className="admin-icon-btn"
+                                        aria-label="Close editor"
+                                    >
+                                        <X size={16} />
+                                    </button>
+                                </div>
                             </div>
-                            <div className="flex items-center gap-2 shrink-0">
+
+                            {/* Drawer Form Body */}
+                            <form onSubmit={(e) => handleSubmit(e)} className="admin-drawer-body">
+                                {sections.map(({ title: sectionTitle, fields }) => (
+                                    <section key={sectionTitle} className="admin-drawer-section">
+                                        <div className="admin-section-legend">
+                                            <span>{sectionTitle}</span>
+                                        </div>
+                                        <div className="admin-form-grid">
+                                            {fields.map((field) => (
+                                                <FormField
+                                                    key={field.name}
+                                                    field={field}
+                                                    value={record[field.name]}
+                                                    record={record}
+                                                    onChange={(val) => updateField(field.name, val)}
+                                                    onUpload={(f) => handleUpload(field, f)}
+                                                    uploading={uploadingField === field.name}
+                                                    slugEdited={slugManuallyEdited}
+                                                    setSlugEdited={setSlugManuallyEdited}
+                                                />
+                                            ))}
+                                        </div>
+                                    </section>
+                                ))}
+                            </form>
+
+                            {/* Drawer Footer Actions */}
+                            <div className="admin-drawer-footer">
                                 <button
                                     type="button"
                                     onClick={closeEditor}
-                                    className="admin-icon-btn"
-                                    aria-label="Close editor"
+                                    className="admin-secondary-action"
                                 >
-                                    <X size={16} />
+                                    Cancel
                                 </button>
-                            </div>
-                        </div>
 
-                        {/* Drawer Form Body */}
-                        <form onSubmit={(e) => handleSubmit(e)} className="admin-drawer-body">
-                            {sections.map(({ title: sectionTitle, fields }) => (
-                                <section key={sectionTitle} className="admin-drawer-section">
-                                    <div className="admin-section-legend">
-                                        <span>{sectionTitle}</span>
-                                    </div>
-                                    <div className="admin-form-grid">
-                                        {fields.map((field) => (
-                                            <FormField
-                                                key={field.name}
-                                                field={field}
-                                                value={record[field.name]}
-                                                record={record}
-                                                onChange={(val) => updateField(field.name, val)}
-                                                onUpload={(f) => handleUpload(field, f)}
-                                                uploading={uploadingField === field.name}
-                                                slugEdited={slugManuallyEdited}
-                                                setSlugEdited={setSlugManuallyEdited}
-                                            />
-                                        ))}
-                                    </div>
-                                </section>
-                            ))}
-                        </form>
-
-                        {/* Drawer Footer Actions */}
-                        <div className="admin-drawer-footer">
-                            <button
-                                type="button"
-                                onClick={closeEditor}
-                                className="admin-secondary-action"
-                            >
-                                Cancel
-                            </button>
-
-                            <div className="flex items-center gap-2.5 ml-auto flex-wrap sm:flex-nowrap">
-                                <button
-                                    type="button"
-                                    onClick={(e) => handleSubmit(e, false)}
-                                    disabled={isSaving}
-                                    className="admin-secondary-action text-amber-300 border-amber-500/30 hover:border-amber-400"
-                                >
-                                    {isSaving ? "Saving…" : "Save as Draft"}
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={(e) => handleSubmit(e, true)}
-                                    disabled={isSaving}
-                                    className="admin-primary-action"
-                                >
-                                    <Check size={14} />
-                                    <span>{isSaving ? "Saving…" : selectedId ? "Save Changes" : "Publish Now"}</span>
-                                </button>
+                                <div className="flex items-center gap-2.5 ml-auto flex-wrap sm:flex-nowrap">
+                                    <button
+                                        type="button"
+                                        onClick={(e) => handleSubmit(e, false)}
+                                        disabled={isSaving}
+                                        className="admin-secondary-action text-amber-300 border-amber-500/30 hover:border-amber-400"
+                                    >
+                                        {isSaving ? "Saving…" : "Save as Draft"}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={(e) => handleSubmit(e, true)}
+                                        disabled={isSaving}
+                                        className="admin-primary-action"
+                                    >
+                                        <Check size={14} />
+                                        <span>{isSaving ? "Saving…" : selectedId ? "Save Changes" : "Publish Now"}</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                )
             )}
 
             {/* PREVIEW MODAL */}
             {previewItem && (
-                <PreviewModal
-                    collection={collection}
-                    item={previewItem}
-                    onClose={() => setPreviewItem(null)}
-                />
+                collection === "projects" ? (
+                    <ProjectPreviewModal
+                        project={previewItem}
+                        onClose={() => setPreviewItem(null)}
+                    />
+                ) : (
+                    <PreviewModal
+                        collection={collection}
+                        item={previewItem}
+                        onClose={() => setPreviewItem(null)}
+                    />
+                )
             )}
 
             {/* CONFIRMATION DIALOG */}
