@@ -76,7 +76,7 @@ const Skills = () => {
             <div className="section-shell">
                 <div className="mb-12 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                     <div>
-                        <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent mb-2">
+                        <p className="font-mono text-xs uppercase tracking-wider text-accent mb-2 font-semibold">
                             03 / Technical Capabilities
                         </p>
                         <motion.h2
@@ -90,7 +90,7 @@ const Skills = () => {
                         </motion.h2>
                     </div>
                     <p className="text-sm sm:text-base text-white/65 max-w-xl">
-                        Grouped by functional domain and backed by documented projects and certifications—without arbitrary percentage bars.
+                        Grouped by functional domain and backed by documented projects and certifications without arbitrary percentage bars.
                     </p>
                 </div>
 

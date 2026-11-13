@@ -33,7 +33,7 @@ export async function generateMetadata({ params }) {
 
     const siteName = siteSettings?.site_name || "Kevin Adiputra Portfolio";
     const owner = profile?.name || "Kevin Adiputra";
-    const title = `${project.title} — ${owner}`;
+    const title = `${project.title} | ${owner}`;
     const description =
         project.tagline ||
         project.description ||

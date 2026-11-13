@@ -29,7 +29,7 @@ export async function generateMetadata({ params }) {
 
     const siteName = siteSettings?.site_name || "Kevin Adiputra Portfolio";
     const owner = profile?.name || "Kevin Adiputra";
-    const title = `${exp.position} at ${exp.organization} — ${owner}`;
+    const title = `${exp.position} at ${exp.organization} | ${owner}`;
     const description =
         exp.overview ||
         exp.description ||
@@ -79,10 +79,10 @@ export default async function ExperiencePage({ params }) {
                     </div>
 
                     {/* Organization Hero Banner */}
-                    <div className="border border-white/10 bg-secondary/80 p-6 sm:p-8 space-y-6">
+                    <div className="rounded-2xl border border-white/[0.08] bg-secondary/80 p-6 sm:p-8 space-y-6 shadow-xl">
                         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6">
                             <div className="flex items-start gap-4">
-                                <div className="w-16 h-16 border border-white/15 bg-primary flex items-center justify-center shrink-0 p-1">
+                                <div className="w-16 h-16 rounded-xl border border-white/15 bg-primary flex items-center justify-center shrink-0 p-1 overflow-hidden">
                                     {exp.logoUrl || exp.logo_url ? (
                                         <img
                                             src={exp.logoUrl || exp.logo_url}
@@ -95,12 +95,12 @@ export default async function ExperiencePage({ params }) {
                                 </div>
                                 <div className="space-y-1">
                                     <div className="flex flex-wrap items-center gap-2">
-                                        <span className="font-mono text-[11px] uppercase tracking-wider px-2 py-0.5 border border-white/10 bg-primary text-white/70">
+                                        <span className="font-mono text-[11px] uppercase tracking-wider px-2 py-0.5 rounded border border-white/10 bg-primary text-white/70">
                                             {exp.organizationType || exp.employmentType || "Organization"}
                                         </span>
                                         {isCurrent && (
-                                            <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-accent bg-accent/10 border border-accent/30 px-2 py-0.5 font-medium">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                                            <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-accent bg-accent/10 border border-accent/30 rounded px-2 py-0.5 font-medium">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-accent" />
                                                 Currently Active
                                             </span>
                                         )}
@@ -200,13 +200,13 @@ export default async function ExperiencePage({ params }) {
                                         }`}
                                     />
 
-                                    <div className="border border-white/10 bg-secondary/50 p-6 space-y-4">
+                                    <div className="rounded-xl border border-white/[0.08] bg-secondary/50 p-6 space-y-4 shadow-md">
                                         <div className="flex flex-wrap items-center justify-between gap-2">
                                             <h3 className="font-display text-lg font-bold text-white">
                                                 {role.position}
                                             </h3>
-                                            <span className="font-mono text-xs text-white/60 bg-primary px-2.5 py-1 border border-white/10">
-                                                {role.period || (role.start_date ? `${role.start_date} — ${role.is_current ? "Present" : role.end_date}` : "")}
+                                            <span className="font-mono text-xs text-white/60 bg-primary px-2.5 py-1 rounded border border-white/10">
+                                                {role.period || (role.start_date ? `${role.start_date} - ${role.is_current ? "Present" : role.end_date}` : "")}
                                             </span>
                                         </div>
 

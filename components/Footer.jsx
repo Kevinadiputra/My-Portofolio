@@ -33,7 +33,7 @@ const Footer = () => {
         "https://www.linkedin.com/in/kevin-adiputra-mahesa-8339911b3/";
 
     return (
-        <footer className="border-t border-white/10 bg-secondary">
+        <footer className="border-t border-white/[0.08] bg-secondary/90">
             <div className="section-shell">
                 <div className="grid gap-10 py-12 md:grid-cols-[1.2fr_0.8fr_1fr]">
                     <div className="space-y-4">
@@ -53,7 +53,7 @@ const Footer = () => {
                                 href={githubUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="chip hover:border-accent/50 hover:text-accent transition-colors"
+                                className="w-9 h-9 rounded-lg border border-white/10 bg-primary/70 hover:border-accent hover:text-accent text-white/75 flex items-center justify-center transition-colors shadow-sm"
                                 aria-label="GitHub"
                             >
                                 <Github size={15} />
@@ -62,14 +62,14 @@ const Footer = () => {
                                 href={linkedinUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="chip hover:border-accent/50 hover:text-accent transition-colors"
+                                className="w-9 h-9 rounded-lg border border-white/10 bg-primary/70 hover:border-accent hover:text-accent text-white/75 flex items-center justify-center transition-colors shadow-sm"
                                 aria-label="LinkedIn"
                             >
                                 <Linkedin size={15} />
                             </a>
                             <a
                                 href={`mailto:${email}`}
-                                className="chip hover:border-accent/50 hover:text-accent transition-colors"
+                                className="w-9 h-9 rounded-lg border border-white/10 bg-primary/70 hover:border-accent hover:text-accent text-white/75 flex items-center justify-center transition-colors shadow-sm"
                                 aria-label="Email"
                             >
                                 <Mail size={15} />
@@ -122,7 +122,7 @@ const Footer = () => {
                     </div>
                 </div>
 
-                <div className="flex flex-col items-center justify-between gap-4 border-t border-white/10 py-6 md:flex-row">
+                <div className="flex flex-col items-center justify-between gap-4 border-t border-white/[0.08] py-6 md:flex-row">
                     <p className="text-xs font-mono text-white/45">
                         © {currentYear} {siteSettings?.site_name || profile?.name || "Kevin Adiputra"}. All rights reserved.
                     </p>

@@ -72,10 +72,10 @@ export default function ProjectCaseStudy({ project, relatedProjects = [] }) {
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
                 {/* 1. Project Hero */}
-                <div className="border-b border-white/10 pb-12 mb-12">
+                <div className="border-b border-white/[0.08] pb-12 mb-12">
                     <div className="grid grid-cols-1 lg:grid-cols-[1.45fr_1fr] gap-10 items-start">
                         <div>
-                            <span className="font-mono text-xs text-accent uppercase tracking-[0.2em] mb-3 block">
+                            <span className="font-mono text-xs text-accent uppercase tracking-wider mb-3 block font-semibold">
                                 {formatCategory(project.category)} / {project.year || "2026"}
                             </span>
                             <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight text-white">
@@ -87,7 +87,7 @@ export default function ProjectCaseStudy({ project, relatedProjects = [] }) {
 
                             <div className="mt-6 flex flex-wrap gap-2">
                                 {(project.technologies || []).map((tech) => (
-                                    <span key={tech} className="chip border-accent/25 text-accent">
+                                    <span key={tech} className="chip border-accent/25 text-accent rounded-md">
                                         {tech}
                                     </span>
                                 ))}
@@ -100,7 +100,7 @@ export default function ProjectCaseStudy({ project, relatedProjects = [] }) {
                                         href={project.liveUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-2 border border-accent bg-accent hover:bg-accent-hover text-primary px-5 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider transition-colors"
+                                        className="inline-flex items-center gap-2 rounded-lg border border-accent bg-accent hover:bg-accent-hover text-primary px-5 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_2px_8px_rgba(104,212,204,0.2)]"
                                     >
                                         <ExternalLink size={14} />
                                         <span>Open Live Demo / Notebook</span>
@@ -111,7 +111,7 @@ export default function ProjectCaseStudy({ project, relatedProjects = [] }) {
                                         href={project.githubUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-2 border border-white/20 hover:border-accent hover:text-accent px-5 py-2.5 font-mono text-xs uppercase tracking-wider transition-colors bg-secondary/70"
+                                        className="inline-flex items-center gap-2 rounded-lg border border-white/20 hover:border-accent hover:text-accent px-5 py-2.5 font-mono text-xs uppercase tracking-wider transition-colors bg-secondary/70 shadow-sm"
                                     >
                                         <Github size={14} />
                                         <span>View Repository</span>
@@ -121,7 +121,7 @@ export default function ProjectCaseStudy({ project, relatedProjects = [] }) {
                         </div>
 
                         {/* Metadata Summary Panel */}
-                        <div className="border border-white/10 bg-secondary/70 p-6 sm:p-7 grid grid-cols-2 gap-y-6 gap-x-4 font-mono">
+                        <div className="rounded-2xl border border-white/[0.08] bg-secondary/80 p-6 sm:p-7 grid grid-cols-2 gap-y-6 gap-x-4 font-mono shadow-lg">
                             <div className="border-r border-white/10 pr-4">
                                 <span className="block text-[10px] uppercase tracking-wider text-white/45 mb-1">
                                     Role
@@ -164,7 +164,7 @@ export default function ProjectCaseStudy({ project, relatedProjects = [] }) {
 
                 {/* 2. Featured Visual */}
                 {project.image && (
-                    <div className="mb-16 overflow-hidden border border-white/10 aspect-[16/9] max-h-[520px] w-full bg-secondary relative">
+                    <div className="mb-16 overflow-hidden rounded-2xl border border-white/[0.08] aspect-[16/9] max-h-[520px] w-full bg-secondary relative shadow-xl">
                         <img
                             src={project.image}
                             alt={project.title}
@@ -410,10 +410,10 @@ export default function ProjectCaseStudy({ project, relatedProjects = [] }) {
 
                 {/* Related Case Studies */}
                 {relatedProjects && relatedProjects.length > 0 && (
-                    <div className="border-t border-white/10 pt-16">
+                    <div className="border-t border-white/[0.08] pt-16">
                         <div className="mb-8 flex items-center justify-between">
                             <div>
-                                <span className="font-mono text-xs uppercase tracking-[0.2em] text-accent block mb-1">
+                                <span className="font-mono text-xs uppercase tracking-wider text-accent block mb-1 font-semibold">
                                     Continue Exploring
                                 </span>
                                 <h2 className="font-display text-2xl font-bold text-white">
@@ -422,9 +422,10 @@ export default function ProjectCaseStudy({ project, relatedProjects = [] }) {
                             </div>
                             <Link
                                 href="/#projects"
-                                className="font-mono text-xs text-accent hover:underline"
+                                className="font-mono text-xs text-accent hover:underline flex items-center gap-1"
                             >
-                                View all projects →
+                                <span>View all projects</span>
+                                <span>&rarr;</span>
                             </Link>
                         </div>
 
@@ -433,7 +434,7 @@ export default function ProjectCaseStudy({ project, relatedProjects = [] }) {
                                 <Link
                                     key={proj.id || proj.slug}
                                     href={`/projects/${proj.slug}`}
-                                    className="group border border-white/10 bg-secondary/60 hover:border-accent/40 p-5 flex flex-col justify-between gap-4 transition-colors"
+                                    className="group rounded-xl border border-white/[0.08] bg-secondary/70 hover:border-accent/40 p-5 flex flex-col justify-between gap-4 transition-all duration-200 shadow-md"
                                 >
                                     <div>
                                         <span className="font-mono text-[10px] uppercase tracking-wider text-accent">

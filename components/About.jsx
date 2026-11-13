@@ -47,11 +47,11 @@ const About = () => {
     const primaryEdu = education?.[0];
 
     return (
-        <section id="about" className="relative bg-secondary py-24 border-b border-white/10">
+        <section id="about" className="relative bg-secondary/40 py-24 border-b border-white/[0.08]">
             <div className="section-shell">
                 <div className="mb-14 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                     <div>
-                        <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent mb-2">
+                        <p className="font-mono text-xs uppercase tracking-wider text-accent mb-2 font-semibold">
                             01 / Engineering Approach
                         </p>
                         <motion.h2
@@ -72,8 +72,8 @@ const About = () => {
 
                 <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 items-start">
                     <div className="space-y-6">
-                        <div className="border border-white/10 bg-primary/50 p-6 sm:p-8 space-y-4">
-                            <div className="font-mono text-xs uppercase tracking-wider text-accent">
+                        <div className="rounded-2xl border border-white/[0.08] bg-primary/60 p-6 sm:p-8 space-y-4 shadow-lg">
+                            <div className="font-mono text-xs uppercase tracking-wider text-accent font-semibold">
                                 Background & Focus
                             </div>
                             <h3 className="font-display text-xl sm:text-2xl font-bold text-white leading-snug">
@@ -90,7 +90,7 @@ const About = () => {
                             </p>
 
                             {primaryEdu && (
-                                <div className="pt-4 mt-4 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 font-mono text-xs">
+                                <div className="pt-4 mt-4 border-t border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-2 font-mono text-xs">
                                     <div>
                                         <span className="text-white font-semibold">{primaryEdu.institution}</span>
                                         <span className="text-white/50"> · {primaryEdu.degree}</span>
@@ -105,7 +105,7 @@ const About = () => {
                         {WORKFLOW_PILLARS.map((pillar) => (
                             <div
                                 key={pillar.step}
-                                className="border border-white/10 bg-primary/40 p-5 flex flex-col justify-between hover:border-accent/35 transition-colors duration-200"
+                                className="rounded-xl border border-white/[0.08] bg-primary/40 p-5 flex flex-col justify-between hover:border-accent/35 transition-colors duration-200 shadow-sm"
                             >
                                 <div>
                                     <span className="font-mono text-xs text-accent font-semibold">

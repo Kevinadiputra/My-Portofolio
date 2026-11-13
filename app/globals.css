@@ -3,26 +3,25 @@
 @tailwind utilities;
 
 :root {
-  --font-display: "Space Grotesk", "Satoshi", "Segoe UI", sans-serif;
-  --font-body: "IBM Plex Sans", "Segoe UI", Arial, sans-serif;
-  --color-primary: #0b0b12;
-  --color-secondary: #12151d;
+  --font-display: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-body: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+  --color-primary: #090a0f;
+  --color-secondary: #0f1118;
   --color-accent: #68d4cc;
-  --color-accent-hover: #8ae4dc;
-  --color-tertiary: #1a1f2a;
-  --color-tertiary-hover: #232a37;
-  --color-muted: #9da9b8;
-  --color-admin-panel: #111820;
-  --color-admin-panel-strong: #151f29;
-  --color-admin-line: rgba(255, 255, 255, 0.12);
-  --color-admin-soft: rgba(255, 255, 255, 0.58);
+  --color-accent-hover: #86e8e0;
+  --color-tertiary: #151822;
+  --color-tertiary-hover: #1c202d;
+  --color-muted: #94a3b8;
+  --color-admin-panel: #10131b;
+  --color-admin-panel-strong: #151923;
+  --color-admin-line: rgba(255, 255, 255, 0.1);
+  --color-admin-soft: rgba(255, 255, 255, 0.6);
 }
 
 body {
-  @apply font-body bg-primary text-white/90 leading-relaxed;
-  background:
-    radial-gradient(900px circle at 12% -10%, rgba(104, 212, 204, 0.12), transparent 45%),
-    linear-gradient(180deg, #0b0b12 0%, #10131a 48%, #0b0b12 100%);
+  @apply font-body bg-primary text-white/90 leading-relaxed antialiased;
+  background-color: #090a0f;
 }
 
 /* Smooth scrolling */
@@ -55,65 +54,66 @@ html {
 }
 
 .h1 {
-  @apply font-display text-[44px] sm:text-[56px] md:text-[64px] lg:text-[72px] leading-[1.05] font-extrabold tracking-tight;
+  @apply font-display text-3xl sm:text-4xl md:text-5xl lg:text-[52px] leading-[1.12] font-bold tracking-tight text-white;
   text-wrap: balance;
 }
 
 .h2 {
-  @apply font-display text-[26px] sm:text-[30px] md:text-[34px] lg:text-[40px] leading-[1.1] font-bold tracking-tight;
+  @apply font-display text-2xl sm:text-3xl md:text-[34px] leading-[1.2] font-bold tracking-tight text-white;
   text-wrap: balance;
 }
 
 .h3 {
-  @apply font-display text-[20px] sm:text-[22px] md:text-[26px] lg:text-[32px] leading-[1.15] font-bold tracking-tight;
+  @apply font-display text-lg sm:text-xl md:text-2xl leading-snug font-semibold tracking-tight text-white;
   text-wrap: balance;
 }
 
 .h4 {
-  @apply font-display text-[18px] sm:text-[20px] md:text-[22px] lg:text-[24px] leading-snug font-bold;
+  @apply font-display text-base sm:text-lg leading-snug font-semibold text-white;
 }
 
 .body-text {
-  @apply font-body text-[15px] sm:text-[16px] md:text-[17px] lg:text-[18px] leading-relaxed text-white/70;
+  @apply font-body text-sm sm:text-base leading-relaxed text-white/75;
 }
 
 .meta-label {
-  @apply font-mono text-[11px] sm:text-[12px] md:text-[13px] lg:text-[14px] uppercase tracking-[0.2em] font-semibold;
+  @apply font-mono text-xs uppercase tracking-wider font-semibold;
 }
 
 /* btns */
 .btn {
-  @apply inline-flex items-center justify-center rounded-none border border-white/10 cursor-pointer transition-all duration-300 font-semibold h-[52px];
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.26);
+  @apply inline-flex items-center justify-center rounded-lg border border-white/10 cursor-pointer transition-all duration-200 font-semibold h-11 text-sm px-5;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .btn:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .btn:active {
-  transform: translateY(0) scale(0.98);
+  transform: translateY(0);
 }
 
 .btn-sm {
-  @apply min-w-[168px] px-5 text-[15px] font-semibold;
+  @apply min-w-[120px] px-3.5 h-9 text-xs font-medium rounded-md;
 }
 
 .btn-lg {
-  @apply min-w-[200px] px-6;
+  @apply min-w-[180px] px-6 h-12 text-sm font-semibold rounded-lg;
 }
 
 /* btns color */
 .btn-accent {
-  @apply bg-accent hover:bg-accent-hover text-primary border-accent;
+  @apply bg-accent hover:bg-accent-hover text-primary border-accent font-semibold;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 2px 10px rgba(104, 212, 204, 0.2);
 }
 
 .btn-tertiary {
-  @apply bg-tertiary hover:bg-tertiary-hover text-white border-white/10;
+  @apply bg-secondary/90 hover:bg-secondary text-white border-white/10 hover:border-white/20;
 }
 
 .btn-white {
-  @apply bg-white hover:bg-white/90 text-primary border-white;
+  @apply bg-white hover:bg-white/90 text-primary border-white font-semibold;
 }
 
 :focus-visible {
@@ -121,42 +121,23 @@ html {
   outline-offset: 3px;
 }
 
-.hero-surface {
-  background:
-    radial-gradient(960px circle at 10% 8%, rgba(104, 212, 204, 0.17), transparent 42%),
-    radial-gradient(780px circle at 88% 14%, rgba(232, 225, 205, 0.07), transparent 56%),
-    linear-gradient(135deg, #0b0b12 0%, #12151d 58%, #0b0b12 100%);
-}
-
-.hero-grid {
-  background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
-  background-size: 90px 90px;
-  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0) 88%);
-}
-
 .noise-overlay {
   background-image: url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
-  opacity: 0.04;
+  opacity: 0.03;
   mix-blend-mode: soft-light;
 }
 
-.notch-card {
-  clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 24px 100%, 0 calc(100% - 24px));
-}
-
 .glass-panel {
-  background: rgba(18, 21, 29, 0.82);
-  border: 1px solid rgba(104, 212, 204, 0.28);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 30px 80px rgba(0, 0, 0, 0.55);
+  background: rgba(15, 17, 24, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 16px 40px rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(16px);
 }
 
 .data-ribbon {
-  background: rgba(18, 21, 29, 0.45);
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(15, 17, 24, 0.6);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(8px);
 }
 
@@ -165,38 +146,39 @@ html {
 }
 
 .section-kicker {
-  @apply text-sm font-semibold text-accent;
+  @apply text-xs font-mono uppercase tracking-wider font-semibold text-accent;
 }
 
 .section-copy {
-  @apply text-white/70 leading-relaxed max-w-2xl;
+  @apply text-white/70 leading-relaxed max-w-2xl text-sm sm:text-base;
   text-wrap: pretty;
 }
 
 .surface-card {
-  @apply bg-tertiary/80 border border-white/10 rounded-none transition-all duration-300;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 22px 60px rgba(0, 0, 0, 0.22);
+  @apply bg-secondary/80 border border-white/[0.08] rounded-xl transition-all duration-200;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 8px 24px rgba(0, 0, 0, 0.25);
 }
 
 .surface-card:hover {
-  border-color: rgba(104, 212, 204, 0.34);
-  transform: translateY(-4px);
+  border-color: rgba(104, 212, 204, 0.35);
+  transform: translateY(-2px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 14px 32px rgba(0, 0, 0, 0.35);
 }
 
 .chip {
-  @apply inline-flex items-center rounded-none border border-white/10 bg-primary/70 px-3 py-1 text-xs font-medium text-white/70;
+  @apply inline-flex items-center rounded-md border border-white/10 bg-primary/80 px-2.5 py-1 text-xs font-medium text-white/75;
 }
 
 .chip-active {
-  @apply border-accent bg-accent text-primary font-semibold;
+  @apply border-accent/40 bg-accent/15 text-accent font-semibold;
 }
 
 .input-control {
-  @apply w-full rounded-none border border-white/10 bg-primary/60 px-4 py-3 text-white placeholder-white/40 transition-colors duration-200 focus:border-accent focus:outline-none;
+  @apply w-full rounded-lg border border-white/10 bg-primary/70 px-3.5 py-2.5 text-sm text-white placeholder-white/35 transition-colors duration-200 focus:border-accent focus:ring-1 focus:ring-accent/40 focus:outline-none;
 }
 
 .skeleton {
-  @apply rounded-none bg-tertiary/80 overflow-hidden relative;
+  @apply rounded-lg bg-tertiary/60 overflow-hidden relative;
 }
 
 .skeleton::after {

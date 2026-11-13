@@ -78,13 +78,13 @@ export default function Experience() {
     return (
         <section
             id="experience"
-            className="relative bg-secondary py-24 text-white border-b border-white/10 overflow-hidden"
+            className="relative bg-secondary/40 py-24 text-white border-b border-white/[0.08] overflow-hidden"
         >
             <div className="section-shell relative z-10">
                 {/* 1. Heading and Section Identity */}
-                <div className="mb-14 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between border-b border-white/10 pb-8">
+                <div className="mb-14 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between border-b border-white/[0.08] pb-8">
                     <div>
-                        <span className="font-mono text-xs uppercase tracking-[0.22em] text-accent mb-2.5 block font-semibold">
+                        <span className="font-mono text-xs uppercase tracking-wider text-accent mb-2.5 block font-semibold">
                             05 / CAREER & LEADERSHIP
                         </span>
                         <motion.h2
@@ -107,7 +107,7 @@ export default function Experience() {
                     {/* Central Vertical Spine: centered on desktop, left-aligned on mobile */}
                     <div
                         aria-hidden="true"
-                        className="absolute top-6 bottom-8 left-5 sm:left-6 lg:left-1/2 -translate-x-1/2 w-0.5 bg-accent/70 shadow-[0_0_8px_rgba(104,212,204,0.35)] pointer-events-none z-10"
+                        className="absolute top-6 bottom-8 left-5 sm:left-6 lg:left-1/2 -translate-x-1/2 w-[1px] bg-accent/60 shadow-[0_0_8px_rgba(104,212,204,0.3)] pointer-events-none z-10"
                     />
 
                     <div className="space-y-12 lg:space-y-16">
@@ -131,9 +131,9 @@ export default function Experience() {
                                     {/* Timeline Node on the Spine */}
                                     <div className="absolute left-5 sm:left-6 lg:left-1/2 -translate-x-1/2 top-6 flex items-center justify-center z-20">
                                         <div
-                                            className={`w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center border transition-all duration-300 ${
+                                            className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center border transition-all duration-300 ${
                                                 isCurrent
-                                                    ? "border-accent bg-primary text-accent shadow-[0_0_14px_rgba(104,212,204,0.45)]"
+                                                    ? "border-accent bg-primary text-accent shadow-[0_0_12px_rgba(104,212,204,0.35)]"
                                                     : "border-white/20 bg-primary text-white/70 hover:border-accent hover:text-accent"
                                             }`}
                                         >
@@ -164,24 +164,24 @@ export default function Experience() {
                                             tabIndex={0}
                                             role="button"
                                             aria-label={`View experience details at ${exp.organization || exp.company}`}
-                                            className="group relative border border-white/10 bg-primary/75 p-6 sm:p-7 hover:border-accent/45 transition-all duration-200 cursor-pointer shadow-lg hover:shadow-2xl hover:translate-y-[-2px] text-left"
+                                            className="group relative rounded-xl border border-white/[0.08] bg-primary/75 p-6 sm:p-7 hover:border-accent/40 transition-all duration-200 cursor-pointer shadow-lg hover:shadow-xl hover:translate-y-[-2px] text-left"
                                         >
                                             {/* Connector indicator for desktop & mobile */}
                                             <span
                                                 aria-hidden="true"
-                                                className={`hidden lg:block absolute top-[2.625rem] sm:top-11 w-10 h-0.5 bg-accent/70 group-hover:bg-accent transition-colors pointer-events-none z-10 ${
+                                                className={`hidden lg:block absolute top-[2.625rem] sm:top-11 w-10 h-0.5 bg-accent/60 group-hover:bg-accent transition-colors pointer-events-none z-10 ${
                                                     isEven ? "-left-10" : "-right-10"
                                                 }`}
                                             />
                                             <span
                                                 aria-hidden="true"
-                                                className="block lg:hidden absolute top-[2.625rem] sm:top-11 -left-9 sm:-left-10 w-9 sm:w-10 h-0.5 bg-accent/70 group-hover:bg-accent transition-colors pointer-events-none z-10"
+                                                className="block lg:hidden absolute top-[2.625rem] sm:top-11 -left-9 sm:-left-10 w-9 sm:w-10 h-0.5 bg-accent/60 group-hover:bg-accent transition-colors pointer-events-none z-10"
                                             />
 
                                             {/* Top Row: Organization Logo + Header Information */}
                                             <div className="flex items-start gap-3.5 mb-4">
                                                 {/* 3. Organization Logo */}
-                                                <div className="w-11 h-11 shrink-0 border border-white/15 bg-secondary/90 flex items-center justify-center p-1.5 overflow-hidden">
+                                                <div className="w-11 h-11 shrink-0 rounded-lg border border-white/15 bg-secondary/90 flex items-center justify-center p-1.5 overflow-hidden">
                                                     {exp.logoUrl || exp.logo_url ? (
                                                         <img
                                                             src={exp.logoUrl || exp.logo_url}
@@ -199,8 +199,8 @@ export default function Experience() {
                                                             {exp.organization || exp.company}
                                                         </span>
                                                         {isCurrent ? (
-                                                            <span className="inline-flex items-center gap-1.5 text-[10px] font-mono text-accent bg-accent/10 border border-accent/30 px-2 py-0.5 font-medium shrink-0">
-                                                                <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                                                            <span className="inline-flex items-center gap-1.5 text-[10px] font-mono text-accent bg-accent/10 border border-accent/30 rounded px-2 py-0.5 font-medium shrink-0">
+                                                                <span className="w-1.5 h-1.5 rounded-full bg-accent" />
                                                                 Currently Active
                                                             </span>
                                                         ) : (
@@ -217,8 +217,8 @@ export default function Experience() {
                                             </div>
 
                                             {/* Period, Location & Type Badges */}
-                                            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs font-mono text-white/55 pb-3 border-b border-white/10">
-                                                <span className="px-2 py-0.5 border border-white/10 bg-secondary text-[10px] text-white/75 uppercase tracking-wider">
+                                            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs font-mono text-white/55 pb-3 border-b border-white/[0.08]">
+                                                <span className="px-2 py-0.5 rounded border border-white/10 bg-secondary text-[10px] text-white/75 uppercase tracking-wider">
                                                     {exp.organizationType || exp.employmentType || "Organization"}
                                                 </span>
                                                 <div className="flex items-center gap-1 text-[11px]">
@@ -235,7 +235,7 @@ export default function Experience() {
 
                                             {/* Multiple Roles Hierarchy (e.g. GDGoC multiple positions) */}
                                             {roleCount > 1 && (
-                                                <div className="mt-3.5 p-3 bg-secondary/80 border border-white/5 space-y-2">
+                                                <div className="mt-3.5 p-3 rounded-lg bg-secondary/80 border border-white/[0.06] space-y-2">
                                                     <div className="flex items-center gap-1.5 text-[11px] font-mono text-accent uppercase tracking-wider font-semibold">
                                                         <Layers size={13} />
                                                         <span>{roleCount} Roles & Positions Held:</span>
@@ -247,7 +247,7 @@ export default function Experience() {
                                                                 className="text-xs font-mono flex items-center justify-between gap-2"
                                                             >
                                                                 <span className="flex items-center gap-2 truncate">
-                                                                    <span className="w-1.5 h-1.5 bg-accent/80 shrink-0" />
+                                                                    <span className="w-1.5 h-1.5 rounded-full bg-accent/80 shrink-0" />
                                                                     <span className="text-white/90 font-medium truncate">
                                                                         {r.position}
                                                                     </span>
@@ -255,7 +255,7 @@ export default function Experience() {
                                                                 <span className="text-[10px] text-white/45 shrink-0">
                                                                     {r.period ||
                                                                         (r.start_date
-                                                                            ? `${r.start_date.slice(0, 7)} — ${
+                                                                            ? `${r.start_date.slice(0, 7)} - ${
                                                                                   r.is_current ? "Present" : r.end_date?.slice(0, 7)
                                                                               }`
                                                                             : "")}
@@ -310,13 +310,13 @@ export default function Experience() {
 
                 {/* Academic Education Section */}
                 {education && education.length > 0 && (
-                    <div className="mt-20 pt-14 border-t border-white/10">
+                    <div className="mt-20 pt-14 border-t border-white/[0.08]">
                         <div className="flex items-center gap-2.5 mb-8">
-                            <div className="p-2 border border-accent/40 bg-accent/10 text-accent">
+                            <div className="p-2 rounded-lg border border-accent/40 bg-accent/10 text-accent">
                                 <GraduationCap size={20} />
                             </div>
                             <div>
-                                <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-accent font-semibold">
+                                <h3 className="font-mono text-xs uppercase tracking-wider text-accent font-semibold">
                                     Formal Academic Education
                                 </h3>
                                 <p className="text-xs text-white/50 font-mono mt-0.5">
@@ -333,7 +333,7 @@ export default function Experience() {
                                     whileInView="visible"
                                     viewport={{ once: true }}
                                     variants={fadeUpVariants}
-                                    className="border border-white/10 bg-primary/60 p-6 sm:p-7 hover:border-white/20 transition-colors"
+                                    className="rounded-xl border border-white/[0.08] bg-primary/60 p-6 sm:p-7 hover:border-white/20 transition-colors shadow-md"
                                 >
                                     <div className="flex flex-wrap items-center justify-between gap-2 font-mono text-xs text-accent mb-2">
                                         <span className="font-semibold">{edu.institution}</span>
@@ -420,14 +420,14 @@ function ExperienceDetailModal({ exp, onClose, onOpenLightbox }) {
                 exit={{ x: "100%" }}
                 transition={{ type: "spring", damping: 28, stiffness: 300 }}
                 onClick={(e) => e.stopPropagation()}
-                className="w-full max-w-2xl bg-[#0c1017] border-l border-white/10 h-full flex flex-col shadow-2xl overflow-hidden"
+                className="w-full max-w-2xl bg-[#0c1017] border-l border-white/[0.08] h-full flex flex-col shadow-2xl overflow-hidden"
             >
                 {/* Drawer Sticky Header with Explicit "← Back to Experience" Button */}
-                <div className="flex items-center justify-between p-4 sm:p-5 border-b border-white/10 bg-[#0e141d] shrink-0 sticky top-0 z-30">
+                <div className="flex items-center justify-between p-4 sm:p-5 border-b border-white/[0.08] bg-[#0e141d] shrink-0 sticky top-0 z-30">
                     <button
                         type="button"
                         onClick={onClose}
-                        className="inline-flex items-center gap-2 text-xs font-mono text-white/85 hover:text-accent border border-white/15 hover:border-accent px-3 py-1.5 bg-primary/80 transition-colors"
+                        className="inline-flex items-center gap-2 text-xs font-mono text-white/85 hover:text-accent border border-white/15 hover:border-accent rounded-lg px-3 py-1.5 bg-primary/80 transition-colors"
                         aria-label="Back to Experience"
                     >
                         <ChevronLeft size={14} className="text-accent" />
@@ -441,7 +441,7 @@ function ExperienceDetailModal({ exp, onClose, onOpenLightbox }) {
                         <button
                             type="button"
                             onClick={onClose}
-                            className="p-1.5 border border-white/10 text-white/60 hover:text-white hover:border-accent transition-colors"
+                            className="p-1.5 rounded-lg border border-white/10 text-white/60 hover:text-white hover:border-accent transition-colors"
                             aria-label="Close modal"
                         >
                             <X size={16} />
@@ -452,10 +452,10 @@ function ExperienceDetailModal({ exp, onClose, onOpenLightbox }) {
                 {/* Drawer Scrollable Body */}
                 <div className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-8">
                     {/* Organization Overview Hero Card */}
-                    <div className="border border-white/10 bg-primary/60 p-6 space-y-4">
+                    <div className="rounded-xl border border-white/[0.08] bg-primary/60 p-6 space-y-4 shadow-md">
                         <div className="flex items-start justify-between gap-4">
                             <div className="flex items-center gap-3.5">
-                                <div className="w-14 h-14 border border-white/15 bg-secondary flex items-center justify-center shrink-0 p-1">
+                                <div className="w-14 h-14 rounded-lg border border-white/15 bg-secondary flex items-center justify-center shrink-0 p-1 overflow-hidden">
                                     {exp.logoUrl || exp.logo_url ? (
                                         <img
                                             src={exp.logoUrl || exp.logo_url}
@@ -570,15 +570,15 @@ function ExperienceDetailModal({ exp, onClose, onOpenLightbox }) {
                                         }`}
                                     />
 
-                                    <div className="border border-white/10 bg-primary/50 p-4 space-y-3">
+                                    <div className="rounded-lg border border-white/[0.08] bg-primary/50 p-4 space-y-3">
                                         <div className="flex flex-wrap items-center justify-between gap-2">
                                             <h4 className="font-display text-base font-bold text-white">
                                                 {role.position}
                                             </h4>
-                                            <span className="font-mono text-xs text-white/50 bg-secondary px-2 py-0.5 border border-white/5">
+                                            <span className="font-mono text-xs text-white/50 bg-secondary px-2 py-0.5 rounded border border-white/5">
                                                 {role.period ||
                                                     (role.start_date
-                                                        ? `${role.start_date} — ${role.is_current ? "Present" : role.end_date}`
+                                                        ? `${role.start_date} - ${role.is_current ? "Present" : role.end_date}`
                                                         : "")}
                                             </span>
                                         </div>
@@ -663,7 +663,7 @@ function ExperienceDetailModal({ exp, onClose, onOpenLightbox }) {
                                     <div
                                         key={idx}
                                         onClick={() => onOpenLightbox(idx)}
-                                        className="group relative aspect-video bg-primary border border-white/10 overflow-hidden cursor-pointer hover:border-accent transition-colors"
+                                        className="group relative aspect-video bg-primary rounded-lg border border-white/[0.08] overflow-hidden cursor-pointer hover:border-accent transition-colors"
                                     >
                                         <img
                                             src={item.url}
@@ -694,7 +694,7 @@ function ExperienceDetailModal({ exp, onClose, onOpenLightbox }) {
                                         href={link.url}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-2 px-3 py-2 border border-white/10 bg-primary/70 hover:border-accent text-xs font-mono text-white/80 hover:text-accent transition-colors"
+                                        className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-white/10 bg-primary/70 hover:border-accent text-xs font-mono text-white/80 hover:text-accent transition-colors"
                                     >
                                         <ExternalLink size={13} />
                                         <span>{link.title || link.url}</span>

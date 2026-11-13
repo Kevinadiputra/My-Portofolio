@@ -752,7 +752,7 @@ export default function AdminCollectionPage({ collection, title, eyebrow, descri
                                                              item.organization ||
                                                              item.degree ||
                                                              item.slug ||
-                                                             "—"}
+                                                             "-"}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -790,7 +790,7 @@ export default function AdminCollectionPage({ collection, title, eyebrow, descri
                                                     #{item.display_order ?? 0}
                                                 </div>
                                                 <div className="text-[10px] font-mono text-white/40 mt-0.5">
-                                                    {item.date_achieved || item.start_date || item.issued_at || "—"}
+                                                    {item.date_achieved || item.start_date || item.issued_at || "-"}
                                                 </div>
                                             </td>
                                             <td className="text-right">
@@ -1095,7 +1095,7 @@ function RolesRepeater({ roles = [], onChange }) {
                                 type="text"
                                 value={role.position || ""}
                                 onChange={(e) => updateRole(idx, "position", e.target.value)}
-                                placeholder="e.g. Project Officer — Build with AI 2026"
+                                placeholder="e.g. Project Officer : Build with AI 2026"
                                 className="admin-input text-xs w-full min-w-0"
                             />
                         </div>

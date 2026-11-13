@@ -99,7 +99,7 @@ const Contact = () => {
             setFieldErrors({});
             showNotification(
                 "success",
-                "Pesan terkirim. Terima kasih — saya akan membalas melalui email."
+                "Pesan terkirim. Terima kasih, saya akan membalas melalui email."
             );
         } catch (error) {
             showNotification(
@@ -152,7 +152,7 @@ const Contact = () => {
             <div className="section-shell">
                 <div className="mb-12 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                     <div>
-                        <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent mb-2">
+                        <p className="font-mono text-xs uppercase tracking-wider text-accent mb-2 font-semibold">
                             06 / Contact
                         </p>
                         <motion.h2
@@ -172,9 +172,9 @@ const Contact = () => {
 
                 <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14">
                     <div className="space-y-6">
-                        <div className="border border-white/10 bg-secondary/80 p-6">
+                        <div className="rounded-xl border border-white/[0.08] bg-secondary/80 p-6 shadow-md">
                             <div className="mb-2 flex items-center gap-2.5">
-                                <span className="h-2 w-2 bg-accent" />
+                                <span className="h-2 w-2 rounded-full bg-accent" />
                                 <span className="font-mono text-xs uppercase tracking-wider text-accent font-semibold">
                                     {profile?.availabilityStatus || "Available for Projects & Roles"}
                                 </span>
@@ -193,9 +193,9 @@ const Contact = () => {
                                     <Wrapper
                                         key={info.title}
                                         {...(info.link ? { href: info.link } : {})}
-                                        className="border border-white/10 bg-secondary/60 hover:border-accent/40 flex items-center gap-4 p-4 transition-colors"
+                                        className="rounded-xl border border-white/[0.08] bg-secondary/60 hover:border-accent/40 flex items-center gap-4 p-4 transition-colors shadow-sm"
                                     >
-                                        <div className="flex h-10 w-10 items-center justify-center border border-accent/25 bg-accent/10 text-accent shrink-0">
+                                        <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-accent/25 bg-accent/10 text-accent shrink-0">
                                             <Icon size={18} />
                                         </div>
                                         <div className="min-w-0">
@@ -224,7 +224,7 @@ const Contact = () => {
                                             href={social.href}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="inline-flex items-center gap-2 px-4 py-2.5 border border-white/10 hover:border-accent text-xs font-mono text-white/80 hover:text-accent bg-secondary/70 transition-colors"
+                                            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-white/10 hover:border-accent text-xs font-mono text-white/80 hover:text-accent bg-secondary/70 transition-colors shadow-sm"
                                             aria-label={social.label}
                                         >
                                             <Icon size={15} />
@@ -236,7 +236,7 @@ const Contact = () => {
                         </div>
                     </div>
 
-                    <div className="border border-white/10 bg-secondary/75 p-6 md:p-8">
+                    <div className="rounded-2xl border border-white/[0.08] bg-secondary/80 p-6 md:p-8 shadow-xl">
                         <h3 className="font-display text-lg font-bold mb-5 text-white">
                             Send a Direct Message
                         </h3>

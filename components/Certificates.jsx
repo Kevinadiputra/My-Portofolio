@@ -57,12 +57,12 @@ const Certificates = () => {
     }
 
     return (
-        <section id="certificates" className="relative bg-primary py-24 text-white border-b border-white/10">
+        <section id="certificates" className="relative bg-primary py-24 text-white border-b border-white/[0.08]">
             <div className="section-shell relative z-10">
                 {/* Section Header */}
                 <div className="mb-12 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                     <div>
-                        <span className="font-mono text-xs uppercase tracking-[0.22em] text-accent mb-2 block">
+                        <span className="font-mono text-xs uppercase tracking-wider text-accent mb-2 block font-semibold">
                             04 / Verified Credentials
                         </span>
                         <motion.h2
@@ -82,7 +82,7 @@ const Certificates = () => {
                 </div>
 
                 {/* Filter Bar */}
-                <div className="mb-10 flex flex-wrap gap-2 border-b border-white/10 pb-5">
+                <div className="mb-10 flex flex-wrap gap-2 border-b border-white/[0.08] pb-5">
                     {categories.map((cat) => {
                         const isActive = activeFilter === cat;
                         const label =
@@ -96,10 +96,10 @@ const Certificates = () => {
                                 type="button"
                                 key={cat}
                                 onClick={() => setActiveFilter(cat)}
-                                className={`px-3.5 py-2 text-xs font-mono uppercase tracking-wider border transition-colors duration-200 ${
+                                className={`px-3.5 py-1.5 text-xs font-mono uppercase tracking-wider rounded-lg border transition-all duration-150 ${
                                     isActive
-                                        ? "border-accent bg-accent text-primary font-semibold"
-                                        : "border-white/10 bg-secondary/70 text-white/65 hover:border-accent/40 hover:text-white"
+                                        ? "border-accent/40 bg-accent/15 text-accent font-semibold shadow-sm"
+                                        : "border-white/10 bg-secondary/80 text-white/65 hover:border-white/20 hover:text-white"
                                 }`}
                             >
                                 {label}
@@ -124,15 +124,15 @@ const Certificates = () => {
                                 whileInView="visible"
                                 viewport={{ once: true, margin: "-50px" }}
                                 variants={fadeUpVariants}
-                                className={`group flex flex-col justify-between p-6 bg-secondary/70 border transition-colors duration-200 ${
+                                className={`group flex flex-col justify-between p-6 rounded-xl bg-secondary/70 border transition-all duration-200 shadow-md ${
                                     isFeatured
-                                        ? "border-accent/35 hover:border-accent"
-                                        : "border-white/10 hover:border-accent/40"
+                                        ? "border-accent/35 hover:border-accent shadow-lg"
+                                        : "border-white/[0.08] hover:border-accent/40"
                                 }`}
                             >
                                 <div>
                                     {hasImage && (
-                                        <div className="mb-4 aspect-[16/10] w-full overflow-hidden border border-white/10 bg-primary">
+                                        <div className="mb-4 aspect-[16/10] w-full overflow-hidden rounded-lg border border-white/[0.08] bg-primary">
                                             <img
                                                 src={certificate.image}
                                                 alt={certificate.title}
@@ -145,11 +145,11 @@ const Certificates = () => {
                                     {/* Card Header */}
                                     <div className="mb-4 flex items-start justify-between gap-3">
                                         <div className="flex items-center gap-2">
-                                            <div className="flex h-9 w-9 items-center justify-center border border-white/10 bg-primary text-accent">
+                                            <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-primary text-accent">
                                                 <Award size={16} />
                                             </div>
                                             {isFeatured && (
-                                                <span className="px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider text-accent border border-accent/30 bg-accent/10">
+                                                <span className="px-2 py-0.5 rounded text-[10px] font-mono uppercase tracking-wider text-accent border border-accent/30 bg-accent/10 font-semibold">
                                                     Featured
                                                 </span>
                                             )}
@@ -195,7 +195,7 @@ const Certificates = () => {
                                             {certificate.skills.map((skillItem) => (
                                                 <span
                                                     key={skillItem}
-                                                    className="text-[10px] font-mono bg-primary/70 border border-white/10 px-2 py-0.5 text-white/70"
+                                                    className="text-[10px] font-mono rounded bg-primary/70 border border-white/10 px-2 py-0.5 text-white/70"
                                                 >
                                                     {skillItem}
                                                 </span>
@@ -204,7 +204,7 @@ const Certificates = () => {
                                     )}
                                 </div>
 
-                                <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs font-mono">
+                                <div className="pt-4 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono">
                                     <span className="text-white/45 uppercase text-[10px]">
                                         {certificate.category || certificate.level || "Verified"}
                                     </span>

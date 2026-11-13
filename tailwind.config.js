@@ -8,12 +8,12 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                primary: '#0b0b12',
-                secondary: '#12131a',
-                accent: '#3df6ff',
-                'accent-hover': '#25d7e2',
-                tertiary: '#1a1c26',
-                'tertiary-hover': '#222536',
+                primary: '#090a0f',
+                secondary: '#0f1118',
+                accent: '#68d4cc',
+                'accent-hover': '#86e8e0',
+                tertiary: '#151822',
+                'tertiary-hover': '#1c202d',
             },
             fontFamily: {
                 display: ['var(--font-display)', 'sans-serif'],

@@ -61,11 +61,11 @@ export default function ProjectPreviewModal({ project, onClose }) {
                 {/* Header Bar */}
                 <div className="flex items-center justify-between border-b border-white/10 pb-4">
                     <div className="flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-                        <span className="font-mono text-xs text-accent tracking-widest uppercase font-semibold">
+                        <span className="w-2 h-2 rounded-full bg-accent" />
+                        <span className="font-mono text-xs text-accent tracking-wider uppercase font-semibold">
                             PUBLIC CASE STUDY PREVIEW
                         </span>
-                        <span className="text-[10px] font-mono px-2 py-0.5 bg-white/10 text-white/70">
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/10 text-white/70">
                             {project.is_published ? "Published" : "Draft"}
                         </span>
                     </div>
@@ -101,7 +101,7 @@ export default function ProjectPreviewModal({ project, onClose }) {
                         {project.project_role && <span>· {project.project_role}</span>}
                         {project.start_date && (
                             <span className="text-white/45">
-                                · {project.start_date} {project.end_date ? `— ${project.end_date}` : ""}
+                                · {project.start_date} {project.end_date ? `- ${project.end_date}` : ""}
                             </span>
                         )}
                     </div>

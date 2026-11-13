@@ -28,10 +28,10 @@ const fadeUpVariants = {
 };
 
 const LEVEL_STYLES = {
-    International: "border-purple-400/40 text-purple-300 bg-purple-500/10",
+    International: "border-white/20 text-white/90 bg-white/[0.06]",
     National: "border-accent/40 text-accent bg-accent/10",
-    Regional: "border-blue-400/40 text-blue-300 bg-blue-500/10",
-    University: "border-emerald-400/40 text-emerald-300 bg-emerald-500/10",
+    Regional: "border-white/10 text-white/70 bg-white/[0.04]",
+    University: "border-white/10 text-white/70 bg-white/[0.03]",
 };
 
 export default function Achievements() {
@@ -64,13 +64,13 @@ export default function Achievements() {
     return (
         <section
             id="achievements"
-            className="relative bg-secondary py-24 text-white border-b border-white/10"
+            className="relative bg-secondary/40 py-24 text-white border-b border-white/[0.08]"
         >
             <div className="section-shell relative z-10">
                 {/* Section Header */}
                 <div className="mb-12 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                     <div>
-                        <span className="font-mono text-xs uppercase tracking-[0.22em] text-accent mb-2 block">
+                        <span className="font-mono text-xs uppercase tracking-wider text-accent mb-2 block font-semibold">
                             03 / Honors & Recognitions
                         </span>
                         <motion.h2
@@ -94,7 +94,7 @@ export default function Achievements() {
                     <div
                         role="tablist"
                         aria-label="Filter achievements by category"
-                        className="mb-10 flex flex-wrap gap-2 border-b border-white/10 pb-4"
+                        className="mb-10 flex flex-wrap gap-2 border-b border-white/[0.08] pb-4"
                     >
                         {categories.map((cat) => {
                             const isActive = selectedCategory === cat;
@@ -110,16 +110,16 @@ export default function Achievements() {
                                     role="tab"
                                     aria-selected={isActive}
                                     onClick={() => setSelectedCategory(cat)}
-                                    className={`px-3.5 py-1.5 text-xs font-mono uppercase tracking-wider border transition-colors duration-200 ${
+                                    className={`px-3.5 py-1.5 text-xs font-mono uppercase tracking-wider rounded-lg border transition-all duration-150 ${
                                         isActive
-                                            ? "border-accent bg-accent text-primary font-semibold"
-                                            : "border-white/10 bg-primary/70 text-white/65 hover:border-accent/40 hover:text-white"
+                                            ? "border-accent/40 bg-accent/15 text-accent font-semibold shadow-sm"
+                                            : "border-white/10 bg-primary/70 text-white/65 hover:border-white/20 hover:text-white"
                                     }`}
                                 >
                                     <span>{cat === "all" ? "All Achievements" : cat}</span>
                                     <span
                                         className={`ml-1.5 text-[10px] ${
-                                            isActive ? "text-primary/80" : "text-white/40"
+                                            isActive ? "text-accent/90" : "text-white/40"
                                         }`}
                                     >
                                         ({count})
@@ -134,7 +134,7 @@ export default function Achievements() {
                 <div className="grid gap-6 md:grid-cols-2">
                     {filtered.map((item, index) => {
                         const levelClass =
-                            LEVEL_STYLES[item.level] || "border-white/20 text-white/70 bg-white/5";
+                            LEVEL_STYLES[item.level] || "border-white/10 text-white/70 bg-white/[0.04]";
 
                         return (
                             <motion.article
@@ -143,10 +143,10 @@ export default function Achievements() {
                                 whileInView="visible"
                                 viewport={{ once: true, margin: "-60px" }}
                                 variants={fadeUpVariants}
-                                className={`relative flex flex-col justify-between border p-6 transition-all duration-300 ${
+                                className={`relative flex flex-col justify-between rounded-xl border p-6 transition-all duration-200 shadow-md ${
                                     item.isFeatured || item.featured
-                                        ? "border-accent/40 bg-primary/90 shadow-[0_0_24px_rgba(104,212,204,0.06)]"
-                                        : "border-white/10 bg-primary/50 hover:border-white/20"
+                                        ? "border-accent/35 bg-primary/75 shadow-lg"
+                                        : "border-white/[0.08] bg-primary/50 hover:border-white/20"
                                 }`}
                             >
                                 <div>
@@ -154,21 +154,21 @@ export default function Achievements() {
                                     <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
                                         <div className="flex flex-wrap items-center gap-2">
                                             <span
-                                                className={`inline-flex items-center gap-1 px-2.5 py-0.5 text-[11px] font-mono font-medium border ${levelClass}`}
+                                                className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-[11px] font-mono font-medium border ${levelClass}`}
                                             >
                                                 <Medal size={11} />
                                                 <span>{item.level || "Award"}</span>
                                             </span>
 
                                             {item.award && (
-                                                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 text-[11px] font-mono text-amber-300 border border-amber-400/30 bg-amber-400/10">
+                                                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-[11px] font-mono text-amber-300 border border-amber-400/30 bg-amber-400/10">
                                                     <Trophy size={11} />
                                                     <span>{item.award}</span>
                                                 </span>
                                             )}
 
                                             {(item.isFeatured || item.featured) && (
-                                                <span className="inline-flex items-center gap-1 text-[10px] font-mono text-accent uppercase tracking-wider">
+                                                <span className="inline-flex items-center gap-1 text-[10px] font-mono text-accent uppercase tracking-wider font-semibold">
                                                     <Sparkles size={10} />
                                                     <span>Featured</span>
                                                 </span>
@@ -248,7 +248,7 @@ export default function Achievements() {
                                             className="text-white/60 hover:text-white transition-colors inline-flex items-center gap-1"
                                         >
                                             <span>Related Case Study</span>
-                                            <span>→</span>
+                                            <span>&rarr;</span>
                                         </a>
                                     )}
                                 </div>
@@ -265,17 +265,17 @@ export default function Achievements() {
                     onClick={() => setPreviewDoc(null)}
                 >
                     <div
-                        className="relative max-w-3xl w-full bg-secondary border border-white/20 p-5"
+                        className="relative max-w-3xl w-full rounded-2xl bg-secondary/95 backdrop-blur-md border border-white/[0.12] p-6 shadow-2xl"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="flex items-center justify-between border-b border-white/10 pb-3 mb-4">
-                            <span className="font-mono text-xs text-accent uppercase">
+                        <div className="flex items-center justify-between border-b border-white/[0.08] pb-3 mb-4">
+                            <span className="font-mono text-xs text-accent uppercase font-semibold">
                                 Certificate Documentation
                             </span>
                             <button
                                 type="button"
                                 onClick={() => setPreviewDoc(null)}
-                                className="text-white/60 hover:text-white"
+                                className="text-white/60 hover:text-white p-1 rounded-lg transition-colors"
                                 aria-label="Close"
                             >
                                 <X size={18} />
@@ -284,7 +284,7 @@ export default function Achievements() {
                         <h4 className="font-display font-bold text-white text-base mb-3">
                             {previewDoc.title}
                         </h4>
-                        <div className="aspect-[4/3] w-full overflow-hidden bg-primary border border-white/10 flex items-center justify-center">
+                        <div className="aspect-[4/3] w-full overflow-hidden rounded-xl bg-primary border border-white/[0.08] flex items-center justify-center">
                             {previewDoc.image?.endsWith(".pdf") ? (
                                 <iframe
                                     src={previewDoc.image}

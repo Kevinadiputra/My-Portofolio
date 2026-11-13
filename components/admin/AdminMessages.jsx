@@ -23,9 +23,9 @@ const FILTERS = [
 ];
 
 function formatDate(value) {
-    if (!value) return "—";
+    if (!value) return "-";
     const date = new Date(value);
-    if (Number.isNaN(date.getTime())) return "—";
+    if (Number.isNaN(date.getTime())) return "-";
     return date.toLocaleString("id-ID", {
         day: "2-digit",
         month: "short",
@@ -468,7 +468,7 @@ export default function AdminMessages() {
                                 <div>
                                     <dt className="admin-eyebrow">HALAMAN ASAL</dt>
                                     <dd className="mt-1 font-mono text-white/70 break-all">
-                                        {selected.source_page || "—"}
+                                        {selected.source_page || "-"}
                                     </dd>
                                 </div>
                             </dl>

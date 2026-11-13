@@ -104,7 +104,7 @@ const Projects = () => {
                 {/* Section Header */}
                 <div className="mb-12 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                     <div>
-                        <span className="font-mono text-xs uppercase tracking-[0.22em] text-accent mb-2 block">
+                        <span className="font-mono text-xs uppercase tracking-wider text-accent mb-2 block font-semibold">
                             02 / Selected Work & Case Studies
                         </span>
                         <motion.h2
@@ -127,7 +127,7 @@ const Projects = () => {
                 <div
                     role="tablist"
                     aria-label="Filter projects by category"
-                    className="mb-12 flex flex-wrap gap-2 border-b border-white/10 pb-5"
+                    className="mb-12 flex flex-wrap gap-2 border-b border-white/[0.08] pb-5"
                 >
                     {filters.map((filterOption) => {
                         const isActive = filter === filterOption.key;
@@ -139,16 +139,16 @@ const Projects = () => {
                                 aria-selected={isActive}
                                 key={filterOption.key}
                                 onClick={() => setFilter(filterOption.key)}
-                                className={`px-3.5 py-2 text-xs font-mono uppercase tracking-wider border transition-colors duration-200 ${
+                                className={`px-3.5 py-1.5 text-xs font-mono uppercase tracking-wider rounded-lg border transition-all duration-150 ${
                                     isActive
-                                        ? "border-accent bg-accent text-primary font-semibold"
-                                        : "border-white/10 bg-secondary/70 text-white/65 hover:border-accent/40 hover:text-white"
+                                        ? "border-accent/40 bg-accent/15 text-accent font-semibold shadow-sm"
+                                        : "border-white/10 bg-secondary/80 text-white/65 hover:border-white/20 hover:text-white"
                                 }`}
                             >
                                 <span>{filterOption.label}</span>
                                 <span
                                     className={`ml-1.5 text-[10px] ${
-                                        isActive ? "text-primary/80" : "text-white/40"
+                                        isActive ? "text-accent/90" : "text-white/40"
                                     }`}
                                 >
                                     ({count})
@@ -235,13 +235,13 @@ function FeaturedProjectCard({ project, index }) {
             whileInView="visible"
             viewport={{ once: true, margin: "-60px" }}
             variants={fadeUpVariants}
-            className="group border border-white/12 bg-secondary/75 hover:border-accent/40 transition-colors duration-200"
+            className="group rounded-2xl border border-white/[0.08] bg-secondary/80 hover:border-accent/35 transition-all duration-200 shadow-xl overflow-hidden"
         >
             <div className="grid lg:grid-cols-[0.95fr_1.25fr] gap-0">
                 {/* Project Visual */}
                 <Link
                     href={`/projects/${project.slug}`}
-                    className="relative block bg-primary border-b lg:border-b-0 lg:border-r border-white/10 overflow-hidden aspect-[16/10] lg:aspect-auto lg:min-h-[320px]"
+                    className="relative block bg-primary border-b lg:border-b-0 lg:border-r border-white/[0.08] overflow-hidden aspect-[16/10] lg:aspect-auto lg:min-h-[320px]"
                     aria-label={`View ${project.title} case study`}
                 >
                     <img
@@ -251,11 +251,11 @@ function FeaturedProjectCard({ project, index }) {
                         className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.02]"
                     />
                     <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-                        <span className="px-2.5 py-1 bg-primary/90 border border-accent/40 font-mono text-[10px] uppercase tracking-wider text-accent font-semibold">
+                        <span className="px-2.5 py-1 bg-primary/90 backdrop-blur-sm rounded-md border border-accent/30 font-mono text-[10px] uppercase tracking-wider text-accent font-semibold">
                             Featured · {formatCategory(project.category)}
                         </span>
                         {project.year && (
-                            <span className="px-2 py-1 bg-primary/90 border border-white/15 font-mono text-[10px] text-white/80">
+                            <span className="px-2 py-1 bg-primary/90 backdrop-blur-sm rounded-md border border-white/15 font-mono text-[10px] text-white/80">
                                 {project.year}
                             </span>
                         )}
@@ -267,10 +267,10 @@ function FeaturedProjectCard({ project, index }) {
                     <div className="space-y-4">
                         <div className="flex flex-wrap items-center justify-between gap-2 font-mono text-xs text-white/50">
                             <span>
-                                {String(index + 1).padStart(2, "0")} ·{" "}
+                                {String(index + 1).padStart(2, "0")} :{" "}
                                 {project.projectRole || "ML Engineer & Data Scientist"}
                             </span>
-                            <span className="text-accent">{project.status || "Completed"}</span>
+                            <span className="text-accent font-medium">{project.status || "Completed"}</span>
                         </div>
 
                         <Link href={`/projects/${project.slug}`} className="block group/title">
@@ -313,7 +313,7 @@ function FeaturedProjectCard({ project, index }) {
                                 {topMetrics.map((metric, mIdx) => (
                                     <div
                                         key={mIdx}
-                                        className="border border-white/10 bg-primary/60 px-3 py-2"
+                                        className="rounded-lg border border-white/[0.08] bg-primary/70 px-3 py-2 shadow-sm"
                                     >
                                         <div className="font-display text-sm sm:text-base font-bold text-accent leading-tight">
                                             {metric.value}
@@ -328,12 +328,12 @@ function FeaturedProjectCard({ project, index }) {
                     </div>
 
                     {/* Footer: Technologies & Action Links */}
-                    <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="pt-4 border-t border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div className="flex flex-wrap gap-1.5">
                             {(project.technologies || []).slice(0, 6).map((tech) => (
                                 <span
                                     key={tech}
-                                    className="font-mono text-[11px] px-2.5 py-0.5 border border-white/10 bg-primary/70 text-white/75"
+                                    className="font-mono text-[11px] px-2.5 py-0.5 rounded-md border border-white/10 bg-primary/70 text-white/75"
                                 >
                                     {tech}
                                 </span>
@@ -346,7 +346,7 @@ function FeaturedProjectCard({ project, index }) {
                                     href={project.githubUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1.5 px-3 py-2 border border-white/15 bg-primary/80 hover:border-accent hover:text-accent text-xs font-mono text-white/80 transition-colors"
+                                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-white/15 bg-primary/80 hover:border-accent hover:text-accent text-xs font-mono text-white/80 transition-colors shadow-sm"
                                 >
                                     <Github size={13} />
                                     <span>Repository</span>
@@ -357,7 +357,7 @@ function FeaturedProjectCard({ project, index }) {
                                     href={project.liveUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1.5 px-3 py-2 border border-white/15 bg-primary/80 hover:border-accent hover:text-accent text-xs font-mono text-white/80 transition-colors"
+                                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-white/15 bg-primary/80 hover:border-accent hover:text-accent text-xs font-mono text-white/80 transition-colors shadow-sm"
                                 >
                                     <ExternalLink size={13} />
                                     <span>Live Demo</span>
@@ -365,7 +365,7 @@ function FeaturedProjectCard({ project, index }) {
                             )}
                             <Link
                                 href={`/projects/${project.slug}`}
-                                className="inline-flex items-center gap-1.5 px-4 py-2 border border-accent bg-accent hover:bg-accent-hover text-primary text-xs font-mono font-semibold uppercase tracking-wider transition-colors"
+                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-accent bg-accent hover:bg-accent-hover text-primary text-xs font-mono font-semibold uppercase tracking-wider transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_2px_8px_rgba(104,212,204,0.2)]"
                             >
                                 <span>Case Study</span>
                                 <ArrowUpRight size={14} />
@@ -389,12 +389,12 @@ function StandardProjectCard({ project, index }) {
             whileInView="visible"
             viewport={{ once: true, margin: "-60px" }}
             variants={fadeUpVariants}
-            className="group border border-white/10 bg-secondary/60 hover:border-accent/40 transition-colors duration-200 flex flex-col justify-between"
+            className="group rounded-xl border border-white/[0.08] bg-secondary/70 hover:border-accent/35 transition-all duration-200 shadow-lg overflow-hidden flex flex-col justify-between"
         >
             <div>
                 <Link
                     href={`/projects/${project.slug}`}
-                    className="relative block aspect-[16/9] w-full overflow-hidden bg-primary border-b border-white/10"
+                    className="relative block aspect-[16/9] w-full overflow-hidden bg-primary border-b border-white/[0.08]"
                 >
                     <img
                         src={project.image}
@@ -403,11 +403,11 @@ function StandardProjectCard({ project, index }) {
                         className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.02]"
                     />
                     <div className="absolute top-3 left-3 flex items-center gap-1.5">
-                        <span className="px-2.5 py-0.5 bg-primary/90 border border-white/15 font-mono text-[10px] uppercase tracking-wider text-accent">
+                        <span className="px-2.5 py-0.5 bg-primary/90 backdrop-blur-sm rounded-md border border-white/15 font-mono text-[10px] uppercase tracking-wider text-accent font-medium">
                             {formatCategory(project.category)}
                         </span>
                         {project.year && (
-                            <span className="px-2 py-0.5 bg-primary/90 border border-white/10 font-mono text-[10px] text-white/70">
+                            <span className="px-2 py-0.5 bg-primary/90 backdrop-blur-sm rounded-md border border-white/10 font-mono text-[10px] text-white/70">
                                 {project.year}
                             </span>
                         )}
@@ -417,7 +417,7 @@ function StandardProjectCard({ project, index }) {
                 <div className="p-6 space-y-4">
                     <div className="flex items-center justify-between font-mono text-[11px] text-white/45">
                         <span>
-                            {String(index + 1).padStart(2, "0")} ·{" "}
+                            {String(index + 1).padStart(2, "0")} :{" "}
                             {project.projectRole || "ML Engineer"}
                         </span>
                         <span>{project.status || "Completed"}</span>
@@ -449,7 +449,7 @@ function StandardProjectCard({ project, index }) {
                             {topMetrics.map((metric, mIdx) => (
                                 <div
                                     key={mIdx}
-                                    className="border border-white/10 bg-primary/50 px-3 py-2"
+                                    className="rounded-md border border-white/[0.08] bg-primary/60 px-3 py-2 shadow-sm"
                                 >
                                     <div className="font-display text-sm font-bold text-accent">
                                         {metric.value}
@@ -464,12 +464,12 @@ function StandardProjectCard({ project, index }) {
                 </div>
             </div>
 
-            <div className="px-6 pb-6 pt-4 border-t border-white/10 space-y-4">
+            <div className="px-6 pb-6 pt-4 border-t border-white/[0.08] space-y-4">
                 <div className="flex flex-wrap gap-1.5">
                     {(project.technologies || []).slice(0, 5).map((tech) => (
                         <span
                             key={tech}
-                            className="font-mono text-[10px] px-2 py-0.5 border border-white/10 bg-primary/60 text-white/70"
+                            className="font-mono text-[10px] px-2 py-0.5 rounded border border-white/10 bg-primary/60 text-white/70"
                         >
                             {tech}
                         </span>
@@ -483,7 +483,7 @@ function StandardProjectCard({ project, index }) {
                                 href={project.githubUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1 px-2.5 py-1.5 border border-white/15 hover:border-accent hover:text-accent text-xs font-mono text-white/75 transition-colors"
+                                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-md border border-white/15 hover:border-accent hover:text-accent text-xs font-mono text-white/75 transition-colors"
                             >
                                 <Github size={12} />
                                 <span>Code</span>
@@ -494,7 +494,7 @@ function StandardProjectCard({ project, index }) {
                                 href={project.liveUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1 px-2.5 py-1.5 border border-white/15 hover:border-accent hover:text-accent text-xs font-mono text-white/75 transition-colors"
+                                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-md border border-white/15 hover:border-accent hover:text-accent text-xs font-mono text-white/75 transition-colors"
                             >
                                 <ExternalLink size={12} />
                                 <span>Demo / Notebook</span>

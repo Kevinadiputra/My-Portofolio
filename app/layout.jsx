@@ -30,7 +30,7 @@ export async function generateMetadata() {
     const { profile, siteSettings } = await getPublicPortfolioData();
     const title =
         siteSettings?.seo_title ||
-        `${profile?.name || "Kevin Adiputra"} — Data Science, Machine Learning & MLOps Portfolio`;
+        `${profile?.name || "Kevin Adiputra"} | Data Science, Machine Learning & MLOps Portfolio`;
     const description =
         siteSettings?.seo_description ||
         profile?.bio ||

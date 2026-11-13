@@ -81,10 +81,10 @@ const Header = () => {
 
     return (
         <header
-            className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-200 ${
+            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
                 scrolled
-                    ? "bg-primary/90 backdrop-blur-md border-b border-white/10"
-                    : "bg-primary/40 backdrop-blur-sm border-b border-white/5"
+                    ? "bg-primary/85 backdrop-blur-md border-b border-white/[0.08] shadow-[0_4px_24px_rgba(0,0,0,0.3)]"
+                    : "bg-primary/40 backdrop-blur-sm border-b border-white/[0.04]"
             }`}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -92,7 +92,7 @@ const Header = () => {
                     <button
                         type="button"
                         onClick={() => handleNavigation(NAV_ITEMS[0])}
-                        className="flex items-center gap-2.5 text-left font-display text-base sm:text-lg font-bold tracking-tight text-white hover:text-accent transition-colors"
+                        className="flex items-center gap-2 text-left font-display text-base sm:text-lg font-bold tracking-tight text-white hover:text-accent transition-colors"
                         aria-label="Go to top of homepage"
                     >
                         {siteSettings?.logo_url ? (
@@ -102,19 +102,19 @@ const Header = () => {
                                 className="h-7 w-auto object-contain"
                             />
                         ) : (
-                            <>
-                                <span className="inline-block w-2 h-2 bg-accent" />
+                            <span className="flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-accent" />
                                 <span>
                                     <span className="text-accent">{firstName}</span> {restName}
                                 </span>
-                            </>
+                            </span>
                         )}
                     </button>
 
                     {/* Desktop Navigation */}
                     <nav
                         aria-label="Primary navigation"
-                        className="hidden md:flex items-center gap-1 border border-white/10 bg-secondary/80 p-1"
+                        className="hidden md:flex items-center gap-1 border border-white/[0.08] bg-secondary/80 backdrop-blur-sm rounded-full px-1.5 py-1"
                     >
                         {NAV_ITEMS.map((item) => {
                             const isActive = pathname === "/" && activeSection === item.id;
@@ -124,10 +124,10 @@ const Header = () => {
                                     key={item.name}
                                     onClick={() => handleNavigation(item)}
                                     aria-current={isActive ? "location" : undefined}
-                                    className={`px-3 py-1.5 text-xs font-mono uppercase tracking-wider transition-colors duration-150 ${
+                                    className={`px-3 py-1.5 text-xs font-mono uppercase tracking-wider rounded-full transition-all duration-150 ${
                                         isActive
-                                            ? "bg-accent text-primary font-semibold"
-                                            : "text-white/70 hover:bg-white/[0.06] hover:text-white"
+                                            ? "bg-white/[0.12] text-white font-semibold shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]"
+                                            : "text-white/65 hover:bg-white/[0.05] hover:text-white"
                                     }`}
                                 >
                                     {item.name}
@@ -139,7 +139,7 @@ const Header = () => {
                     {/* Mobile Menu Toggle */}
                     <button
                         type="button"
-                        className="md:hidden border border-white/15 bg-secondary/80 p-2 text-white hover:border-accent hover:text-accent transition-colors"
+                        className="md:hidden rounded-lg border border-white/10 bg-secondary/80 p-2 text-white hover:border-accent/40 hover:text-accent transition-colors"
                         onClick={() => setIsOpen((prev) => !prev)}
                         aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
                         aria-expanded={isOpen}
@@ -150,8 +150,8 @@ const Header = () => {
 
                 {/* Mobile Navigation */}
                 {isOpen && (
-                    <div className="md:hidden pb-4 border-t border-white/10">
-                        <nav aria-label="Mobile navigation" className="mt-3 grid gap-1 bg-secondary p-2 border border-white/10">
+                    <div className="md:hidden pb-4 border-t border-white/[0.08]">
+                        <nav aria-label="Mobile navigation" className="mt-2 grid gap-1 bg-secondary/95 backdrop-blur-md p-2 rounded-xl border border-white/[0.08] shadow-2xl">
                             {NAV_ITEMS.map((item) => {
                                 const isActive = pathname === "/" && activeSection === item.id;
                                 return (
@@ -159,10 +159,10 @@ const Header = () => {
                                         type="button"
                                         key={item.name}
                                         onClick={() => handleNavigation(item)}
-                                        className={`px-3 py-2.5 text-left text-xs font-mono uppercase tracking-wider transition-colors ${
+                                        className={`px-3.5 py-2.5 text-left text-xs font-mono uppercase tracking-wider rounded-lg transition-colors ${
                                             isActive
-                                                ? "bg-accent text-primary font-semibold"
-                                                : "text-white/75 hover:bg-white/10 hover:text-accent"
+                                                ? "bg-accent/15 text-accent font-semibold border border-accent/30"
+                                                : "text-white/70 hover:bg-white/[0.06] hover:text-white"
                                         }`}
                                     >
                                         {item.name}

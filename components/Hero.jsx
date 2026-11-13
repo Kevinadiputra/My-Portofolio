@@ -54,10 +54,9 @@ const Hero = () => {
     return (
         <section
             id="home"
-            className="relative w-full min-h-[88vh] flex flex-col justify-between overflow-hidden pt-24 pb-12 border-b border-white/10"
+            className="relative w-full min-h-[85vh] flex flex-col justify-between overflow-hidden pt-28 pb-14 border-b border-white/[0.08]"
         >
-            <div className="absolute inset-0 hero-surface pointer-events-none" />
-            <div className="absolute inset-0 hero-grid pointer-events-none" />
+            <div className="absolute top-0 left-1/4 w-[600px] h-[350px] bg-accent/[0.04] blur-[120px] pointer-events-none rounded-full" />
 
             <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-grow flex items-center">
                 <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-12 lg:gap-16 items-center w-full py-6 lg:py-10">
@@ -69,8 +68,8 @@ const Hero = () => {
                             variants={fadeUp(0)}
                             className="flex flex-wrap items-center gap-3"
                         >
-                            <span className="inline-flex items-center gap-2 border border-accent/35 bg-accent/10 px-3 py-1 font-mono text-[11px] font-medium text-accent">
-                                <span className="w-1.5 h-1.5 bg-accent" />
+                            <span className="inline-flex items-center gap-2 border border-accent/30 bg-accent/[0.08] rounded-full px-3 py-1 font-mono text-[11px] font-medium text-accent">
+                                <span className="w-1.5 h-1.5 rounded-full bg-accent" />
                                 {profile?.availabilityStatus || "Available for Data Science, ML & MLOps Roles"}
                             </span>
                             <span className="font-mono text-[11px] text-white/45 uppercase tracking-wider">
@@ -84,13 +83,13 @@ const Hero = () => {
                             variants={fadeUp(0.05)}
                             className="mt-5"
                         >
-                            <p className="font-mono text-xs sm:text-sm uppercase tracking-[0.18em] text-accent font-semibold">
-                                {profile?.name || "Kevin Adiputra Mahesa"} —{" "}
+                            <p className="font-mono text-xs uppercase tracking-wider text-accent font-semibold">
+                                {profile?.name || "Kevin Adiputra Mahesa"} :{" "}
                                 <span className="text-white/80">
                                     {profile?.title || "Machine Learning Engineer & Data Scientist"}
                                 </span>
                             </p>
-                            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-[50px] font-bold tracking-tight text-white leading-[1.12] mt-3 max-w-2xl">
+                            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold tracking-tight text-white leading-[1.12] mt-3 max-w-2xl">
                                 Building machine learning models, analytical dashboards, and reproducible data pipelines.
                             </h1>
                         </motion.div>
@@ -115,7 +114,7 @@ const Hero = () => {
                             <button
                                 type="button"
                                 onClick={() => scrollToSection("#projects")}
-                                className="inline-flex items-center justify-center h-12 px-6 text-xs sm:text-sm font-mono uppercase tracking-wider font-semibold border border-accent bg-accent hover:bg-accent-hover text-primary transition-all duration-200 active:translate-y-0 gap-2"
+                                className="inline-flex items-center justify-center h-11 px-5 text-xs sm:text-sm font-mono uppercase tracking-wider font-semibold rounded-lg border border-accent bg-accent hover:bg-accent-hover text-primary transition-all duration-200 active:translate-y-0 gap-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_2px_10px_rgba(104,212,204,0.25)]"
                             >
                                 <span>View Selected Projects</span>
                                 <ArrowRight size={15} />
@@ -126,7 +125,7 @@ const Hero = () => {
                                     href={profile.cvUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center justify-center h-12 px-6 text-xs sm:text-sm font-mono uppercase tracking-wider font-medium border border-white/15 bg-secondary/90 hover:border-accent/50 hover:text-accent text-white/85 transition-colors duration-200 gap-2"
+                                    className="inline-flex items-center justify-center h-11 px-5 text-xs sm:text-sm font-mono uppercase tracking-wider font-medium rounded-lg border border-white/15 bg-secondary/80 hover:border-accent/40 hover:text-accent text-white/85 transition-colors duration-200 gap-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
                                 >
                                     <Download size={15} />
                                     <span>Download CV</span>
@@ -139,14 +138,14 @@ const Hero = () => {
                             initial="hidden"
                             animate="visible"
                             variants={fadeUp(0.2)}
-                            className="grid grid-cols-3 gap-3 mt-9 pt-7 border-t border-white/10 max-w-xl"
+                            className="grid grid-cols-3 gap-3 mt-9 pt-7 border-t border-white/[0.08] max-w-xl"
                         >
                             {summaryMetrics.map((stat) => (
-                                <div key={stat.label} className="border border-white/10 bg-secondary/60 p-3.5">
+                                <div key={stat.label} className="border border-white/[0.08] bg-secondary/70 rounded-lg p-3.5 shadow-sm">
                                     <div className="text-lg sm:text-xl font-display font-bold text-accent leading-none">
                                         {stat.value}
                                     </div>
-                                    <div className="mt-1.5 text-[11px] font-mono text-white/55 leading-snug">
+                                    <div className="mt-1.5 text-[11px] font-mono text-white/60 leading-snug">
                                         {stat.label}
                                     </div>
                                 </div>
@@ -188,7 +187,7 @@ const Hero = () => {
                                             href={item.url}
                                             target={isMail ? undefined : "_blank"}
                                             rel={isMail ? undefined : "noopener noreferrer"}
-                                            className="w-9 h-9 bg-secondary border border-white/10 hover:border-accent hover:text-accent text-white/75 flex items-center justify-center transition-colors duration-200"
+                                            className="w-9 h-9 rounded-lg bg-secondary/90 border border-white/10 hover:border-accent hover:text-accent text-white/75 flex items-center justify-center transition-colors duration-200 shadow-sm"
                                             aria-label={item.label}
                                         >
                                             <Icon size={15} />
@@ -210,13 +209,13 @@ const Hero = () => {
                         variants={fadeUp(0.12)}
                         className="flex justify-center lg:justify-end w-full"
                     >
-                        <div className="border border-white/12 bg-secondary/90 p-5 sm:p-6 w-full max-w-[350px] flex flex-col gap-4">
-                            <div className="flex items-center justify-between border-b border-white/10 pb-3 font-mono text-[11px]">
+                        <div className="border border-white/[0.08] bg-secondary/90 rounded-2xl p-5 sm:p-6 w-full max-w-[360px] flex flex-col gap-4 shadow-xl">
+                            <div className="flex items-center justify-between border-b border-white/[0.08] pb-3 font-mono text-[11px]">
                                 <span className="text-white/60 uppercase tracking-wider">Engineer Profile</span>
-                                <span className="text-accent">S1 Sistem Komputer</span>
+                                <span className="text-accent font-medium">S1 Sistem Komputer</span>
                             </div>
 
-                            <div className="relative aspect-[4/5] w-full overflow-hidden bg-primary border border-white/10">
+                            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-xl bg-primary border border-white/[0.08]">
                                 {profile?.profilePicture &&
                                 profile.profilePicture !== "/api/placeholder/400/400" ? (
                                     <img
@@ -240,7 +239,7 @@ const Hero = () => {
                                         {focusDomains.map((item) => (
                                             <span
                                                 key={item}
-                                                className="text-[11px] font-mono px-2 py-0.5 bg-primary/70 border border-white/10 text-white/75"
+                                                className="text-[11px] font-mono px-2 py-0.5 rounded bg-primary/70 border border-white/[0.08] text-white/75"
                                             >
                                                 {item}
                                             </span>
@@ -248,7 +247,7 @@ const Hero = () => {
                                     </div>
                                 </div>
 
-                                <div className="border-t border-white/10 pt-3 flex items-center justify-between text-xs font-mono">
+                                <div className="border-t border-white/[0.08] pt-3 flex items-center justify-between text-xs font-mono">
                                     <span className="text-white/45">Primary Stack</span>
                                     <span className="text-accent">Python · SQL · Airflow · MLflow</span>
                                 </div>
