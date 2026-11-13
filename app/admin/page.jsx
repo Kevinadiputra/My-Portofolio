@@ -6,13 +6,10 @@ import {
     GraduationCap,
     Trophy,
     Inbox,
-    Plus,
     FileCheck,
     FileEdit,
     ArrowUpRight,
-    Sparkles,
     ChevronRight,
-    TrendingUp,
 } from "lucide-react";
 import { requireAdmin } from "@/lib/admin-auth";
 import { getAdminContentSnapshot } from "@/lib/admin-data";
@@ -54,57 +51,46 @@ export default async function AdminDashboardPage() {
                     <h1 className="admin-title">Admin Dashboard</h1>
                     <p className="admin-subtitle">
                         Pusat kendali dan status seluruh konten portofolio. Terautentikasi sebagai{" "}
-                        <span className="text-accent font-mono text-xs">{user.email}</span>.
+                        <span className="text-white/70 font-mono text-xs">{user.email}</span>.
                     </p>
-                </div>
-                <div className="flex flex-wrap items-center gap-2.5">
-                    <Link href="/admin/projects?new=1" className="admin-primary-action">
-                        <Plus size={14} />
-                        <span>Add Project</span>
-                    </Link>
-                    <Link href="/admin/achievements?new=1" className="admin-secondary-action">
-                        <Plus size={14} />
-                        <span>Add Achievement</span>
-                    </Link>
                 </div>
             </header>
 
             {/* Quick Actions Bar */}
             <section className="admin-quick-actions-bar" aria-label="Quick Actions">
                 <span className="admin-quick-actions-label">Quick Actions:</span>
-                <div className="flex flex-wrap gap-2">
-                    <Link href="/admin/projects?new=1" className="admin-quick-chip">
-                        <FolderKanban size={13} className="text-accent" />
-                        <span>+ Project</span>
+                <div className="admin-quick-actions-list">
+                    <Link href="/admin/projects?new=1" className="admin-quick-chip group">
+                        <FolderKanban size={13} className="admin-quick-chip-icon" />
+                        <span>Add Project</span>
                     </Link>
-                    <Link href="/admin/certificates?new=1" className="admin-quick-chip">
-                        <Award size={13} className="text-accent" />
-                        <span>+ Certificate</span>
+                    <Link href="/admin/certificates?new=1" className="admin-quick-chip group">
+                        <Award size={13} className="admin-quick-chip-icon" />
+                        <span>Add Certificate</span>
                     </Link>
-                    <Link href="/admin/experience?new=1" className="admin-quick-chip">
-                        <Briefcase size={13} className="text-accent" />
-                        <span>+ Experience</span>
+                    <Link href="/admin/experience?new=1" className="admin-quick-chip group">
+                        <Briefcase size={13} className="admin-quick-chip-icon" />
+                        <span>Add Experience</span>
                     </Link>
-                    <Link href="/admin/achievements?new=1" className="admin-quick-chip">
-                        <Trophy size={13} className="text-accent" />
-                        <span>+ Achievement</span>
+                    <Link href="/admin/achievements?new=1" className="admin-quick-chip group">
+                        <Trophy size={13} className="admin-quick-chip-icon" />
+                        <span>Add Achievement</span>
                     </Link>
-                    <Link href="/admin/education?new=1" className="admin-quick-chip">
-                        <GraduationCap size={13} className="text-accent" />
-                        <span>+ Education</span>
+                    <Link href="/admin/education?new=1" className="admin-quick-chip group">
+                        <GraduationCap size={13} className="admin-quick-chip-icon" />
+                        <span>Add Education</span>
                     </Link>
                 </div>
             </section>
 
             {/* 6 Key Metrics Grid */}
-            <section className="admin-stat-grid mt-4" aria-label="Content statistics">
+            <section className="admin-stat-grid" aria-label="Content statistics">
                 <Stat
                     icon={FolderKanban}
                     label="Projects"
                     value={snapshot.projects.total}
                     meta={`${snapshot.projects.published} published · ${snapshot.projects.featured} featured`}
                     href="/admin/projects"
-                    accent={snapshot.projects.total > 0}
                 />
                 <Stat
                     icon={Award}
@@ -112,7 +98,6 @@ export default async function AdminDashboardPage() {
                     value={snapshot.certificates.total}
                     meta={`${snapshot.certificates.published} published`}
                     href="/admin/certificates"
-                    accent={snapshot.certificates.total > 0}
                 />
                 <Stat
                     icon={Briefcase}
@@ -120,7 +105,6 @@ export default async function AdminDashboardPage() {
                     value={snapshot.experience.total}
                     meta={`${snapshot.experience.published} published`}
                     href="/admin/experience"
-                    accent={snapshot.experience.total > 0}
                 />
                 <Stat
                     icon={GraduationCap}
@@ -128,7 +112,6 @@ export default async function AdminDashboardPage() {
                     value={snapshot.education.total}
                     meta={`${snapshot.education.published} published`}
                     href="/admin/education"
-                    accent={snapshot.education.total > 0}
                 />
                 <Stat
                     icon={Trophy}
@@ -136,15 +119,14 @@ export default async function AdminDashboardPage() {
                     value={snapshot.achievements?.total ?? 0}
                     meta={`${snapshot.achievements?.published ?? 0} published · ${snapshot.achievements?.featured ?? 0} featured`}
                     href="/admin/achievements"
-                    accent={(snapshot.achievements?.total ?? 0) > 0}
                 />
                 <Stat
                     icon={Inbox}
                     label="Messages"
                     value={snapshot.messages.total}
-                    meta={`${snapshot.messages.unread} unread inquiries`}
+                    meta={snapshot.messages.unread > 0 ? `${snapshot.messages.unread} unread inquiries` : "All inquiries read"}
                     href="/admin/messages"
-                    alert={snapshot.messages.unread > 0}
+                    unreadCount={snapshot.messages.unread}
                 />
             </section>
 
@@ -167,7 +149,7 @@ export default async function AdminDashboardPage() {
                                     <span className="inline-flex items-center gap-1.5 shrink-0">
                                         <span
                                             className={`inline-block w-1.5 h-1.5 rounded-full ${
-                                                item.isPublished ? "bg-accent shadow-[0_0_6px_rgba(104,212,204,0.4)]" : "bg-amber-400"
+                                                item.isPublished ? "bg-accent" : "bg-amber-400"
                                             }`}
                                         />
                                         <span className="text-[10px] font-mono text-white/50 uppercase">
@@ -281,26 +263,29 @@ export default async function AdminDashboardPage() {
     );
 }
 
-function Stat({ icon: Icon, label, value, meta, href, accent = false, alert = false }) {
+function Stat({ icon: Icon, label, value, meta, href, unreadCount = 0 }) {
+    const hasUnread = unreadCount > 0;
     return (
         <Link href={href} className="admin-stat-card group">
-            <div className="flex items-center justify-between">
-                <span className="flex items-center gap-2 group-hover:text-white transition-colors">
+            <div className="admin-stat-card-header">
+                <span className="admin-stat-card-label-group">
                     <span className="admin-stat-card-icon">
-                        <Icon size={15} className={alert ? "text-amber-400" : accent ? "text-accent" : "text-white/40"} />
+                        <Icon size={14} />
                     </span>
-                    <span>{label}</span>
+                    <span className="admin-stat-card-label">{label}</span>
                 </span>
-                {alert ? (
-                    <span className="w-2 h-2 rounded-full bg-amber-400" title="Unread messages" />
+                {hasUnread ? (
+                    <span className="admin-stat-unread-dot" title={`${unreadCount} unread inquiries`} />
                 ) : (
-                    <ChevronRight size={14} className="text-white/20 group-hover:text-white/60 group-hover:translate-x-0.5 transition-all" />
+                    <ChevronRight size={13} className="admin-stat-arrow" />
                 )}
             </div>
-            <strong className={alert ? "text-amber-400" : accent ? "text-accent" : "text-white"}>
-                {value}
-            </strong>
-            {meta && <small className="font-mono text-[11px] text-white/45 truncate">{meta}</small>}
+            <div className="admin-stat-card-value-wrap">
+                <strong className={`admin-stat-card-value ${hasUnread ? "text-amber-400" : "text-[#f0f6fc]"}`}>
+                    {value}
+                </strong>
+            </div>
+            {meta && <small className="admin-stat-card-meta">{meta}</small>}
         </Link>
     );
 }
