@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -19,6 +19,8 @@ import {
     ChevronLeft,
     ChevronRight,
     Shield,
+    ChevronRight as ChevronBreadcrumb,
+    Activity,
 } from "lucide-react";
 import AdminLogoutButton from "@/components/admin/AdminLogoutButton";
 
@@ -54,6 +56,18 @@ const NAV_GROUPS = [
     },
 ];
 
+const ROUTE_LABELS = {
+    "/admin": "Dashboard",
+    "/admin/projects": "Projects",
+    "/admin/certificates": "Certificates",
+    "/admin/experience": "Experience",
+    "/admin/education": "Education",
+    "/admin/achievements": "Achievements",
+    "/admin/messages": "Messages",
+    "/admin/profile": "Profile & Bio",
+    "/admin/settings": "Site Settings",
+};
+
 export default function AdminShell({ children }) {
     const pathname = usePathname();
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -84,6 +98,15 @@ export default function AdminShell({ children }) {
         });
     }
 
+    const currentSectionName = useMemo(() => {
+        if (!pathname) return "Dashboard";
+        for (const [route, label] of Object.entries(ROUTE_LABELS)) {
+            if (route === "/admin" && pathname === "/admin") return label;
+            if (route !== "/admin" && pathname.startsWith(route)) return label;
+        }
+        return "Control Panel";
+    }, [pathname]);
+
     if (pathname === "/admin/login") {
         return children;
     }
@@ -99,12 +122,13 @@ export default function AdminShell({ children }) {
                 />
             )}
 
+            {/* Sidebar Navigation */}
             <aside className={`admin-sidebar ${collapsed ? "is-collapsed" : ""}`}>
                 <div className="admin-sidebar-top">
                     <div className="admin-sidebar-brand-wrap">
-                        <div className="admin-eyebrow">CONTROL ROOM</div>
-                        <Link href="/admin" className="admin-brand">
-                            {collapsed ? "KP" : "Portfolio CMS"}
+                        <Link href="/admin" className="admin-brand" title="Portfolio CMS Control Room">
+                            <span className="admin-brand-icon">KP</span>
+                            {!collapsed && <span>Portfolio CMS</span>}
                         </Link>
                     </div>
 
@@ -207,6 +231,33 @@ export default function AdminShell({ children }) {
                 </div>
             </aside>
 
+            {/* Desktop Top Bar */}
+            <div className="admin-topbar hidden lg:flex">
+                <div className="admin-topbar-breadcrumb">
+                    <span>Admin</span>
+                    <ChevronBreadcrumb size={12} className="text-white/30" />
+                    <span className="admin-topbar-breadcrumb-item">{currentSectionName}</span>
+                </div>
+
+                <div className="admin-topbar-right">
+                    <div className="admin-status-badge">
+                        <span className="admin-status-indicator" />
+                        <span>Supabase Connected</span>
+                    </div>
+
+                    <Link
+                        href="/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="admin-quick-chip"
+                        title="Open public portfolio website"
+                    >
+                        <span>Live Site</span>
+                        <ExternalLink size={12} />
+                    </Link>
+                </div>
+            </div>
+
             {/* Mobile Header Bar */}
             <div className="admin-mobile-bar lg:hidden">
                 <button
@@ -217,10 +268,21 @@ export default function AdminShell({ children }) {
                 >
                     <Menu size={20} />
                 </button>
-                <Link href="/admin" className="font-display font-bold text-white text-sm">
-                    Portfolio CMS
+                <div className="flex items-center gap-2">
+                    <span className="admin-brand-icon !w-6 !h-6 !text-[10px]">KP</span>
+                    <Link href="/admin" className="font-display font-bold text-white text-sm">
+                        Portfolio CMS
+                    </Link>
+                </div>
+                <Link
+                    href="/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="admin-mobile-toggle-btn !p-1.5 text-accent"
+                    title="Open live site"
+                >
+                    <ExternalLink size={16} />
                 </Link>
-                <div className="w-8" />
             </div>
 
             <main className="admin-content">{children}</main>

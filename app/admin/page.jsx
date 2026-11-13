@@ -11,6 +11,8 @@ import {
     FileEdit,
     ArrowUpRight,
     Sparkles,
+    ChevronRight,
+    TrendingUp,
 } from "lucide-react";
 import { requireAdmin } from "@/lib/admin-auth";
 import { getAdminContentSnapshot } from "@/lib/admin-data";
@@ -38,6 +40,10 @@ export default async function AdminDashboardPage() {
         snapshot.experience.published +
         snapshot.education.published +
         (snapshot.achievements?.published ?? 0);
+
+    const publishedPercentage = totalContentItems > 0
+        ? Math.round((totalPublishedItems / totalContentItems) * 100)
+        : 0;
 
     return (
         <div className="admin-page">
@@ -157,11 +163,11 @@ export default async function AdminDashboardPage() {
                     {snapshot.recentChanges.length ? (
                         <ul className="admin-change-list">
                             {snapshot.recentChanges.map((item) => (
-                                <li key={`${item.type}-${item.id}`}>
+                                <li key={`${item.type}-${item.id}`} className="hover:bg-white/[0.02] px-2 rounded-lg transition-colors">
                                     <span className="inline-flex items-center gap-1.5 shrink-0">
                                         <span
-                                            className={`inline-block w-1.5 h-1.5 ${
-                                                item.isPublished ? "bg-accent" : "bg-amber-400"
+                                            className={`inline-block w-1.5 h-1.5 rounded-full ${
+                                                item.isPublished ? "bg-accent shadow-[0_0_6px_rgba(104,212,204,0.4)]" : "bg-amber-400"
                                             }`}
                                         />
                                         <span className="text-[10px] font-mono text-white/50 uppercase">
@@ -185,7 +191,7 @@ export default async function AdminDashboardPage() {
                             ))}
                         </ul>
                     ) : (
-                        <div className="py-8 text-center text-white/50 text-xs font-mono">
+                        <div className="py-12 text-center text-white/50 text-xs font-mono">
                             Belum ada riwayat perubahan yang tercatat di database.
                         </div>
                     )}
@@ -199,10 +205,27 @@ export default async function AdminDashboardPage() {
                     <div className="admin-panel">
                         <div className="admin-eyebrow">CONTENT HEALTH</div>
                         <h2 className="admin-panel-title">Publication Overview</h2>
-                        <div className="mt-4 space-y-3">
-                            <div className="flex items-center justify-between border border-white/10 p-3 bg-secondary/50">
-                                <div className="flex items-center gap-2">
-                                    <FileCheck size={16} className="text-accent" />
+
+                        {/* Visual Progress Bar */}
+                        <div className="mt-4 p-3 rounded-xl border border-white/[0.08] bg-white/[0.02]">
+                            <div className="flex items-center justify-between text-xs font-mono mb-2">
+                                <span className="text-white/60">Published Ratio</span>
+                                <span className="text-accent font-bold">{publishedPercentage}%</span>
+                            </div>
+                            <div className="w-full h-2 rounded-full bg-white/[0.08] overflow-hidden">
+                                <div
+                                    className="h-full bg-accent rounded-full transition-all duration-500 ease-out"
+                                    style={{ width: `${publishedPercentage}%` }}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="mt-3 space-y-2.5">
+                            <div className="flex items-center justify-between rounded-xl border border-white/[0.07] p-3 bg-white/[0.02]">
+                                <div className="flex items-center gap-2.5">
+                                    <div className="w-7 h-7 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center text-accent">
+                                        <FileCheck size={14} />
+                                    </div>
                                     <span className="text-xs font-mono text-white/80">Published Items</span>
                                 </div>
                                 <span className="text-base font-display font-bold text-accent">
@@ -210,9 +233,11 @@ export default async function AdminDashboardPage() {
                                 </span>
                             </div>
 
-                            <div className="flex items-center justify-between border border-white/10 p-3 bg-secondary/50">
-                                <div className="flex items-center gap-2">
-                                    <FileEdit size={16} className="text-amber-400" />
+                            <div className="flex items-center justify-between rounded-xl border border-white/[0.07] p-3 bg-white/[0.02]">
+                                <div className="flex items-center gap-2.5">
+                                    <div className="w-7 h-7 rounded-lg bg-amber-400/10 border border-amber-400/20 flex items-center justify-center text-amber-400">
+                                        <FileEdit size={14} />
+                                    </div>
                                     <span className="text-xs font-mono text-white/80">Draft Items</span>
                                 </div>
                                 <span className="text-base font-display font-bold text-amber-400">
@@ -221,31 +246,31 @@ export default async function AdminDashboardPage() {
                             </div>
                         </div>
 
-                        <div className="mt-5 pt-4 border-t border-white/10">
-                            <div className="text-[11px] font-mono text-white/50 uppercase tracking-wider mb-2">
+                        <div className="mt-5 pt-4 border-t border-white/[0.08]">
+                            <div className="text-[11px] font-mono text-white/45 uppercase tracking-wider mb-2.5">
                                 Quick Navigation
                             </div>
                             <div className="space-y-1.5">
                                 <Link
                                     href="/admin/profile"
-                                    className="flex items-center justify-between p-2 border border-white/5 hover:border-accent/40 text-xs font-mono text-white/70 hover:text-white transition-colors"
+                                    className="flex items-center justify-between p-2.5 rounded-lg border border-white/[0.05] hover:border-accent/40 bg-white/[0.01] hover:bg-white/[0.03] text-xs font-mono text-white/70 hover:text-white transition-all"
                                 >
                                     <span>Edit Bio, Contacts & CV</span>
-                                    <ArrowUpRight size={13} />
+                                    <ArrowUpRight size={13} className="text-white/40" />
                                 </Link>
                                 <Link
                                     href="/admin/settings"
-                                    className="flex items-center justify-between p-2 border border-white/5 hover:border-accent/40 text-xs font-mono text-white/70 hover:text-white transition-colors"
+                                    className="flex items-center justify-between p-2.5 rounded-lg border border-white/[0.05] hover:border-accent/40 bg-white/[0.01] hover:bg-white/[0.03] text-xs font-mono text-white/70 hover:text-white transition-all"
                                 >
                                     <span>SEO, Logo & Favicon</span>
-                                    <ArrowUpRight size={13} />
+                                    <ArrowUpRight size={13} className="text-white/40" />
                                 </Link>
                                 <Link
                                     href="/admin/messages"
-                                    className="flex items-center justify-between p-2 border border-white/5 hover:border-accent/40 text-xs font-mono text-white/70 hover:text-white transition-colors"
+                                    className="flex items-center justify-between p-2.5 rounded-lg border border-white/[0.05] hover:border-accent/40 bg-white/[0.01] hover:bg-white/[0.03] text-xs font-mono text-white/70 hover:text-white transition-all"
                                 >
                                     <span>Contact Form Inbox</span>
-                                    <ArrowUpRight size={13} />
+                                    <ArrowUpRight size={13} className="text-white/40" />
                                 </Link>
                             </div>
                         </div>
@@ -258,13 +283,19 @@ export default async function AdminDashboardPage() {
 
 function Stat({ icon: Icon, label, value, meta, href, accent = false, alert = false }) {
     return (
-        <Link href={href} className="admin-stat-card group hover:border-accent/40 transition-colors">
+        <Link href={href} className="admin-stat-card group">
             <div className="flex items-center justify-between">
-                <span className="group-hover:text-white transition-colors flex items-center gap-2">
-                    <Icon size={14} className={alert ? "text-amber-400" : accent ? "text-accent" : "text-white/40"} />
+                <span className="flex items-center gap-2 group-hover:text-white transition-colors">
+                    <span className="admin-stat-card-icon">
+                        <Icon size={15} className={alert ? "text-amber-400" : accent ? "text-accent" : "text-white/40"} />
+                    </span>
                     <span>{label}</span>
                 </span>
-                {alert && <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />}
+                {alert ? (
+                    <span className="w-2 h-2 rounded-full bg-amber-400" title="Unread messages" />
+                ) : (
+                    <ChevronRight size={14} className="text-white/20 group-hover:text-white/60 group-hover:translate-x-0.5 transition-all" />
+                )}
             </div>
             <strong className={alert ? "text-amber-400" : accent ? "text-accent" : "text-white"}>
                 {value}

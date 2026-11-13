@@ -27,7 +27,7 @@ export function KeyLearningsRepeater({ learnings = [], onChange }) {
         <div className="space-y-2.5 w-full min-w-0">
             {items.map((item, index) => (
                 <div key={index} className="flex items-center gap-2 w-full min-w-0">
-                    <span className="w-6 h-6 flex items-center justify-center bg-white/5 border border-white/10 text-accent font-mono text-xs shrink-0">
+                    <span className="w-6 h-6 rounded flex items-center justify-center bg-white/5 border border-white/10 text-accent font-mono text-xs shrink-0">
                         {index + 1}
                     </span>
                     <input
@@ -96,7 +96,7 @@ export function MetricsRepeater({ metrics = [], onChange }) {
             {parsedItems.map((item, index) => (
                 <div
                     key={index}
-                    className="p-3 bg-primary/70 border border-white/10 space-y-2 relative"
+                    className="p-3 bg-[#090d14] rounded-lg border border-white/10 space-y-2 relative"
                 >
                     <div className="flex items-center justify-between border-b border-white/10 pb-1.5">
                         <span className="font-mono text-xs text-accent font-semibold">
@@ -202,7 +202,7 @@ export function ProcessRepeater({ process = [], onChange }) {
             {parsedItems.map((item, index) => (
                 <div
                     key={index}
-                    className="p-3 bg-primary/70 border border-white/10 space-y-2 relative"
+                    className="p-3 bg-[#090d14] rounded-lg border border-white/10 space-y-2 relative"
                 >
                     <div className="flex items-center justify-between border-b border-white/10 pb-1.5">
                         <span className="font-mono text-xs text-accent font-semibold">

@@ -57,11 +57,11 @@ export default function ProjectTechnologiesInput({
     return (
         <div className="space-y-2.5 w-full min-w-0">
             {/* Input Box with chips inside */}
-            <div className="flex flex-wrap items-center gap-1.5 p-2 bg-primary border border-white/10 min-h-[44px] focus-within:border-accent focus-within:ring-1 focus-within:ring-accent/30 transition-all">
+            <div className="flex flex-wrap items-center gap-1.5 p-2 bg-[#090d14] rounded-lg border border-white/10 min-h-[44px] focus-within:border-accent focus-within:ring-1 focus-within:ring-accent/30 transition-all">
                 {currentTags.map((tech, idx) => (
                     <span
                         key={`${tech}-${idx}`}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-mono bg-accent/15 text-accent border border-accent/30 tracking-wide"
+                        className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-mono bg-accent/15 text-accent border border-accent/30 rounded-md tracking-wide"
                     >
                         <span>{tech}</span>
                         <button
@@ -88,7 +88,7 @@ export default function ProjectTechnologiesInput({
                         <button
                             type="button"
                             onClick={() => addTag(inputValue)}
-                            className="px-2 py-0.5 bg-accent text-primary text-[11px] font-mono font-bold shrink-0 hover:bg-accent/90"
+                            className="px-2.5 py-1 bg-accent text-primary text-[11px] font-mono font-bold rounded-md shrink-0 hover:bg-accent/90 transition-colors"
                         >
                             + Add
                         </button>
@@ -110,7 +110,7 @@ export default function ProjectTechnologiesInput({
                             key={item}
                             type="button"
                             onClick={() => addTag(item)}
-                            className="text-[11px] font-mono px-2 py-0.5 bg-white/[0.04] hover:bg-accent/20 hover:text-accent border border-white/10 hover:border-accent/40 text-white/60 transition-colors"
+                            className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-white/[0.04] hover:bg-accent/20 hover:text-accent border border-white/10 hover:border-accent/40 text-white/60 transition-colors"
                         >
                             + {item}
                         </button>

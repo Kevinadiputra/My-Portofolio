@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { useProfile } from "@/context/ProfileContext";
@@ -15,6 +15,8 @@ const NAV_ITEMS = [
     { name: "Contact", href: "#contact", id: "contact" },
 ];
 
+const HEADER_OFFSET = 72; // Header height (64px) + comfortable breathing room (8px)
+
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
@@ -23,55 +25,154 @@ const Header = () => {
     const pathname = usePathname();
     const { profile, siteSettings } = useProfile();
 
-    useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 36);
-        };
-        handleScroll();
-        window.addEventListener("scroll", handleScroll, { passive: true });
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+    const isProgrammaticScroll = useRef(false);
+    const scrollLockTimeout = useRef(null);
 
-    useEffect(() => {
-        if (pathname !== "/") return;
+    // Scroll-based active section detection
+    const updateActiveSectionOnScroll = useCallback(() => {
+        if (pathname !== "/" || isProgrammaticScroll.current) return;
 
-        const elements = NAV_ITEMS.map((item) => document.getElementById(item.id)).filter(Boolean);
-        if (!elements.length) return;
+        const scrollY = window.scrollY;
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
 
-        const observer = new IntersectionObserver(
-            (entries) => {
-                const visible = entries
-                    .filter((entry) => entry.isIntersecting)
-                    .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-                if (visible[0]?.target?.id) {
-                    setActiveSection(visible[0].target.id);
-                }
-            },
-            {
-                rootMargin: "-25% 0px -55% 0px",
-                threshold: [0.1, 0.35],
+        // 1. Top of page: always highlight Home
+        if (scrollY < 80) {
+            setActiveSection("home");
+            return;
+        }
+
+        // 2. Bottom of page: always highlight Contact
+        if (windowHeight + scrollY >= documentHeight - 60) {
+            setActiveSection("contact");
+            return;
+        }
+
+        // 3. Middle sections: find the section that intersects the top offset line
+        const triggerPoint = scrollY + HEADER_OFFSET + 40;
+        let currentSection = "home";
+
+        for (const item of NAV_ITEMS) {
+            const el = document.getElementById(item.id);
+            if (!el) continue;
+
+            const top = el.offsetTop;
+            const height = el.offsetHeight;
+
+            if (triggerPoint >= top && triggerPoint < top + height) {
+                currentSection = item.id;
+                break;
             }
-        );
+        }
 
-        elements.forEach((el) => observer.observe(el));
-        return () => observer.disconnect();
+        setActiveSection(currentSection);
     }, [pathname]);
 
+    useEffect(() => {
+        let ticking = false;
+
+        const onScroll = () => {
+            const isScrolledNow = window.scrollY > 30;
+            if (isScrolledNow !== scrolled) {
+                setScrolled(isScrolledNow);
+            }
+
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    updateActiveSectionOnScroll();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        };
+
+        window.addEventListener("scroll", onScroll, { passive: true });
+        onScroll(); // Run immediately on mount
+
+        return () => window.removeEventListener("scroll", onScroll);
+    }, [scrolled, updateActiveSectionOnScroll]);
+
+    // Handle deep-link section hash on initial page mount (e.g. /#experience)
+    useEffect(() => {
+        if (pathname !== "/" || typeof window === "undefined") return;
+
+        const hash = window.location.hash.replace("#", "");
+        if (hash) {
+            const match = NAV_ITEMS.find((item) => item.id === hash);
+            if (match) {
+                setActiveSection(match.id);
+                // Slight delay to ensure DOM layout is calculated
+                const timer = setTimeout(() => {
+                    const el = document.getElementById(match.id);
+                    if (el) {
+                        const targetY = el.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
+                        window.scrollTo({ top: targetY, behavior: "smooth" });
+                    }
+                }, 150);
+                return () => clearTimeout(timer);
+            }
+        }
+    }, [pathname]);
+
+    // Listen to browser forward/back buttons (popstate & hashchange)
+    useEffect(() => {
+        const handleHashOrPop = () => {
+            if (pathname !== "/" || typeof window === "undefined") return;
+            const hash = window.location.hash.replace("#", "");
+            if (hash) {
+                const match = NAV_ITEMS.find((item) => item.id === hash);
+                if (match) {
+                    setActiveSection(match.id);
+                    const el = document.getElementById(match.id);
+                    if (el) {
+                        const targetY = el.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
+                        window.scrollTo({ top: targetY, behavior: "smooth" });
+                    }
+                }
+            } else if (window.scrollY < 80) {
+                setActiveSection("home");
+            }
+        };
+
+        window.addEventListener("popstate", handleHashOrPop);
+        window.addEventListener("hashchange", handleHashOrPop);
+        return () => {
+            window.removeEventListener("popstate", handleHashOrPop);
+            window.removeEventListener("hashchange", handleHashOrPop);
+        };
+    }, [pathname]);
+
+    // Navigation item click handler with reliable offset & smooth scroll
     const handleNavigation = (item) => {
         setIsOpen(false);
+
         if (pathname !== "/") {
             router.push(`/${item.href}`);
             return;
         }
+
+        // Lock scroll listener temporarily during smooth scroll animation
+        isProgrammaticScroll.current = true;
+        if (scrollLockTimeout.current) {
+            clearTimeout(scrollLockTimeout.current);
+        }
+        scrollLockTimeout.current = setTimeout(() => {
+            isProgrammaticScroll.current = false;
+        }, 850);
+
+        setActiveSection(item.id);
+
         if (item.id === "home") {
             window.scrollTo({ top: 0, behavior: "smooth" });
-            setActiveSection("home");
+            window.history.pushState(null, "", "/");
             return;
         }
-        const element = document.querySelector(item.href);
+
+        const element = document.getElementById(item.id);
         if (element) {
-            element.scrollIntoView({ behavior: "smooth" });
-            setActiveSection(item.id);
+            const targetY = element.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
+            window.scrollTo({ top: targetY, behavior: "smooth" });
+            window.history.pushState(null, "", `#${item.id}`);
         }
     };
 

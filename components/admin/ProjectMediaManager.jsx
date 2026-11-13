@@ -351,10 +351,10 @@ export default function ProjectMediaManager({
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
                 onClick={() => fileInputRef.current?.click()}
-                className={`group relative flex flex-col items-center justify-center border-2 border-dashed p-6 sm:p-8 text-center cursor-pointer transition-all duration-200 select-none ${
+                className={`group relative flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-6 sm:p-8 text-center cursor-pointer transition-all duration-200 select-none ${
                     isDragging
                         ? "border-accent bg-accent/10 shadow-[0_0_30px_rgba(104,212,204,0.15)]"
-                        : "border-white/15 bg-primary/40 hover:border-accent/60 hover:bg-white/[0.02]"
+                        : "border-white/15 bg-white/[0.01] hover:border-accent/60 hover:bg-white/[0.03]"
                 }`}
             >
                 <input
@@ -385,7 +385,7 @@ export default function ProjectMediaManager({
                     className="hidden"
                 />
 
-                <div className="w-12 h-12 rounded-full border border-white/10 bg-secondary flex items-center justify-center text-accent mb-3 group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 rounded-xl border border-white/10 bg-white/[0.04] flex items-center justify-center text-accent mb-3 group-hover:scale-105 transition-transform">
                     {uploadState.active ? (
                         <Loader2 size={22} className="animate-spin text-accent" />
                     ) : (
@@ -407,7 +407,7 @@ export default function ProjectMediaManager({
 
                 {/* Active Upload Progress Banner */}
                 {uploadState.active && (
-                    <div className="mt-4 w-full max-w-sm bg-secondary border border-accent/30 p-2.5 rounded-none space-y-1.5">
+                    <div className="mt-4 w-full max-w-sm bg-[#090d14] border border-accent/30 p-3 rounded-lg space-y-1.5">
                         <div className="flex items-center justify-between text-xs font-mono">
                             <span className="text-white/80 truncate max-w-[200px]">
                                 {uploadState.fileName}
@@ -416,9 +416,9 @@ export default function ProjectMediaManager({
                                 {uploadState.current} / {uploadState.total}
                             </span>
                         </div>
-                        <div className="w-full bg-white/10 h-1.5 overflow-hidden">
+                        <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
                             <div
-                                className="bg-accent h-full transition-all duration-300"
+                                className="bg-accent h-full rounded-full transition-all duration-300"
                                 style={{
                                     width: `${Math.round(
                                         (uploadState.current / (uploadState.total || 1)) * 100
@@ -446,14 +446,14 @@ export default function ProjectMediaManager({
                         {images.map((item, index) => (
                             <div
                                 key={item.id}
-                                className={`group relative border transition-all duration-150 flex flex-col bg-secondary/80 ${
+                                className={`group relative border rounded-xl overflow-hidden transition-all duration-150 flex flex-col bg-[#090d14] ${
                                     item.isCover
                                         ? "border-accent shadow-[0_0_15px_rgba(104,212,204,0.18)]"
                                         : "border-white/10 hover:border-white/30"
                                 }`}
                             >
                                 {/* Thumbnail Image */}
-                                <div className="relative aspect-video w-full bg-primary/80 overflow-hidden">
+                                <div className="relative aspect-video w-full bg-black/40 overflow-hidden">
                                     <img
                                         src={item.url}
                                         alt={`Project visual ${index + 1}`}
@@ -463,7 +463,7 @@ export default function ProjectMediaManager({
 
                                     {/* Cover Badge */}
                                     {item.isCover ? (
-                                        <div className="absolute top-2 left-2 flex items-center gap-1 bg-accent text-primary px-2 py-0.5 text-[10px] font-mono font-bold tracking-wider uppercase shadow-md">
+                                        <div className="absolute top-2 left-2 flex items-center gap-1 bg-accent text-primary px-2.5 py-0.5 rounded-md text-[10px] font-mono font-bold tracking-wider uppercase shadow-md">
                                             <Star size={11} className="fill-primary" />
                                             <span>Cover / Thumbnail</span>
                                         </div>
@@ -471,7 +471,7 @@ export default function ProjectMediaManager({
                                         <button
                                             type="button"
                                             onClick={() => setAsCover(item.id)}
-                                            className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/75 hover:bg-accent hover:text-primary text-white/90 px-2 py-0.5 text-[10px] font-mono font-medium tracking-wider uppercase backdrop-blur-sm border border-white/20"
+                                            className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/75 hover:bg-accent hover:text-primary text-white/90 px-2 py-0.5 rounded-md text-[10px] font-mono font-medium tracking-wider uppercase backdrop-blur-sm border border-white/20"
                                             title="Jadikan sebagai gambar cover utama"
                                         >
                                             Set as Cover
@@ -486,7 +486,7 @@ export default function ProjectMediaManager({
                                                 setReplacingId(item.id);
                                                 replaceInputRef.current?.click();
                                             }}
-                                            className="h-7 w-7 bg-black/80 hover:bg-white text-white hover:text-primary flex items-center justify-center transition-colors border border-white/20"
+                                            className="h-7 w-7 rounded-md bg-black/80 hover:bg-white text-white hover:text-primary flex items-center justify-center transition-colors border border-white/20"
                                             title="Ganti gambar ini"
                                         >
                                             <RefreshCw size={12} />
@@ -494,7 +494,7 @@ export default function ProjectMediaManager({
                                         <button
                                             type="button"
                                             onClick={() => removeImage(item.id)}
-                                            className="h-7 w-7 bg-black/80 hover:bg-red-500 text-white flex items-center justify-center transition-colors border border-white/20"
+                                            className="h-7 w-7 rounded-md bg-black/80 hover:bg-red-500 text-white flex items-center justify-center transition-colors border border-white/20"
                                             title="Hapus gambar"
                                         >
                                             <Trash2 size={12} />
@@ -503,7 +503,7 @@ export default function ProjectMediaManager({
                                 </div>
 
                                 {/* Bottom Info & Reorder Controls */}
-                                <div className="flex items-center justify-between p-2 border-t border-white/10 text-xs font-mono bg-primary/40">
+                                <div className="flex items-center justify-between p-2.5 border-t border-white/10 text-xs font-mono bg-white/[0.02]">
                                     <span className="text-white/45 text-[11px]">
                                         #{index + 1} {item.isCover && "· Cover"}
                                     </span>
@@ -522,7 +522,7 @@ export default function ProjectMediaManager({
                                             type="button"
                                             disabled={index === 0}
                                             onClick={() => moveImage(index, -1)}
-                                            className="h-6 w-6 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 disabled:opacity-20 disabled:hover:bg-transparent"
+                                            className="h-6 w-6 rounded flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 disabled:opacity-20 disabled:hover:bg-transparent"
                                             title="Pindahkan ke kiri"
                                         >
                                             <ArrowLeft size={12} />
@@ -531,7 +531,7 @@ export default function ProjectMediaManager({
                                             type="button"
                                             disabled={index === images.length - 1}
                                             onClick={() => moveImage(index, 1)}
-                                            className="h-6 w-6 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 disabled:opacity-20 disabled:hover:bg-transparent"
+                                            className="h-6 w-6 rounded flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 disabled:opacity-20 disabled:hover:bg-transparent"
                                             title="Pindahkan ke kanan"
                                         >
                                             <ArrowRight size={12} />
