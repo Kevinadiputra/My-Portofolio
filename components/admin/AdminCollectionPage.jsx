@@ -32,6 +32,20 @@ import ProjectPreviewModal from "./ProjectPreviewModal";
 
 const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
 
+const CATEGORY_NAMES = {
+    "data-science": "Data Science",
+    "machine-learning": "Machine Learning",
+    "deep-learning": "Deep Learning",
+    "nlp": "NLP",
+    "data-engineering": "Data Engineering",
+    "mlops": "MLOps",
+};
+
+function formatCategory(val) {
+    if (!val) return "";
+    return CATEGORY_NAMES[val] || val.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
 function emptyValue(field) {
     if (field.type === "array" || field.type === "lines" || field.type === "roles_repeater" || field.type === "gallery_repeater" || field.type === "links_repeater") return [];
     if (field.type === "checkbox") return Boolean(field.defaultValue);
@@ -715,17 +729,21 @@ export default function AdminCollectionPage({ collection, title, eyebrow, descri
                             <table className="admin-table">
                                 <thead>
                                     <tr>
-                                        <th className="w-[40%]">Item Information</th>
-                                        <th className="w-[18%]">Category / Details</th>
-                                        <th className="w-[14%]">Status</th>
-                                        <th className="w-[12%]">Order / Date</th>
-                                        <th className="w-[16%] text-right">Actions</th>
+                                        <th className="admin-th-project">
+                                            {collection === "projects" ? "Project" : "Item Information"}
+                                        </th>
+                                        <th className="admin-th-category">
+                                            {collection === "projects" ? "Category" : "Category / Details"}
+                                        </th>
+                                        <th className="admin-th-status">Status</th>
+                                        <th className="admin-th-order">Order / Date</th>
+                                        <th className="admin-th-actions text-right">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {records.map((item) => (
                                         <tr key={item.id} className="admin-tr">
-                                            <td>
+                                            <td className="admin-td-project">
                                                 <div className="admin-item-cell">
                                                     {/* Thumbnail / Icon / Logo */}
                                                     {(item.thumbnail_url || item.image_url || item.logo_url || item.certificate_image_url) ? (
@@ -734,19 +752,36 @@ export default function AdminCollectionPage({ collection, title, eyebrow, descri
                                                                 src={item.thumbnail_url || item.image_url || item.logo_url || item.certificate_image_url}
                                                                 alt=""
                                                                 className="w-full h-full object-cover"
+                                                                loading="lazy"
                                                             />
                                                         </div>
                                                     ) : (
                                                         <div className="admin-item-thumb-placeholder">
-                                                            <ImageIcon size={15} />
+                                                            <ImageIcon size={16} />
                                                         </div>
                                                     )}
-                                                    <div className="admin-item-meta truncate">
-                                                        <div className="admin-item-title truncate">
+                                                    <div className="admin-item-meta">
+                                                        <div
+                                                            className="admin-item-title"
+                                                            title={item.title || item.position || item.institution || item.name}
+                                                        >
                                                             {item.title || item.position || item.institution || item.name}
                                                         </div>
-                                                        <div className="admin-item-sub truncate">
-                                                            {item.tagline ||
+                                                        <div
+                                                            className="admin-item-desc"
+                                                            title={
+                                                                item.short_description ||
+                                                                item.tagline ||
+                                                                item.event_name ||
+                                                                item.issuer ||
+                                                                item.organization ||
+                                                                item.degree ||
+                                                                item.slug ||
+                                                                ""
+                                                            }
+                                                        >
+                                                            {item.short_description ||
+                                                             item.tagline ||
                                                              item.event_name ||
                                                              item.issuer ||
                                                              item.organization ||
@@ -757,11 +792,12 @@ export default function AdminCollectionPage({ collection, title, eyebrow, descri
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>
-                                                <div className="flex flex-col gap-1 items-start">
+                                            <td className="admin-td-category">
+                                                <div className="admin-category-cell">
                                                     {(item.category || item.employment_type || item.award) && (
-                                                        <span className="admin-tag-badge">
-                                                            {item.award ? `${item.award} · ` : ""}{item.category || item.employment_type}
+                                                        <span className="admin-tag-badge" title={item.category || item.employment_type}>
+                                                            {item.award ? `${item.award} · ` : ""}
+                                                            {formatCategory(item.category || item.employment_type)}
                                                         </span>
                                                     )}
                                                     {item.level && (
@@ -770,37 +806,41 @@ export default function AdminCollectionPage({ collection, title, eyebrow, descri
                                                         </span>
                                                     )}
                                                     {item.is_featured && (
-                                                        <span className="admin-featured-badge">Featured</span>
+                                                        <span className="admin-featured-chip">Featured</span>
                                                     )}
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td className="admin-td-status">
                                                 <button
                                                     type="button"
                                                     onClick={(e) => togglePublishStatus(item, e)}
                                                     className={`admin-status-toggle ${item.is_published ? "is-published" : "is-draft"}`}
                                                     title="Click to toggle publish status"
+                                                    aria-label={`Toggle status, currently ${item.is_published ? "Published" : "Draft"}`}
                                                 >
                                                     <span className="admin-status-dot" />
                                                     <span>{item.is_published ? "Published" : "Draft"}</span>
                                                 </button>
                                             </td>
-                                            <td>
-                                                <div className="text-xs font-mono text-white/70">
-                                                    #{item.display_order ?? 0}
-                                                </div>
-                                                <div className="text-[10px] font-mono text-white/40 mt-0.5">
-                                                    {item.date_achieved || item.start_date || item.issued_at || "-"}
+                                            <td className="admin-td-order">
+                                                <div className="admin-order-date-cell">
+                                                    <span className="admin-order-num">#{item.display_order ?? 0}</span>
+                                                    <span className="admin-date-sub">
+                                                        {item.date_achieved ||
+                                                         item.start_date ||
+                                                         item.issued_at ||
+                                                         (item.created_at ? item.created_at.slice(0, 10) : "-")}
+                                                    </span>
                                                 </div>
                                             </td>
-                                            <td className="text-right">
+                                            <td className="admin-td-actions text-right">
                                                 <div className="admin-actions-cell">
                                                     <button
                                                         type="button"
                                                         onClick={() => setPreviewItem(item)}
-                                                        className="admin-action-btn"
-                                                        title="Preview item"
-                                                        aria-label="Preview item"
+                                                        className="admin-action-btn admin-action-view"
+                                                        title={`Preview ${config.singularLabel.toLowerCase()}`}
+                                                        aria-label={`Preview ${config.singularLabel.toLowerCase()}`}
                                                     >
                                                         <Eye size={14} />
                                                     </button>
@@ -808,8 +848,8 @@ export default function AdminCollectionPage({ collection, title, eyebrow, descri
                                                         type="button"
                                                         onClick={() => openEditEditor(item)}
                                                         className="admin-action-btn admin-action-edit"
-                                                        title="Edit item"
-                                                        aria-label="Edit item"
+                                                        title={`Edit ${config.singularLabel.toLowerCase()}`}
+                                                        aria-label={`Edit ${config.singularLabel.toLowerCase()}`}
                                                     >
                                                         <Edit3 size={14} />
                                                     </button>
@@ -817,8 +857,8 @@ export default function AdminCollectionPage({ collection, title, eyebrow, descri
                                                         type="button"
                                                         onClick={(e) => requestDelete(item, e)}
                                                         className="admin-action-btn admin-action-delete"
-                                                        title="Delete item"
-                                                        aria-label="Delete item"
+                                                        title={`Delete ${config.singularLabel.toLowerCase()}`}
+                                                        aria-label={`Delete ${config.singularLabel.toLowerCase()}`}
                                                     >
                                                         <Trash2 size={14} />
                                                     </button>

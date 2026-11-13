@@ -1137,7 +1137,7 @@ section[id] {
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  padding: 0.75rem 1rem;
+  padding: 0.65rem 0.85rem;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.06);
   background: #0d1117;
@@ -1149,6 +1149,7 @@ section[id] {
   position: relative;
   flex: 1;
   min-width: 220px;
+  height: 34px;
 }
 
 .admin-search-icon {
@@ -1162,13 +1163,15 @@ section[id] {
 
 .admin-search-input {
   width: 100%;
+  height: 34px;
   border-radius: 6px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: #080b0f;
   color: #f0f6fc;
-  padding: 0.5rem 1.85rem 0.5rem 2.25rem;
-  font: 400 0.82rem/1.3 var(--font-body);
+  padding: 0 1.85rem 0 2.25rem;
+  font: 400 0.82rem var(--font-body);
   outline: none;
+  box-sizing: border-box;
   transition: all 140ms ease;
 }
 
@@ -1204,19 +1207,25 @@ section[id] {
 
 .admin-pill-group {
   display: inline-flex;
+  height: 34px;
+  align-items: center;
   border-radius: 6px;
   border: 1px solid rgba(255, 255, 255, 0.07);
   background: #080b0f;
   padding: 2px;
+  box-sizing: border-box;
 }
 
 .admin-pill-btn {
+  height: 100%;
   border: none;
   border-radius: 4px;
   background: transparent;
   color: #8b949e;
-  padding: 0.35rem 0.75rem;
-  font: 500 0.75rem/1 var(--font-body);
+  padding: 0 0.75rem;
+  font: 500 0.75rem var(--font-body);
+  display: inline-flex;
+  align-items: center;
   cursor: pointer;
   transition: all 140ms ease;
 }
@@ -1233,14 +1242,16 @@ section[id] {
 }
 
 .admin-select-filter {
+  height: 34px;
   border-radius: 6px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: #080b0f;
   color: #e6edf3;
-  padding: 0.4rem 0.75rem;
-  font: 450 0.78rem/1.2 var(--font-body);
+  padding: 0 0.75rem;
+  font: 450 0.78rem var(--font-body);
   outline: none;
   cursor: pointer;
+  box-sizing: border-box;
   transition: border-color 140ms ease;
 }
 
@@ -1252,13 +1263,14 @@ section[id] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: 6px;
   border: 1px solid rgba(255, 255, 255, 0.07);
   background: #080b0f;
   color: #8b949e;
   cursor: pointer;
+  box-sizing: border-box;
   transition: all 140ms ease;
 }
 
@@ -1279,28 +1291,55 @@ section[id] {
 
 .admin-table {
   width: 100%;
+  min-width: 760px;
+  table-layout: fixed;
   border-collapse: collapse;
   text-align: left;
 }
 
 .admin-table th {
-  padding: 0.75rem 1.15rem;
+  padding: 0.75rem 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   font: 500 0.72rem/1 var(--font-body);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: #8b949e;
   background: rgba(255, 255, 255, 0.015);
+  height: 46px;
+  box-sizing: border-box;
+}
+
+.admin-th-project {
+  width: 44%;
+}
+
+.admin-th-category {
+  width: 18%;
+}
+
+.admin-th-status {
+  width: 13%;
+}
+
+.admin-th-order {
+  width: 13%;
+}
+
+.admin-th-actions {
+  width: 12%;
+  text-align: right;
 }
 
 .admin-table td {
-  padding: 0.85rem 1.15rem;
+  padding: 0.65rem 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   vertical-align: middle;
   font-family: var(--font-body);
+  box-sizing: border-box;
 }
 
 .admin-tr {
+  height: 78px;
   transition: background-color 140ms ease;
 }
 
@@ -1317,12 +1356,14 @@ section[id] {
   align-items: center;
   gap: 0.85rem;
   min-width: 0;
+  width: 100%;
 }
 
 .admin-item-thumb {
   width: 42px;
   height: 42px;
-  object-fit: cover;
+  min-width: 42px;
+  min-height: 42px;
   border-radius: 6px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: #080b0f;
@@ -1333,6 +1374,8 @@ section[id] {
 .admin-item-thumb-placeholder {
   width: 42px;
   height: 42px;
+  min-width: 42px;
+  min-height: 42px;
   border-radius: 6px;
   display: grid;
   place-items: center;
@@ -1344,35 +1387,63 @@ section[id] {
 
 .admin-item-meta {
   min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  overflow: hidden;
 }
 
 .admin-item-title {
-  font: 500 0.86rem/1.3 var(--font-body);
+  font: 600 0.86rem/1.3 var(--font-body);
   color: #f0f6fc;
-  margin-bottom: 0.15rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.admin-item-sub {
-  font: 400 0.74rem/1.2 var(--font-mono);
+.admin-item-desc {
+  font: 400 0.74rem/1.3 var(--font-body);
   color: #8b949e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-category-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3rem;
+  min-width: 0;
 }
 
 .admin-tag-badge {
   display: inline-block;
+  max-width: 100%;
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.02);
-  font: 450 0.7rem/1 var(--font-body);
+  background: rgba(255, 255, 255, 0.025);
+  font: 500 0.72rem/1 var(--font-body);
   color: #e6edf3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+.admin-featured-chip,
 .admin-featured-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
-  font: 500 0.68rem/1 var(--font-mono);
-  color: #f3c27f;
+  font: 500 0.65rem/1 var(--font-mono);
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+  white-space: nowrap;
 }
 
 .admin-status-toggle {
@@ -1382,11 +1453,12 @@ section[id] {
   border-radius: 9999px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(255, 255, 255, 0.02);
-  padding: 0.3rem 0.65rem;
+  padding: 0.28rem 0.6rem;
   cursor: pointer;
   font: 500 0.72rem/1 var(--font-body);
   color: #8b949e;
   transition: all 140ms ease;
+  white-space: nowrap;
 }
 
 .admin-status-toggle:hover {
@@ -1395,9 +1467,9 @@ section[id] {
 }
 
 .admin-status-toggle.is-published {
-  border-color: rgba(56, 178, 172, 0.25);
+  border-color: rgba(56, 178, 172, 0.28);
   background: rgba(56, 178, 172, 0.06);
-  color: #4fd1c5;
+  color: #38b2ac;
 }
 
 .admin-status-toggle.is-draft {
@@ -1421,6 +1493,27 @@ section[id] {
   background: #fbbf24;
 }
 
+.admin-order-date-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.admin-order-num {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: #cbd5e1;
+}
+
+.admin-date-sub {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: #6e7681;
+  white-space: nowrap;
+}
+
 .admin-actions-cell {
   display: inline-flex;
   align-items: center;
@@ -1435,16 +1528,29 @@ section[id] {
   width: 30px;
   height: 30px;
   border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.07);
   background: rgba(255, 255, 255, 0.02);
   color: #8b949e;
   cursor: pointer;
   transition: all 140ms ease;
+  flex-shrink: 0;
 }
 
 .admin-action-btn:hover {
-  border-color: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.2);
   color: #f0f6fc;
+}
+
+.admin-action-btn.admin-action-view:hover {
+  border-color: rgba(56, 178, 172, 0.35);
+  color: #38b2ac;
+  background: rgba(56, 178, 172, 0.08);
+}
+
+.admin-action-btn.admin-action-edit:hover {
+  border-color: rgba(56, 178, 172, 0.35);
+  color: #38b2ac;
+  background: rgba(56, 178, 172, 0.08);
 }
 
 .admin-action-btn.admin-action-delete:hover {
