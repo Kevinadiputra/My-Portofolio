@@ -351,24 +351,52 @@ section[id] {
 }
 
 /* ==========================================================================
-   ADMIN CMS: REFINED EDITORIAL SAAS LAYOUT & DESIGN SYSTEM
+   ADMIN CMS: PERSISTENT APPLICATION SHELL & INDEPENDENT SCROLL ARCHITECTURE
    ========================================================================== */
 
+/* Clean, Dark-Mode Scrollbars for Admin Shell */
+.admin-shell,
+.admin-shell * {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.14) transparent;
+}
+
+.admin-shell ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.admin-shell ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.admin-shell ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 9999px;
+}
+
+.admin-shell ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
 .admin-shell {
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
+  max-height: 100dvh;
+  width: 100%;
   display: flex;
   background: #080b0f;
   color: #f0f6fc;
   font-family: var(--font-body), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  overflow-x: hidden;
+  overflow: hidden;
+  position: relative;
 }
 
 .admin-sidebar {
   width: 256px;
   min-width: 256px;
-  height: 100vh;
-  position: sticky;
-  top: 0;
+  height: 100%;
+  max-height: 100%;
   display: flex;
   flex-direction: column;
   background: #06080c;
@@ -376,9 +404,9 @@ section[id] {
   padding: 1.25rem 0.85rem;
   z-index: 40;
   flex-shrink: 0;
+  overflow: hidden;
   transition: width 200ms cubic-bezier(0.16, 1, 0.3, 1), min-width 200ms cubic-bezier(0.16, 1, 0.3, 1), padding 200ms ease;
-  overflow-y: auto;
-  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 .admin-sidebar.is-collapsed {
@@ -394,6 +422,7 @@ section[id] {
   gap: 0.5rem;
   padding-bottom: 1.15rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  flex-shrink: 0;
 }
 
 .admin-sidebar.is-collapsed .admin-sidebar-top {
@@ -489,9 +518,11 @@ section[id] {
   display: none;
 }
 
-.admin-sidebar-collapsible {
+.admin-sidebar-collapsible,
+.admin-sidebar-body {
   display: flex;
-  flex: 1;
+  flex: 1 1 0%;
+  min-height: 0;
   flex-direction: column;
   justify-content: space-between;
   gap: 1.25rem;
@@ -690,26 +721,28 @@ section[id] {
 .admin-main-container {
   flex: 1 1 0%;
   min-width: 0;
+  height: 100%;
+  max-height: 100%;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
   background: #090c10;
-  overflow-x: hidden;
+  overflow: hidden;
+  position: relative;
 }
 
 .admin-topbar {
   height: 54px;
   min-height: 54px;
-  position: sticky;
-  top: 0;
-  z-index: 30;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 2rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  background: rgba(9, 12, 16, 0.85);
+  background: rgba(9, 12, 16, 0.92);
   backdrop-filter: blur(12px);
+  z-index: 30;
+  box-sizing: border-box;
 }
 
 .admin-topbar-breadcrumb {
@@ -751,13 +784,18 @@ section[id] {
   background: #10b981;
 }
 
-/* Main Content Area */
+/* Main Content Area: The ONLY scroll container */
 .admin-content {
-  flex: 1 1 auto;
+  flex: 1 1 0%;
+  min-height: 0;
   min-width: 0;
   width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 2rem 2.25rem;
   box-sizing: border-box;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 .admin-page {
@@ -765,6 +803,7 @@ section[id] {
   max-width: 1200px;
   margin: 0 auto;
   min-width: 0;
+  padding-bottom: 3.5rem;
 }
 
 .admin-page-header {
@@ -1840,49 +1879,66 @@ select.admin-input {
 /* Responsive Media Queries */
 @media (max-width: 1024px) {
   .admin-shell {
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+    position: relative;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
   }
 
   .admin-topbar {
     display: none;
   }
 
+  .admin-mobile-bar {
+    display: flex;
+    height: 52px;
+    min-height: 52px;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: #06080c;
+    z-index: 35;
+    box-sizing: border-box;
+  }
+
   .admin-sidebar {
     position: fixed;
     top: 0;
-    left: -280px;
+    left: 0;
     width: 280px;
     height: 100vh;
-    z-index: 50;
-    transition: left 240ms ease;
-    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.7);
+    height: 100dvh;
+    z-index: 60;
+    transform: translateX(-100%);
+    transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.75);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .admin-sidebar.is-mobile-open,
+  .admin-sidebar:has(.admin-sidebar-collapsible.is-open) {
+    transform: translateX(0);
   }
 
   .admin-sidebar-collapsible.is-open {
     display: flex;
   }
 
-  .admin-sidebar:has(.admin-sidebar-collapsible.is-open) {
-    left: 0;
-  }
-
   .admin-main-container {
     width: 100%;
     min-width: 0;
-    min-height: 100vh;
+    height: 100%;
+    max-height: 100%;
+    overflow: hidden;
   }
 
-  .admin-mobile-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.75rem 1.25rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    background: #06080c;
-    position: sticky;
-    top: 0;
-    z-index: 45;
+  .admin-content {
+    padding: 1.25rem 1rem 3.5rem;
   }
 
   .admin-mobile-toggle-btn {
@@ -1901,10 +1957,6 @@ select.admin-input {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-  }
-
-  .admin-content {
-    padding: 1.25rem 1rem;
   }
 
   .admin-drawer-panel {
@@ -1977,9 +2029,11 @@ select.admin-input {
 }
 
 @media (max-width: 640px) {
-  .admin-auth-shell,
-  .admin-content {
+  .admin-auth-shell {
     padding: 1rem;
+  }
+  .admin-content {
+    padding: 1rem 1rem 3.5rem;
   }
 
   .admin-page-header {

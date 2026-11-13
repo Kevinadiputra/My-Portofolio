@@ -122,8 +122,8 @@ export default function AdminShell({ children }) {
                 />
             )}
 
-            {/* Sidebar Navigation */}
-            <aside className={`admin-sidebar ${collapsed ? "is-collapsed" : ""}`}>
+            {/* Persistent Sidebar Navigation */}
+            <aside className={`admin-sidebar ${collapsed ? "is-collapsed" : ""} ${mobileOpen ? "is-mobile-open" : ""}`}>
                 <div className="admin-sidebar-top">
                     <div className="admin-sidebar-brand-wrap">
                         <Link href="/admin" className="admin-brand" title="Portfolio CMS Control Room">
@@ -148,16 +148,16 @@ export default function AdminShell({ children }) {
                         <button
                             type="button"
                             className="admin-mobile-toggle lg:hidden"
-                            onClick={() => setMobileOpen((prev) => !prev)}
+                            onClick={() => setMobileOpen(false)}
                             aria-expanded={mobileOpen}
-                            aria-label={mobileOpen ? "Tutup menu navigasi admin" : "Buka menu navigasi admin"}
+                            aria-label="Tutup menu navigasi admin"
                         >
-                            {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+                            <X size={18} />
                         </button>
                     </div>
                 </div>
 
-                <div className={`admin-sidebar-collapsible ${mobileOpen ? "is-open" : ""}`}>
+                <div className={`admin-sidebar-body admin-sidebar-collapsible ${mobileOpen ? "is-open" : ""}`}>
                     <nav aria-label="Admin navigation" className="admin-nav-groups">
                         {NAV_GROUPS.map((group) => (
                             <div key={group.title} className="admin-nav-group">

@@ -520,7 +520,7 @@ export default function AdminCollectionPage({ collection, title, eyebrow, descri
                     <div className="admin-singleton-bottom-bar">
                         {dirty && (
                             <span className="text-xs font-mono text-amber-300 flex items-center gap-1.5">
-                                <span className="w-2 h-2 bg-amber-400 rounded-full animate-pulse" />
+                                <span className="w-1.5 h-1.5 bg-amber-400 rounded-full" />
                                 Perubahan belum disimpan
                             </span>
                         )}
