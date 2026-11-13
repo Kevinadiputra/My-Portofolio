@@ -231,61 +231,67 @@ export default function AdminShell({ children }) {
                 </div>
             </aside>
 
-            {/* Desktop Top Bar */}
-            <div className="admin-topbar hidden lg:flex">
-                <div className="admin-topbar-breadcrumb">
-                    <span>Admin</span>
-                    <ChevronBreadcrumb size={12} className="text-white/30" />
-                    <span className="admin-topbar-breadcrumb-item">{currentSectionName}</span>
-                </div>
-
-                <div className="admin-topbar-right">
-                    <div className="admin-status-badge">
-                        <span className="admin-status-indicator" />
-                        <span>Supabase Connected</span>
+            {/* Main Application Container: encapsulates topbar & content without grid-column wrapping issues */}
+            <div className="admin-main-container">
+                {/* Desktop Top Bar */}
+                <header className="admin-topbar hidden lg:flex">
+                    <div className="admin-topbar-breadcrumb">
+                        <span className="text-white/40">Admin</span>
+                        <ChevronBreadcrumb size={12} className="text-white/20" />
+                        <span className="admin-topbar-breadcrumb-item">{currentSectionName}</span>
                     </div>
 
+                    <div className="admin-topbar-right">
+                        <div className="admin-status-badge">
+                            <span className="admin-status-indicator" />
+                            <span>Supabase Connected</span>
+                        </div>
+
+                        <Link
+                            href="/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="admin-quick-chip"
+                            title="Open public portfolio website"
+                        >
+                            <span>Live Site</span>
+                            <ExternalLink size={12} />
+                        </Link>
+                    </div>
+                </header>
+
+                {/* Mobile Header Bar */}
+                <header className="admin-mobile-bar lg:hidden">
+                    <button
+                        type="button"
+                        className="admin-mobile-toggle-btn"
+                        onClick={() => setMobileOpen(true)}
+                        aria-label="Open navigation menu"
+                    >
+                        <Menu size={20} />
+                    </button>
+                    <div className="flex items-center gap-2">
+                        <span className="admin-brand-icon !w-6 !h-6 !text-[10px]">KP</span>
+                        <Link href="/admin" className="font-semibold text-white text-sm">
+                            Portfolio CMS
+                        </Link>
+                    </div>
                     <Link
                         href="/"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="admin-quick-chip"
-                        title="Open public portfolio website"
+                        className="admin-mobile-toggle-btn !p-1.5 text-accent"
+                        title="Open live site"
                     >
-                        <span>Live Site</span>
-                        <ExternalLink size={12} />
+                        <ExternalLink size={16} />
                     </Link>
-                </div>
-            </div>
+                </header>
 
-            {/* Mobile Header Bar */}
-            <div className="admin-mobile-bar lg:hidden">
-                <button
-                    type="button"
-                    className="admin-mobile-toggle-btn"
-                    onClick={() => setMobileOpen(true)}
-                    aria-label="Open navigation menu"
-                >
-                    <Menu size={20} />
-                </button>
-                <div className="flex items-center gap-2">
-                    <span className="admin-brand-icon !w-6 !h-6 !text-[10px]">KP</span>
-                    <Link href="/admin" className="font-display font-bold text-white text-sm">
-                        Portfolio CMS
-                    </Link>
-                </div>
-                <Link
-                    href="/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="admin-mobile-toggle-btn !p-1.5 text-accent"
-                    title="Open live site"
-                >
-                    <ExternalLink size={16} />
-                </Link>
+                {/* Main Content Viewport */}
+                <main className="admin-content" id="admin-main-content">
+                    {children}
+                </main>
             </div>
-
-            <main className="admin-content">{children}</main>
         </div>
     );
 }
