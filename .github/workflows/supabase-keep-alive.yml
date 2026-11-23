@@ -1,0 +1,107 @@
+name: Supabase Free Tier Keep-Alive
+
+# Scheduled cron to prevent Supabase Free Tier from automatically pausing
+# after 7 days of inactivity. Runs every 3 days at 04:00 UTC.
+
+on:
+  schedule:
+    # At 04:00 UTC every 3 days (approx. 2-3 times per week)
+    - cron: '0 4 */3 * *'
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Ping target mode (all, direct_supabase, app_endpoint)'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - direct_supabase
+          - app_endpoint
+
+permissions:
+  contents: read
+
+concurrency:
+  group: supabase-keep-alive
+  cancel-in-progress: false
+
+jobs:
+  keep-alive:
+    name: Ping Database & Health Endpoints
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Harden Runner Security
+        uses: step-security/harden-runner@4d991eb9995541a0b71d1b66f1f98a5f1bef422c  # v2.11.0
+        with:
+          egress-policy: audit
+
+      - name: Ping Direct Supabase PostgREST API
+        if: ${{ github.event.inputs.target == 'all' || github.event.inputs.target == 'direct_supabase' || github.event_name == 'schedule' }}
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL || secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY || secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "::warning title=Supabase Credentials Missing::SUPABASE_URL or SUPABASE_ANON_KEY secret is not set. Falling back to application endpoint ping."
+            exit 0
+          fi
+
+          echo "Pinging Supabase REST API directly at $SUPABASE_URL/rest/v1/projects..."
+          
+          # Query 1 record from 'projects' table via PostgREST to generate real PostgreSQL traffic
+          HTTP_RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}\nTIME_TOTAL:%{time_total}s" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            -H "Accept: application/json" \
+            "$SUPABASE_URL/rest/v1/projects?select=id,slug&limit=1")
+          
+          HTTP_BODY=$(echo "$HTTP_RESPONSE" | sed -e '$d' -e '$d')
+          HTTP_STATUS=$(echo "$HTTP_RESPONSE" | grep "HTTP_STATUS:" | cut -d':' -f2)
+          TIME_TOTAL=$(echo "$HTTP_RESPONSE" | grep "TIME_TOTAL:" | cut -d':' -f2)
+
+          echo "Response Status: $HTTP_STATUS"
+          echo "Latency: $TIME_TOTAL"
+          echo "Response Body: $HTTP_BODY"
+
+          if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 300 ]; then
+            echo "::notice title=Direct Ping Success::Supabase database actively responded with HTTP $HTTP_STATUS in $TIME_TOTAL."
+          else
+            echo "::error title=Direct Ping Failed::Supabase REST API returned HTTP $HTTP_STATUS."
+            exit 1
+          fi
+
+      - name: Ping Portfolio Keep-Alive Endpoint
+        if: ${{ github.event.inputs.target == 'all' || github.event.inputs.target == 'app_endpoint' || github.event_name == 'schedule' }}
+        env:
+          APP_URL: ${{ secrets.APP_URL || 'https://kevin-adiputra-portfolio.vercel.app' }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          TARGET_URL="${APP_URL%/}/api/keep-alive"
+          echo "Pinging application keep-alive route at $TARGET_URL..."
+
+          AUTH_HEADER=""
+          if [ -n "$CRON_SECRET" ]; then
+            AUTH_HEADER="Authorization: Bearer $CRON_SECRET"
+          fi
+
+          HTTP_RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}\nTIME_TOTAL:%{time_total}s" \
+            ${AUTH_HEADER:+-H "$AUTH_HEADER"} \
+            -H "Accept: application/json" \
+            "$TARGET_URL")
+
+          HTTP_BODY=$(echo "$HTTP_RESPONSE" | sed -e '$d' -e '$d')
+          HTTP_STATUS=$(echo "$HTTP_RESPONSE" | grep "HTTP_STATUS:" | cut -d':' -f2)
+          TIME_TOTAL=$(echo "$HTTP_RESPONSE" | grep "TIME_TOTAL:" | cut -d':' -f2)
+
+          echo "Response Status: $HTTP_STATUS"
+          echo "Latency: $TIME_TOTAL"
+          echo "Response Body: $HTTP_BODY"
+
+          if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 300 ]; then
+            echo "::notice title=App Ping Success::Application keep-alive route executed successfully (HTTP $HTTP_STATUS in $TIME_TOTAL)."
+          else
+            echo "::warning title=App Ping Notice::Application endpoint returned HTTP $HTTP_STATUS. Ensure the application is deployed and APP_URL is accurate."
+          fi
